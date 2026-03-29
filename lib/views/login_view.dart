@@ -96,31 +96,31 @@ class _LoginViewState extends State<LoginView> {
                                     value!.isEmpty ? 'Password required' : null,
                               ),
                             ),
-                            8.verticalSpace,
+                            16.verticalSpace,
 
                             // Remember + Forgot Password
-                            Row(
-                              children: [
-                                Checkbox(
-                                  value: false,
-                                  onChanged: (value) {},
-                                ),
-                                Gap(2),
-                                Text("Remember me"),
-                                Spacer(),
-                                GestureDetector(
-                                  onTap: () {},
-                                  child: Text(
-                                    "Forgot Password?",
-                                    style: TextStyle(
-                                      color: AppColor.primaryOrange,
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            8.verticalSpace,
+                            // Row(
+                            //   children: [
+                            //     Checkbox(
+                            //       value: false,
+                            //       onChanged: (value) {},
+                            //     ),
+                            //     Gap(2),
+                            //     Text("Remember me"),
+                            //     Spacer(),
+                            //     GestureDetector(
+                            //       onTap: () {},
+                            //       child: Text(
+                            //         "Forgot Password?",
+                            //         style: TextStyle(
+                            //           color: AppColor.primaryOrange,
+                            //           fontSize: 14,
+                            //         ),
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
+                            // 8.verticalSpace,
 
                             // Sign In Button
                             SizedBox(
@@ -155,7 +155,7 @@ class _LoginViewState extends State<LoginView> {
                               children: [
                                 Text(
                                   "Don't have an account?",
-                                  style: TextStyle(fontSize: 16),
+                                  style: TextStyle(fontSize: 14),
                                 ),
                                 Gap(4),
                                 InkWell(
@@ -166,7 +166,7 @@ class _LoginViewState extends State<LoginView> {
                                     "Create Account",
                                     style: TextStyle(
                                       color: AppColor.primaryOrange,
-                                      fontSize: 16,
+                                      fontSize: 14,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),

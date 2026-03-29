@@ -188,9 +188,12 @@ class DashboardView extends StatelessWidget {
                     title: "Logout",
                     content: Text("Do you want to continue?"),
                     actions: [
-                      OutlinedButton(onPressed: (){}, child: Text("Cancel")),
+                      OutlinedButton(onPressed: (){
+                        Get.back();
+                      }, child: Text("Cancel")),
                       FilledButton(onPressed: (){
                           StorageController().deleteToken();
+                          authController.reset();
                        Get.offAllNamed(AppRoutes.login);
                       }, child: Text("Yes")),
                     ]
