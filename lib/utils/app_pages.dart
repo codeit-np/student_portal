@@ -1,4 +1,4 @@
-import 'package:codeit/bindings/certificate_bindings.dart';
+
 import 'package:codeit/bindings/order_bindings.dart';
 import 'package:codeit/bindings/terms_condition_binding.dart';
 import 'package:codeit/bindings/upcoming_class_binding.dart';

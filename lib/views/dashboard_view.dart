@@ -2,7 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:codeit/controller/auth_controller.dart';
 import 'package:codeit/controller/certificate_controller.dart';
 import 'package:codeit/controller/course_controller.dart';
+import 'package:codeit/controller/googlemeet_controller.dart';
 import 'package:codeit/controller/storage_controller.dart';
+import 'package:codeit/model/googlemeet_model.dart';
 import 'package:codeit/utils/app_color.dart';
 import 'package:codeit/utils/app_routes.dart';
 import 'package:codeit/utils/app_strings.dart';
@@ -11,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DashboardView extends StatelessWidget {
   const DashboardView({super.key});
@@ -20,6 +23,7 @@ class DashboardView extends StatelessWidget {
     var courseController = Get.find<CourseController>();
     var authController = Get.find<AuthController>();
     var certificateController = Get.find<CertificateController>();
+    var googleMeetController = Get.put(GoogleMeetController());
     return Scaffold(
       backgroundColor: AppColor.backgroundColor,
       appBar: AppBar(
@@ -250,7 +254,24 @@ class DashboardView extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 24),
-                  _buildLiveClassCard(),
+                  if (googleMeetController.liveClasses.isEmpty)
+                    const SizedBox()
+                  else
+                    Column(
+                      children: [
+                        ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: googleMeetController.liveClasses.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 12),
+                              child: _buildLiveClassCard(googleMeetController.liveClasses[index]),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
                   const SizedBox(height: 16),
                   GestureDetector(
                     onTap: () {
@@ -592,7 +613,7 @@ class DashboardView extends StatelessWidget {
     );
   }
 
-  Widget _buildLiveClassCard() {
+  Widget _buildLiveClassCard(Datum data) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -625,31 +646,31 @@ class DashboardView extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Advanced Excel',
-                    style: TextStyle(
+                  Text(
+                    data.courseName ?? 'Live Class',
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                       color: Color(0xFF1E293B),
                     ),
                   ),
                   const SizedBox(height: 4),
-                  const Text(
-                    'Sita Katuwal',
-                    style: TextStyle(
+                  Text(
+                    data.mentorName ?? 'Unknown',
+                    style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
                       color: Color(0xFF475569),
                     ),
                   ),
                   const SizedBox(height: 4),
-                  const Text(
-                    'Class Time: 8:00 - 9:30 pm',
-                    style: TextStyle(fontSize: 12, color: Color(0xFF94A3B8)),
+                  Text(
+                    'Class Time: ${data.classTime ?? 'N/A'}',
+                    style: const TextStyle(fontSize: 12, color: Color(0xFF94A3B8)),
                   ),
                   const SizedBox(height: 12),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () => _launchUrl(data.meetLink ?? ''),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF10B981), // Green color
                       foregroundColor: Colors.white,
@@ -673,6 +694,23 @@ class DashboardView extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Future<void> _launchUrl(String? url) async {
+    if (url == null || url.isEmpty) {
+      Get.snackbar('Error', 'Meeting link is not available');
+      return;
+    }
+    try {
+      final uri = Uri.parse(url);
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
+      } else {
+        Get.snackbar('Error', 'Could not open the meeting link');
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'Invalid meeting link');
+    }
   }
 
   Widget _buildStatCard({
