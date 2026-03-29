@@ -8,13 +8,20 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
-class LoginView extends StatelessWidget {
+class LoginView extends StatefulWidget {
   const LoginView({super.key});
 
   @override
+  State<LoginView> createState() => _LoginViewState();
+}
+
+class _LoginViewState extends State<LoginView> {
+  // ✅ Keep form key outside build
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final AuthController authController = Get.find<AuthController>();
+
+  @override
   Widget build(BuildContext context) {
-    var key = GlobalKey<FormState>();
-    var authController = Get.find<AuthController>();
     return Scaffold(
       body: SafeArea(
         child: Center(
@@ -26,77 +33,78 @@ class LoginView extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    //Logo
+                    // Logo
                     Image.asset(AppStrings.logo, width: 200.w),
                     16.verticalSpace,
-                    //SizedBox Header
-                    SizedBox(
-                      child: Column(
-                        children: [
-                          Text(
-                            "Welcome Back!",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 24.sp,
-                            ),
-                          ),
-                          8.verticalSpace,
-                          Text("Sign in to your student portal",style: TextStyle(fontSize: 16.sp),),
-                        ],
-                      ),
-                    ),
 
+                    // Header
+                    Column(
+                      children: [
+                        Text(
+                          "Welcome Back!",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 24.sp,
+                          ),
+                        ),
+                        8.verticalSpace,
+                        Text(
+                          "Sign in to your student portal",
+                          style: TextStyle(fontSize: 16.sp),
+                        ),
+                      ],
+                    ),
                     16.verticalSpace,
-                    //Login Form
+
+                    // Login Form
                     SizedBox(
                       width: 428,
                       child: Form(
-                        key: key,
+                        key: _formKey,
                         child: Column(
                           children: [
-                            //Email Address
+                            // Email Field
                             TextFormField(
                               controller: authController.email,
                               decoration: InputDecoration(
                                 prefixIcon: Icon(Icons.email),
-                                hint: Text("Enter your email address"),
-                                label: Text("Email Address"),
-                                visualDensity:
-                                    VisualDensity.adaptivePlatformDensity,
+                                hintText: "Enter your email address",
+                                labelText: "Email Address",
                               ),
                               validator: (value) =>
-                                  value!.isEmpty ? 'email required' : null,
+                                  value!.isEmpty ? 'Email required' : null,
                             ),
                             8.verticalSpace,
 
-                          Obx((){
-                            return TextFormField(
-                              controller: authController.password,
-                              decoration: InputDecoration(
-                                prefixIcon: Icon(Icons.lock),
-                                suffixIcon: IconButton(
-                                  onPressed: () {
-                                    authController.visibility();
-                                  },
-                                  icon: authController.obsecure.value == true ? Icon(Icons.visibility_off) : Icon(Icons.visibility),
+                            // Password Field (Reactive)
+                            Obx(
+                              () => TextFormField(
+                                controller: authController.password,
+                                obscureText: authController.obsecure.value,
+                                decoration: InputDecoration(
+                                  prefixIcon: Icon(Icons.lock),
+                                  suffixIcon: IconButton(
+                                    onPressed: authController.visibility,
+                                    icon: authController.obsecure.value
+                                        ? Icon(Icons.visibility_off)
+                                        : Icon(Icons.visibility),
+                                  ),
+                                  hintText: "Enter your password",
+                                  labelText: "Password",
                                 ),
-                                hint: Text("Enter your password"),
-                                label: Text("Password"),
-                                visualDensity:
-                                    VisualDensity.adaptivePlatformDensity,
+                                validator: (value) =>
+                                    value!.isEmpty ? 'Password required' : null,
                               ),
-                              obscureText: authController.obsecure.value,
-                              validator: (value) =>
-                                  value!.isEmpty ? 'password required' : null,
-                            );
-                          }),
-                            
-
+                            ),
                             8.verticalSpace,
 
+                            // Remember + Forgot Password
                             Row(
                               children: [
-                                Checkbox(value: false, onChanged: (valuye) {}),
+                                Checkbox(
+                                  value: false,
+                                  onChanged: (value) {},
+                                ),
                                 Gap(2),
                                 Text("Remember me"),
                                 Spacer(),
@@ -113,9 +121,10 @@ class LoginView extends StatelessWidget {
                               ],
                             ),
                             8.verticalSpace,
+
+                            // Sign In Button
                             SizedBox(
                               width: double.infinity,
-
                               height: 50,
                               child: MaterialButton(
                                 shape: RoundedRectangleBorder(
@@ -123,11 +132,10 @@ class LoginView extends StatelessWidget {
                                 ),
                                 color: AppColor.primaryOrange,
                                 onPressed: () async {
-                                  if (key.currentState!.validate()) {
+                                  if (_formKey.currentState!.validate()) {
                                     Loader.show(context);
                                     await authController.login();
                                     Loader.hide();
-                                   
                                   }
                                 },
                                 child: Text(
@@ -139,19 +147,15 @@ class LoginView extends StatelessWidget {
                                 ),
                               ),
                             ),
-
-                            //Don't have an Account
                             16.verticalSpace,
 
+                            // Create Account
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
                                   "Don't have an account?",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    
-                                  ),
+                                  style: TextStyle(fontSize: 16),
                                 ),
                                 Gap(4),
                                 InkWell(
@@ -163,7 +167,7 @@ class LoginView extends StatelessWidget {
                                     style: TextStyle(
                                       color: AppColor.primaryOrange,
                                       fontSize: 16,
-                                      fontWeight: FontWeight.bold
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                 ),
@@ -174,6 +178,8 @@ class LoginView extends StatelessWidget {
                       ),
                     ),
                     40.verticalSpace,
+
+                    // Footer
                     const Text(
                       "© 2026 Code IT. All rights reserved.",
                       style: TextStyle(fontSize: 13, color: Color(0xFF9CA3AF)),

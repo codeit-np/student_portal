@@ -75,7 +75,15 @@ class AuthController extends GetxController {
         reset();
         Get.offNamed(AppRoutes.dashboard);
       }else{
-        Get.snackbar("Error", "Invalid email or password");
+        Get.defaultDialog(
+          title: "Message",
+          content: Text("Invalid Email or Password"),
+          actions: [
+            FilledButton(onPressed: (){
+              Get.back();
+            }, child: Text("Cancel"))
+          ]
+        );
       }
     } finally {
       isLoading(false);
