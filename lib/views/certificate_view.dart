@@ -155,7 +155,7 @@ class CertificateCard extends StatelessWidget {
                     child: Icon(
                       Icons.workspace_premium,
                       size: 32,
-                      color: theme.colorScheme.primary,
+                      color: AppColor.primaryOrange,
                     ),
                   ),
                   const SizedBox(width: 16),
@@ -194,10 +194,12 @@ class CertificateCard extends StatelessWidget {
               Align(
                 alignment: Alignment.centerRight,
                 child: FilledButton.icon(
+                  
                   onPressed: onEmailPressed,
                   icon: const Icon(Icons.email_outlined, size: 20),
                   label: const Text("Send to Email"),
                   style: FilledButton.styleFrom(
+                    backgroundColor: AppColor.primaryOrange,
                     padding: const EdgeInsets.symmetric(
                       horizontal: 24,
                       vertical: 14,
