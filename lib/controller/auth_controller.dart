@@ -6,7 +6,6 @@ import 'package:codeit/model/profile_model.dart';
 import 'package:codeit/services/auth_service.dart';
 import 'package:codeit/utils/app_routes.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 class AuthController extends GetxController {
