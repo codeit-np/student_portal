@@ -29,6 +29,6 @@ class AppPages {
     GetPage(name: AppRoutes.video, page: () => VideoView()),
     GetPage(name: AppRoutes.demoVideo, page: () => DemoVideoView()),
     GetPage(name: AppRoutes.confirmation, page: () => ConfirmationView()),
-    GetPage(name: AppRoutes.certificates, page: () => CertificateView(),binding: CertificateBindings()),
+    GetPage(name: AppRoutes.certificates, page: () => CertificateView()),
   ];
 }

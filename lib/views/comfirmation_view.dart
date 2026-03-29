@@ -1,4 +1,5 @@
 import 'package:codeit/controller/course_controller.dart';
+import 'package:codeit/utils/app_color.dart';
 import 'package:codeit/utils/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
@@ -13,7 +14,7 @@ class ConfirmationView extends StatelessWidget {
     final courseController = Get.find<CourseController>();
 
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: AppColor.backgroundColor,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(

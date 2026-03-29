@@ -15,7 +15,14 @@ class UpcomingClasses extends GetView<UpcomingClassController> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.backgroundColor,
-      appBar: AppBar(title: Text("Upcoming Classes")),
+      appBar: AppBar(
+        title: Text("Upcoming Classes"),
+         backgroundColor: Colors.white,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+       
+      ),
+      
       body: Obx(() {
         if (controller.isLoading.value == true) {
           return LinearProgressIndicator();

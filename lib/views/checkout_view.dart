@@ -5,7 +5,6 @@ import 'package:codeit/utils/app_routes.dart';
 import 'package:codeit/utils/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
-import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
 class CheckoutView extends GetView<AuthController> {
@@ -16,15 +15,13 @@ class CheckoutView extends GetView<AuthController> {
     var orderController = Get.find<OrderController>();
     var course = Get.arguments;
     return Scaffold(
-      backgroundColor: AppColor.backgroundColor,
+       backgroundColor: AppColor.backgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        title: Text("Checkout"),
+         backgroundColor: Colors.white,
         elevation: 0,
         scrolledUnderElevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColor.textColor),
-          onPressed: () => Navigator.pop(context),
-        ),
+       
       ),
       body: Obx(() {
         return SingleChildScrollView(

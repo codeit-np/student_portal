@@ -5,6 +5,7 @@ class CertificateBindings extends Bindings{
   @override
   void dependencies() {
     Get.put<CertificateController>(CertificateController(),permanent: false);
+   
   }
 
 }

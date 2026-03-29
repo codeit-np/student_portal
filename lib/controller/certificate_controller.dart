@@ -35,9 +35,5 @@ class CertificateController extends GetxController{
     }
   }
 
-  @override
-  void onInit() {
-    super.onInit();
-    getCertificated();
-  }
+  
 }

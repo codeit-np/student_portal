@@ -1,3 +1,4 @@
+import 'package:codeit/controller/certificate_controller.dart';
 import 'package:codeit/controller/course_controller.dart';
 import 'package:codeit/controller/storage_controller.dart';
 import 'package:codeit/model/login_model.dart';
@@ -27,7 +28,9 @@ class AuthController extends GetxController {
     if (token != null) {
       Future.delayed(Duration(seconds: 2), () async {
         var courseController = Get.find<CourseController>();
+        var certificateController = Get.find<CertificateController>();
         await getProfle();
+        await certificateController.getCertificated();
         await courseController.getCourses();
         reset();
         Get.offAllNamed(AppRoutes.dashboard);
@@ -67,7 +70,9 @@ class AuthController extends GetxController {
         await getProfle();
 
         var courseController = Get.find<CourseController>();
+        var certificateController = Get.find<CertificateController>();
         await courseController.getCourses();
+        await certificateController.getCertificated();
         reset();
         Get.offNamed(AppRoutes.dashboard);
       } else {
@@ -101,7 +106,10 @@ class AuthController extends GetxController {
         await getProfle();
 
         var courseController = Get.find<CourseController>();
+        var certificateController = Get.find<CertificateController>();
         await courseController.getCourses();
+        await certificateController.getCertificated();
+
         Get.offNamed(AppRoutes.dashboard);
       } else {
         errorMessage.value = loginMessage.value.message!;

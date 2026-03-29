@@ -1,4 +1,5 @@
 import 'package:codeit/controller/auth_controller.dart';
+import 'package:codeit/controller/certificate_controller.dart';
 import 'package:codeit/controller/course_controller.dart';
 import 'package:codeit/controller/storage_controller.dart';
 import 'package:codeit/controller/video_controller.dart';
@@ -11,5 +12,6 @@ class ControllerBindings extends Bindings{
     Get.put<AuthController>(AuthController());
     Get.put<CourseController>(CourseController(),permanent: true);
     Get.put<VideoController>(VideoController(),permanent: true);
+    Get.put<CertificateController>(CertificateController(),permanent: true);
   }
 }
