@@ -38,7 +38,7 @@ class DashboardView extends StatelessWidget {
 
         title: _buildLogo(),
         actions: [
-          Text("Beta Version"),
+          Text("Beta Version",style: TextStyle(color: Colors.blueGrey,fontSize: 12),),
           Gap(16)
         ],
         // actions: [
@@ -167,6 +167,9 @@ class DashboardView extends StatelessWidget {
               //   title: 'Suggestions',
               // ),
               _buildDrawerItem(
+                onTap: (){
+                  Get.toNamed(AppRoutes.terms);
+                },
                 icon: Icons.description_outlined,
                 title: 'Terms & Conditions',
               ),
@@ -177,8 +180,18 @@ class DashboardView extends StatelessWidget {
                 icon: Icons.logout,
                 title: 'Logout',
                 onTap: () {
-                  StorageController().deleteToken();
-                  Get.offAllNamed(AppRoutes.login);
+                  Get.defaultDialog(
+                    title: "Logout",
+                    content: Text("Do you want to continue?"),
+                    actions: [
+                      OutlinedButton(onPressed: (){}, child: Text("Cancel")),
+                      FilledButton(onPressed: (){
+                          StorageController().deleteToken();
+                       Get.offAllNamed(AppRoutes.login);
+                      }, child: Text("Yes")),
+                    ]
+                  );
+                
                 },
               ),
               const SizedBox(height: 16),
@@ -768,7 +781,7 @@ class DashboardView extends StatelessWidget {
   }
 
   Widget _buildLogo() {
-    return Image.asset(AppStrings.logo,width: 100.w,);
+    return Image.asset(AppStrings.logo,width: 120.w,);
   }
 
   Widget _buildDrawerItem({

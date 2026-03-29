@@ -195,7 +195,7 @@ class CourseCard extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                       height: 1.3,
                     ),
-                    maxLines: 2,
+                    maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                   const Gap(8),

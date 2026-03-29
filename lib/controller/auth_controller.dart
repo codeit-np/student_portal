@@ -50,7 +50,6 @@ class AuthController extends GetxController {
     name.text = "";
     email.text = "";
     whatsApp.text = "";
-    name.text = "";
     countryCode.value = "+977";
   }
 
@@ -75,13 +74,8 @@ class AuthController extends GetxController {
         await certificateController.getCertificated();
         reset();
         Get.offNamed(AppRoutes.dashboard);
-      } else {
-        errorMessage.value = loginMessage.value.message!;
-        Get.defaultDialog(
-          onCancel: () => Get.back(),
-          title: "Warning Message",
-          content: Text(errorMessage.value),
-        );
+      }else{
+        Get.snackbar("Error", "Invalid email or password");
       }
     } finally {
       isLoading(false);

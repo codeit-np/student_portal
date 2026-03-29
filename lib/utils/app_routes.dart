@@ -11,4 +11,5 @@ class AppRoutes {
   static const demoVideo = "/demovideo";
   static const confirmation = "/confirmation";
   static const certificates = "/certificates";
+  static const terms = "/terms";
 }
