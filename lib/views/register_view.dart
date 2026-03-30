@@ -6,9 +6,9 @@ import 'package:codeit/views/login_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:gap/gap.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
@@ -20,9 +20,8 @@ class RegisterView extends StatefulWidget {
 class _RegisterViewState extends State<RegisterView> {
   bool _isLoadingCountries = true;
   String? _selectedCountryCca2;
+  String? countryCode;
   List<Map<String, String>> _countryCodes = [];
-
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -30,19 +29,21 @@ class _RegisterViewState extends State<RegisterView> {
     _fetchCountries();
   }
 
+  // ==================== YOUR ORIGINAL LOGIC (UNCHANGED) ====================
   Future<void> _fetchCountries() async {
     try {
       final response = await http.get(
         Uri.parse('https://restcountries.com/v3.1/all?fields=name,cca2,idd,flag'),
       );
-
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
         final List<Map<String, String>> loadedCountries = [];
 
         for (var country in data) {
           final cca2 = country['cca2']?.toString() ?? '';
-          if (country['idd'] != null && country['idd']['root'] != null && cca2.isNotEmpty) {
+          if (country['idd'] != null &&
+              country['idd']['root'] != null &&
+              cca2.isNotEmpty) {
             final String root = country['idd']['root'].toString();
             final List<dynamic>? suffixes = country['idd']['suffixes'];
             final String flag = country['flag']?.toString() ?? '';
@@ -50,7 +51,9 @@ class _RegisterViewState extends State<RegisterView> {
 
             String code = root;
             if (suffixes != null && suffixes.isNotEmpty) {
-              code = '$root${suffixes[0]}';
+              if (suffixes.length == 1) {
+                code = '$root${suffixes[0]}';
+              }
             }
 
             loadedCountries.add({
@@ -63,13 +66,14 @@ class _RegisterViewState extends State<RegisterView> {
         }
 
         loadedCountries.sort((a, b) => a['name']!.compareTo(b['name']!));
-
         setState(() {
           _countryCodes = loadedCountries;
           final nepal = _countryCodes.where((c) => c['cca2'] == 'NP').toList();
-          _selectedCountryCca2 = nepal.isNotEmpty 
-              ? nepal.first['cca2'] 
-              : (_countryCodes.isNotEmpty ? _countryCodes.first['cca2'] : null);
+          if (nepal.isNotEmpty) {
+            _selectedCountryCca2 = nepal.first['cca2'];
+          } else if (_countryCodes.isNotEmpty) {
+            _selectedCountryCca2 = _countryCodes.first['cca2'];
+          }
           _isLoadingCountries = false;
         });
       } else {
@@ -86,255 +90,245 @@ class _RegisterViewState extends State<RegisterView> {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (context) => _CountryPickerModal(
-        countries: _countryCodes,
-        onCountrySelected: (String cca2) {
-          setState(() => _selectedCountryCca2 = cca2);
-          Navigator.pop(context);
-        },
-      ),
+      builder: (context) {
+        return _CountryPickerModal(
+          countries: _countryCodes,
+          onCountrySelected: (String cca2) {
+            setState(() => _selectedCountryCca2 = cca2);
+            Navigator.pop(context);
+          },
+        );
+      },
     );
   }
 
   @override
   Widget build(BuildContext context) {
     final authController = Get.find<AuthController>();
+    final formKey = GlobalKey<FormState>();
 
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Color(0xFFF8FAFC), Color(0xFFEEF2FF)],
-          ),
-        ),
-        child: SafeArea(
-          child: Center(
-            child: SingleChildScrollView(
-              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 24.h),
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 420),
-                child: Column(
-                  children: [
-                    // Logo
-                    Image.asset(AppStrings.logo, width: 180.w),
-                    Gap(32.h),
+      backgroundColor: const Color(0xFFF8FAFC),
+      body: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 24.h),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 420),
+              child: Column(
+                children: [
+                  // Logo
+                  Image.asset(AppStrings.logo, width: 180.w),
+                  Gap(32.h),
 
-                    // Header
-                    Text(
-                      "Create Account",
-                      style: TextStyle(
-                        fontSize: 28.sp,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.black87,
-                        letterSpacing: -0.5,
-                      ),
+                  // Header
+                  Text(
+                    "Create a Student Account",
+                    style: TextStyle(
+                      fontSize: 26.sp,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black87,
                     ),
-                    Gap(8.h),
-                    Text(
-                      "Join Code IT Student Portal",
-                      style: TextStyle(
-                        fontSize: 15.sp,
-                        color: Colors.grey.shade600,
-                      ),
+                  ),
+                  Gap(8.h),
+                  Text(
+                    "Join Code IT Student Portal",
+                    style: TextStyle(
+                      fontSize: 15.sp,
+                      color: AppColor.subtitleColor ?? Colors.grey.shade600,
                     ),
-                    Gap(40.h),
+                  ),
+                  Gap(40.h),
 
-                    // Form Card
-                    Container(
-                      padding: EdgeInsets.all(24.r),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(24.r),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.06),
-                            blurRadius: 30,
-                            offset: const Offset(0, 10),
-                          ),
-                        ],
-                      ),
-                      child: Form(
-                        key: _formKey,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // Full Name
-                            TextFormField(
-                              controller: authController.name,
-                              keyboardType: TextInputType.name,
-                              decoration: _modernInputDecoration(
-                                label: "Full Name",
-                                hint: "Enter your full name",
-                                icon: Icons.person_outline,
-                              ),
-                              validator: (value) => value!.isEmpty ? "Full name is required" : null,
-                            ),
-                            Gap(20.h),
-
-                            // Email
-                            TextFormField(
-                              controller: authController.email,
-                              keyboardType: TextInputType.emailAddress,
-                              decoration: _modernInputDecoration(
-                                label: "Email Address",
-                                hint: "you@example.com",
-                                icon: Icons.email_outlined,
-                              ),
-                              validator: (value) => value!.isEmpty ? "Email is required" : null,
-                            ),
-                            Gap(20.h),
-
-                            // WhatsApp Number with Country Code
-                            TextFormField(
-                              controller: authController.whatsApp,
-                              keyboardType: TextInputType.phone,
-                              decoration: _modernInputDecoration(
-                                label: "WhatsApp Number",
-                                hint: "Enter your WhatsApp number",
-                                icon: null,
-                              ).copyWith(
-                                prefixIcon: Container(
-                                  margin: const EdgeInsets.only(right: 8),
-                                  padding: EdgeInsets.symmetric(horizontal: 12.w),
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey.shade100,
-                                    borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(16.r),
-                                      bottomLeft: Radius.circular(16.r),
-                                    ),
-                                  ),
-                                  child: InkWell(
-                                    onTap: _isLoadingCountries ? null : _showCountryPicker,
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        if (_selectedCountryCca2 != null) ...[
-                                          Text(
-                                            _countryCodes.firstWhere(
-                                              (c) => c['cca2'] == _selectedCountryCca2,
-                                              orElse: () => {'flag': '🇳🇵'},
-                                            )['flag']!,
-                                            style: TextStyle(fontSize: 20.sp),
-                                          ),
-                                          Gap(6.w),
-                                          Text(
-                                            _countryCodes.firstWhere(
-                                              (c) => c['cca2'] == _selectedCountryCca2,
-                                              orElse: () => {'code': '+977'},
-                                            )['code']!,
-                                            style: TextStyle(
-                                              fontSize: 15.sp,
-                                              fontWeight: FontWeight.w600,
-                                              color: Colors.black87,
-                                            ),
-                                          ),
-                                        ],
-                                        Icon(Icons.arrow_drop_down, size: 20.sp),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              validator: (value) => value!.isEmpty ? "WhatsApp number is required" : null,
-                            ),
-                            Gap(20.h),
-
-                            // Password
-                            Obx(() => TextFormField(
-                                  controller: authController.password,
-                                  obscureText: authController.obsecure.value,
-                                  decoration: _modernInputDecoration(
-                                    label: "Password",
-                                    hint: "Create a strong password",
-                                    icon: Icons.lock_outline,
-                                  ).copyWith(
-                                    suffixIcon: IconButton(
-                                      onPressed: authController.visibility,
-                                      icon: Icon(
-                                        authController.obsecure.value
-                                            ? Icons.visibility_off_outlined
-                                            : Icons.visibility_outlined,
-                                      ),
-                                    ),
-                                  ),
-                                  validator: (value) => value!.isEmpty ? "Password is required" : null,
-                                )),
-                            Gap(32.h),
-
-                            // Create Account Button
-                            SizedBox(
-                              width: double.infinity,
-                              height: 56.h,
-                              child: ElevatedButton(
-                                onPressed: () async {
-                                  if (_formKey.currentState!.validate()) {
-                                    Loader.show(context);
-                                    await authController.register();
-                                    Loader.hide();
-                                  }
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppColor.primaryOrange,
-                                  foregroundColor: Colors.white,
-                                  elevation: 2,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(16.r),
-                                  ),
-                                ),
-                                child: Text(
-                                  "Create Account",
-                                  style: TextStyle(
-                                    fontSize: 17.sp,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-
-                    Gap(32.h),
-
-                    // Already have account
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Already have an account?",
-                          style: TextStyle(
-                            fontSize: 14.sp,
-                            color: Colors.grey.shade600,
-                          ),
-                        ),
-                        Gap(6.w),
-                        TextButton(
-                          onPressed: () => Get.off(() => const LoginView()),
-                          style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                          child: Text(
-                            "Sign in",
-                            style: TextStyle(
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.bold,
-                              color: AppColor.primaryOrange,
-                            ),
-                          ),
+                  // Form Card
+                  Container(
+                    padding: EdgeInsets.all(24.r),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20.r),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.05),
+                          blurRadius: 20,
+                          offset: const Offset(0, 8),
                         ),
                       ],
                     ),
+                    child: Form(
+                      key: formKey,
+                      child: Column(
+                        children: [
+                          // Full Name
+                          TextFormField(
+                            controller: authController.name,
+                            keyboardType: TextInputType.name,
+                            decoration: _modernDecoration(
+                              label: "Full Name",
+                              hint: "Enter your full name",
+                              icon: Icons.person_outline,
+                            ),
+                            validator: (value) => value!.trim().isEmpty ? "Full name required" : null,
+                          ),
+                          Gap(20.h),
 
-                    Gap(40.h),
+                          // Email
+                          TextFormField(
+                            controller: authController.email,
+                            keyboardType: TextInputType.emailAddress,
+                            decoration: _modernDecoration(
+                              label: "Email Address",
+                              hint: "you@example.com",
+                              icon: Icons.email_outlined,
+                            ),
+                            validator: (value) => value!.trim().isEmpty ? "Email required" : null,
+                          ),
+                          Gap(20.h),
 
-                    // Footer
-                    Text(
-                      "© 2026 Code IT. All rights reserved.",
-                      style: TextStyle(fontSize: 12.sp, color: Colors.grey.shade500),
+                          // WhatsApp Number
+                          TextFormField(
+                            controller: authController.whatsApp,
+                            keyboardType: TextInputType.phone,
+                            validator: (value) => value!.trim().isEmpty ? "WhatsApp No. required" : null,
+                            decoration: _modernDecoration(
+                              label: "WhatsApp Number",
+                              hint: "9841234567",
+                              icon: null,
+                            ).copyWith(
+                              prefixIcon: Container(
+                                margin: EdgeInsets.only(right: 12.w),
+                                padding: EdgeInsets.symmetric(horizontal: 14.w),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFF3F4F6),
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(12.r),
+                                    bottomLeft: Radius.circular(12.r),
+                                  ),
+                                ),
+                                child: InkWell(
+                                  onTap: _isLoadingCountries ? null : _showCountryPicker,
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      if (_selectedCountryCca2 != null) ...[
+                                        Text(
+                                          _countryCodes.firstWhere(
+                                            (c) => c['cca2'] == _selectedCountryCca2,
+                                            orElse: () => {'flag': '🇳🇵'},
+                                          )['flag']!,
+                                          style: TextStyle(fontSize: 22.sp),
+                                        ),
+                                        Gap(6.w),
+                                        Text(
+                                          _countryCodes.firstWhere(
+                                            (c) => c['cca2'] == _selectedCountryCca2,
+                                            orElse: () => {'code': '+977'},
+                                          )['code']!,
+                                          style: TextStyle(
+                                            fontSize: 15.sp,
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.black87,
+                                          ),
+                                        ),
+                                      ],
+                                      const Icon(Icons.arrow_drop_down, size: 20),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              contentPadding: EdgeInsets.symmetric(vertical: 16.h),
+                            ),
+                          ),
+                          Gap(20.h),
+
+                          // Password
+                          Obx(() => TextFormField(
+                                controller: authController.password,
+                                obscureText: authController.obsecure.value,
+                                decoration: _modernDecoration(
+                                  label: "Password",
+                                  hint: "Enter your password",
+                                  icon: Icons.lock_outline,
+                                ).copyWith(
+                                  suffixIcon: IconButton(
+                                    onPressed: authController.visibility,
+                                    icon: Icon(
+                                      authController.obsecure.value
+                                          ? Icons.visibility_off_outlined
+                                          : Icons.visibility_outlined,
+                                    ),
+                                  ),
+                                ),
+                                validator: (value) => value!.isEmpty ? "Password required" : null,
+                              )),
+                          Gap(32.h),
+
+                          // Create Account Button
+                          SizedBox(
+                            width: double.infinity,
+                            height: 54.h,
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                if (formKey.currentState!.validate()) {
+                                  Loader.show(context);
+                                  await authController.register();
+                                  Loader.hide();
+                                }
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColor.primaryOrange,
+                                foregroundColor: Colors.white,
+                                elevation: 2,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12.r),
+                                ),
+                              ),
+                              child: Text(
+                                'Create Account',
+                                style: TextStyle(
+                                  fontSize: 17.sp,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ],
-                ),
+                  ),
+
+                  Gap(32.h),
+
+                  // Already have account
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Already have an account? ",
+                        style: TextStyle(fontSize: 15.sp, color: Colors.grey.shade600),
+                      ),
+                      TextButton(
+                        onPressed: () => Get.off(() => const LoginView()),
+                        style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                        child: Text(
+                          "Sign in",
+                          style: TextStyle(
+                            fontSize: 15.sp,
+                            fontWeight: FontWeight.w600,
+                            color: AppColor.primaryOrange,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  Gap(40.h),
+
+                  // Footer
+                  Text(
+                    "© 2026 Code IT. All rights reserved.",
+                    style: TextStyle(fontSize: 12.sp, color: Colors.grey.shade500),
+                  ),
+                ],
               ),
             ),
           ),
@@ -343,8 +337,8 @@ class _RegisterViewState extends State<RegisterView> {
     );
   }
 
-  // Reusable modern input decoration
-  InputDecoration _modernInputDecoration({
+  // Modern Input Decoration
+  InputDecoration _modernDecoration({
     required String label,
     required String hint,
     IconData? icon,
@@ -352,30 +346,31 @@ class _RegisterViewState extends State<RegisterView> {
     return InputDecoration(
       labelText: label,
       hintText: hint,
-      prefixIcon: icon != null ? Icon(icon) : null,
+      prefixIcon: icon != null ? Icon(icon, color: Colors.grey.shade600) : null,
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(16.r),
+        borderRadius: BorderRadius.circular(12.r),
       ),
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(16.r),
-        borderSide: BorderSide(color: Colors.grey.shade200),
+        borderRadius: BorderRadius.circular(12.r),
+        borderSide: BorderSide(color: Colors.grey.shade300),
       ),
       focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(16.r),
+        borderRadius: BorderRadius.circular(12.r),
         borderSide: BorderSide(color: AppColor.primaryOrange, width: 2),
       ),
       contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+      filled: true,
+      fillColor: Colors.white,
     );
   }
 }
 
-// Keep your existing _CountryPickerModal as it is (or I can modernize it too if you want)
+// ==================== COUNTRY PICKER MODAL (Slightly Cleaner UI) ====================
 class _CountryPickerModal extends StatefulWidget {
   final List<Map<String, String>> countries;
   final Function(String) onCountrySelected;
 
   const _CountryPickerModal({
-    super.key,
     required this.countries,
     required this.onCountrySelected,
   });
@@ -420,7 +415,7 @@ class _CountryPickerModalState extends State<_CountryPickerModal> {
       height: MediaQuery.of(context).size.height * 0.75,
       decoration: const BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       child: Column(
         children: [
@@ -430,9 +425,9 @@ class _CountryPickerModalState extends State<_CountryPickerModal> {
               controller: _searchController,
               onChanged: _filterCountries,
               decoration: InputDecoration(
-                hintText: "Search country or code",
+                hintText: 'Search country or code',
                 prefixIcon: const Icon(Icons.search),
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(16.r)),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12.r)),
                 filled: true,
                 fillColor: Colors.grey.shade50,
               ),
@@ -444,6 +439,7 @@ class _CountryPickerModalState extends State<_CountryPickerModal> {
               itemBuilder: (context, index) {
                 final country = _filteredCountries[index];
                 return ListTile(
+                  contentPadding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 4.h),
                   leading: Text(country['flag']!, style: TextStyle(fontSize: 26.sp)),
                   title: Text(country['name']!),
                   trailing: Text(

@@ -41,6 +41,9 @@ class AuthController extends GetxController {
     }
   }
 
+void remember(bool value){
+  isRemember.value = value;
+}
   void setCountryCode(String code) {
     countryCode.value = code;
   }
@@ -67,7 +70,6 @@ class AuthController extends GetxController {
         //Store Token in local storage
         StorageController().saveLogin(loginMessage.value.token!);
         await getProfle();
-
         var courseController = Get.find<CourseController>();
         var certificateController = Get.find<CertificateController>();
         await courseController.getCourses();

@@ -153,11 +153,14 @@ class _LoginViewState extends State<LoginView> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Row(
+                                Obx((){
+                                  return  Row(
                                   children: [
                                     Checkbox(
-                                      value: false, // You can make this reactive later
-                                      onChanged: (value) {},
+                                      value: authController.isRemember.value, // You can make this reactive later
+                                      onChanged: (value) {
+                                        authController.remember(value!);
+                                      },
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(4.r),
                                       ),
@@ -170,7 +173,10 @@ class _LoginViewState extends State<LoginView> {
                                       ),
                                     ),
                                   ],
-                                ),
+                                );
+                               
+                                }),
+                                
                                 GestureDetector(
                                   onTap: () => Get.toNamed(AppRoutes.forgotPassword),
                                   child: Text(
