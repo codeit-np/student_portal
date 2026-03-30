@@ -161,10 +161,14 @@ class DashboardView extends StatelessWidget {
                 icon: Icons.card_membership,
                 title: 'Certificates',
               ),
-              // _buildDrawerItem(
-              //   icon: Icons.receipt_long,
-              //   title: 'Payment Receipts',
-              // ),
+              _buildDrawerItem(
+                onTap: (){
+                  Get.back();
+                  Get.toNamed(AppRoutes.receipts);
+                },
+                icon: Icons.receipt_long,
+                title: 'Payment Receipts',
+              ),
               // _buildDrawerItem(icon: Icons.headset_mic, title: 'Support'),
               // _buildDrawerItem(
               //   icon: Icons.chat_bubble_outline,
