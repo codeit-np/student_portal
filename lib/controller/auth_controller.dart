@@ -142,6 +142,6 @@ class AuthController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    checkAuth();
+    // checkAuth();
   }
 }

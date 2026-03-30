@@ -79,10 +79,10 @@ class ConfirmationView extends StatelessWidget {
                   ),
                   child: Column(
                     children: [
-                      Icon(Icons.school_rounded, size: 48.w, color: Colors.deepPurple),
+                      Icon(Icons.school_rounded, size: 48.w, color: AppColor.primaryOrange),
                       16.verticalSpace,
                  Text(
-                            "Premium Course",
+                            "Welcome to Code IT",
                             style: TextStyle(
                               fontSize: 20.sp,
                               fontWeight: FontWeight.bold,
@@ -91,7 +91,7 @@ class ConfirmationView extends StatelessWidget {
                  ),
                       8.verticalSpace,
                       Text(
-                        "You are now enrolled!",
+                        "Nepal's Most Affordable IT Training",
                         style: TextStyle(
                           fontSize: 15.sp,
                           color: Colors.green.shade700,
@@ -118,7 +118,7 @@ class ConfirmationView extends StatelessWidget {
                       16.horizontalSpace,
                       Expanded(
                         child: Text(
-                          "Your payment has been received successfully.\nYou can start learning immediately.",
+                          "We’ve received your application and will review it shortly",
                           style: TextStyle(
                             fontSize: 15.sp,
                             height: 1.4,
@@ -150,7 +150,7 @@ class ConfirmationView extends StatelessWidget {
                       style: TextStyle(fontSize: 17.sp, fontWeight: FontWeight.w600),
                     ),
                     style: FilledButton.styleFrom(
-                      backgroundColor: Colors.deepPurple,
+                      backgroundColor: AppColor.primaryOrange,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16.r),
                       ),
