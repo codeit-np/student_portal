@@ -2,6 +2,7 @@ import 'package:codeit/controller/forgot_password_controller.dart';
 import 'package:codeit/utils/app_color.dart';
 import 'package:codeit/utils/app_strings.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -158,11 +159,13 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
                               width: double.infinity,
                               height: 56.h,
                               child: ElevatedButton(
-                                onPressed: () {
+                                onPressed: () async {
                                   if (_formKey.currentState!.validate()) {
-                                    controller.verifyOtp(
+                                    Loader.show(context);
+                                   await controller.verifyOtp(
                                       controller.otpController.text.trim(),
                                     );
+                                    Loader.hide();
                                   }
                                 },
                                 style: ElevatedButton.styleFrom(

@@ -52,6 +52,7 @@ void remember(bool value){
     name.text = "";
     email.text = "";
     whatsApp.text = "";
+    password.text = "";
     countryCode.value = "+977";
   }
 

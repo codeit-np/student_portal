@@ -63,6 +63,12 @@ class ForgotPasswordController extends GetxController {
     }
   }
 
+  void reset(){
+    emailController.text = "";
+    otpController.text = "";
+    newPasswordController.text = "";
+    confirmPasswordController.text = "";
+  }
   Future<void> resetPassword() async {
     if (newPasswordController.text != confirmPasswordController.text) {
       Get.snackbar(

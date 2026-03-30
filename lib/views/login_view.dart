@@ -51,7 +51,7 @@ class _LoginViewState extends State<LoginView> {
 
                     // Header
                     Text(
-                      "Welcome Back",
+                      "Student Portal",
                       style: TextStyle(
                         fontSize: 28.sp,
                         fontWeight: FontWeight.w700,
@@ -61,7 +61,7 @@ class _LoginViewState extends State<LoginView> {
                     ),
                     Gap(8.h),
                     Text(
-                      "Sign in to continue to your student portal",
+                      "Sign in to continue your learning journey",
                       style: TextStyle(
                         fontSize: 15.sp,
                         color: Colors.grey.shade600,
