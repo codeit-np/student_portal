@@ -15,4 +15,5 @@ class AppRoutes {
   static const forgotPassword = "/forgot-password";
   static const otpVerification = "/otp-verification";
   static const resetPassword = "/reset-password";
+  static const receipts = "/receipts";
 }

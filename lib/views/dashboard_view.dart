@@ -42,7 +42,12 @@ class DashboardView extends StatelessWidget {
 
         title: _buildLogo(),
         actions: [
-          Text("Beta Version",style: TextStyle(color: Colors.blueGrey,fontSize: 12),),
+          Column(
+            children: [
+              Text("Beta Version\n(3.0.5)",style: TextStyle(color: Colors.blueGrey,fontSize: 12,),textAlign: TextAlign.right,),
+              
+            ],
+          ),
           Gap(16)
         ],
         // actions: [
@@ -161,10 +166,14 @@ class DashboardView extends StatelessWidget {
                 icon: Icons.card_membership,
                 title: 'Certificates',
               ),
-              // _buildDrawerItem(
-              //   icon: Icons.receipt_long,
-              //   title: 'Payment Receipts',
-              // ),
+              _buildDrawerItem(
+                onTap: (){
+                  Get.back();
+                  Get.toNamed(AppRoutes.receipts);
+                },
+                icon: Icons.receipt_long,
+                title: 'Payment Receipts',
+              ),
               // _buildDrawerItem(icon: Icons.headset_mic, title: 'Support'),
               // _buildDrawerItem(
               //   icon: Icons.chat_bubble_outline,
@@ -276,14 +285,14 @@ class DashboardView extends StatelessWidget {
                           itemCount: googleMeetController.liveClasses.length,
                           itemBuilder: (context, index) {
                             return Padding(
-                              padding: const EdgeInsets.only(bottom: 12),
+                              padding: const EdgeInsets.only(bottom: 8),
                               child: _buildLiveClassCard(googleMeetController.liveClasses[index]),
                             );
                           },
                         ),
                       ],
                     ),
-                  const SizedBox(height: 16),
+                  
                   GestureDetector(
                     onTap: () {
                       Get.toNamed(AppRoutes.mycourse);
@@ -297,7 +306,7 @@ class DashboardView extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  InkWell(
+                  GestureDetector(
                     onTap: (){
                       Get.toNamed(AppRoutes.certificates);
                     },
