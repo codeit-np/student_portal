@@ -42,7 +42,12 @@ class DashboardView extends StatelessWidget {
 
         title: _buildLogo(),
         actions: [
-          Text("Beta Version",style: TextStyle(color: Colors.blueGrey,fontSize: 12),),
+          Column(
+            children: [
+              Text("Beta Version\n(3.0.5)",style: TextStyle(color: Colors.blueGrey,fontSize: 12,),textAlign: TextAlign.right,),
+              
+            ],
+          ),
           Gap(16)
         ],
         // actions: [
@@ -272,14 +277,14 @@ class DashboardView extends StatelessWidget {
                           itemCount: googleMeetController.liveClasses.length,
                           itemBuilder: (context, index) {
                             return Padding(
-                              padding: const EdgeInsets.only(bottom: 12),
+                              padding: const EdgeInsets.only(bottom: 8),
                               child: _buildLiveClassCard(googleMeetController.liveClasses[index]),
                             );
                           },
                         ),
                       ],
                     ),
-                  const SizedBox(height: 16),
+                  
                   GestureDetector(
                     onTap: () {
                       Get.toNamed(AppRoutes.mycourse);
@@ -293,7 +298,7 @@ class DashboardView extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  InkWell(
+                  GestureDetector(
                     onTap: (){
                       Get.toNamed(AppRoutes.certificates);
                     },
