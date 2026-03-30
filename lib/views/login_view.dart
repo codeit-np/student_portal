@@ -99,27 +99,29 @@ class _LoginViewState extends State<LoginView> {
                             16.verticalSpace,
 
                             // Remember + Forgot Password
-                            // Row(
-                            //   children: [
-                            //     Checkbox(
-                            //       value: false,
-                            //       onChanged: (value) {},
-                            //     ),
-                            //     Gap(2),
-                            //     Text("Remember me"),
-                            //     Spacer(),
-                            //     GestureDetector(
-                            //       onTap: () {},
-                            //       child: Text(
-                            //         "Forgot Password?",
-                            //         style: TextStyle(
-                            //           color: AppColor.primaryOrange,
-                            //           fontSize: 14,
-                            //         ),
-                            //       ),
-                            //     ),
-                            //   ],
-                            // ),
+                            Row(
+                              children: [
+                                Checkbox(
+                                  value: false,
+                                  onChanged: (value) {},
+                                ),
+                                Gap(2),
+                                Text("Remember me"),
+                                Spacer(),
+                                GestureDetector(
+                                  onTap: () {
+                                    Get.toNamed(AppRoutes.forgotPassword);
+                                  },
+                                  child: Text(
+                                    "Forgot Password?",
+                                    style: TextStyle(
+                                      color: AppColor.primaryOrange,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                             // 8.verticalSpace,
 
                             // Sign In Button

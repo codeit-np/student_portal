@@ -12,4 +12,7 @@ class AppRoutes {
   static const confirmation = "/confirmation";
   static const certificates = "/certificates";
   static const terms = "/terms";
+  static const forgotPassword = "/forgot-password";
+  static const otpVerification = "/otp-verification";
+  static const resetPassword = "/reset-password";
 }

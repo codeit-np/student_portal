@@ -9,9 +9,12 @@ import 'package:codeit/views/comfirmation_view.dart';
 import 'package:codeit/views/course_view.dart';
 import 'package:codeit/views/dashboard_view.dart';
 import 'package:codeit/views/demo_video_view.dart';
+import 'package:codeit/views/forgot_password_view.dart';
 import 'package:codeit/views/login_view.dart';
 import 'package:codeit/views/mycourse_view.dart';
+import 'package:codeit/views/otp_verification_view.dart';
 import 'package:codeit/views/register_view.dart';
+import 'package:codeit/views/reset_password_view.dart';
 import 'package:codeit/views/splash_view.dart';
 import 'package:codeit/views/terms_condition_view.dart';
 import 'package:codeit/views/upcoming_classes.dart';
@@ -33,5 +36,8 @@ class AppPages {
     GetPage(name: AppRoutes.confirmation, page: () => ConfirmationView()),
     GetPage(name: AppRoutes.certificates, page: () => CertificateView()),
     GetPage(name: AppRoutes.terms, page: () => TermsConditionView(),binding: TermsConditionBinding()),
+    GetPage(name: AppRoutes.forgotPassword, page: () => const ForgotPasswordView()),
+    GetPage(name: AppRoutes.otpVerification, page: () => const OtpVerificationView()),
+    GetPage(name: AppRoutes.resetPassword, page: () => const ResetPasswordView()),
   ];
 }
