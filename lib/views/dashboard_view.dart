@@ -177,6 +177,14 @@ class DashboardView extends StatelessWidget {
                 icon: Icons.description_outlined,
                 title: 'Terms & Conditions',
               ),
+               _buildDrawerItem(
+                onTap: (){
+                  Get.back();
+                  Get.toNamed(AppRoutes.resetPassword);
+                },
+                icon: Icons.lock,
+                title: 'Change Password',
+              ),
               // _buildDrawerItem(icon: Icons.person_outline, title: 'Profile'),
               const Spacer(),
               const Divider(color: Colors.white38, height: 1),

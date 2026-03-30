@@ -35,7 +35,7 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
                     Image.asset(AppStrings.logo, width: 200.w),
                     16.verticalSpace,
                     Text(
-                      "Create New Password",
+                      "Reset Your Password",
                       style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24.sp),
                     ),
                     8.verticalSpace,

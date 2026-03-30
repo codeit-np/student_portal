@@ -55,6 +55,7 @@ class AuthController extends GetxController {
   void visibility(){
     obsecure.value = !obsecure.value;
   }
+  
   //Login Method
   Future login() async {
     try {
