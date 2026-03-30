@@ -43,6 +43,7 @@ class DashboardView extends StatelessWidget {
         title: _buildLogo(),
         actions: [
           Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text("Beta Version\n(3.0.5)",style: TextStyle(color: Colors.blueGrey,fontSize: 12,),textAlign: TextAlign.right,),
               
