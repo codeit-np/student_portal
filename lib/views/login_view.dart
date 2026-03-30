@@ -16,123 +16,181 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
-  // ✅ Keep form key outside build
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final AuthController authController = Get.find<AuthController>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: 600),
-              child: Padding(
-                padding: EdgeInsets.all(16.0.r),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xFFF8FAFC),
+              Color(0xFFEEF2FF),
+            ],
+          ),
+        ),
+        child: SafeArea(
+          child: Center(
+            child: SingleChildScrollView(
+              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 24.h),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 420),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     // Logo
-                    Image.asset(AppStrings.logo, width: 200.w),
-                    16.verticalSpace,
+                    Image.asset(
+                      AppStrings.logo,
+                      width: 180.w,
+                    ),
+                    Gap(32.h),
 
                     // Header
-                    Column(
-                      children: [
-                        Text(
-                          "Welcome Back!",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 24.sp,
-                          ),
-                        ),
-                        8.verticalSpace,
-                        Text(
-                          "Sign in to your student portal",
-                          style: TextStyle(fontSize: 16.sp),
-                        ),
-                      ],
+                    Text(
+                      "Welcome Back",
+                      style: TextStyle(
+                        fontSize: 28.sp,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.black87,
+                        letterSpacing: -0.5,
+                      ),
                     ),
-                    16.verticalSpace,
+                    Gap(8.h),
+                    Text(
+                      "Sign in to continue to your student portal",
+                      style: TextStyle(
+                        fontSize: 15.sp,
+                        color: Colors.grey.shade600,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    Gap(40.h),
 
-                    // Login Form
-                    SizedBox(
-                      width: 428,
+                    // Login Card
+                    Container(
+                      padding: EdgeInsets.all(24.r),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(24.r),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.06),
+                            blurRadius: 30,
+                            offset: const Offset(0, 10),
+                          ),
+                        ],
+                      ),
                       child: Form(
                         key: _formKey,
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             // Email Field
                             TextFormField(
                               controller: authController.email,
+                              keyboardType: TextInputType.emailAddress,
                               decoration: InputDecoration(
-                                prefixIcon: Icon(Icons.email),
-                                hintText: "Enter your email address",
                                 labelText: "Email Address",
+                                hintText: "you@example.com",
+                                prefixIcon: const Icon(Icons.email_outlined),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(16.r),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(16.r),
+                                  borderSide: BorderSide(color: Colors.grey.shade200),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(16.r),
+                                  borderSide: BorderSide(color: AppColor.primaryOrange, width: 2),
+                                ),
                               ),
                               validator: (value) =>
-                                  value!.isEmpty ? 'Email required' : null,
+                                  value!.isEmpty ? 'Email is required' : null,
                             ),
-                            8.verticalSpace,
+                            Gap(20.h),
 
-                            // Password Field (Reactive)
+                            // Password Field
                             Obx(
                               () => TextFormField(
                                 controller: authController.password,
                                 obscureText: authController.obsecure.value,
                                 decoration: InputDecoration(
-                                  prefixIcon: Icon(Icons.lock),
+                                  labelText: "Password",
+                                  hintText: "Enter your password",
+                                  prefixIcon: const Icon(Icons.lock_outline),
                                   suffixIcon: IconButton(
                                     onPressed: authController.visibility,
-                                    icon: authController.obsecure.value
-                                        ? Icon(Icons.visibility_off)
-                                        : Icon(Icons.visibility),
+                                    icon: Icon(
+                                      authController.obsecure.value
+                                          ? Icons.visibility_off_outlined
+                                          : Icons.visibility_outlined,
+                                    ),
                                   ),
-                                  hintText: "Enter your password",
-                                  labelText: "Password",
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(16.r),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(16.r),
+                                    borderSide: BorderSide(color: Colors.grey.shade200),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(16.r),
+                                    borderSide: BorderSide(color: AppColor.primaryOrange, width: 2),
+                                  ),
                                 ),
                                 validator: (value) =>
-                                    value!.isEmpty ? 'Password required' : null,
+                                    value!.isEmpty ? 'Password is required' : null,
                               ),
                             ),
-                            16.verticalSpace,
+                            Gap(16.h),
 
-                            // Remember + Forgot Password
+                            // Remember + Forgot
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Checkbox(
-                                  value: false,
-                                  onChanged: (value) {},
+                                Row(
+                                  children: [
+                                    Checkbox(
+                                      value: false, // You can make this reactive later
+                                      onChanged: (value) {},
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(4.r),
+                                      ),
+                                    ),
+                                    Text(
+                                      "Remember me",
+                                      style: TextStyle(
+                                        fontSize: 14.sp,
+                                        color: Colors.grey.shade700,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                Gap(2),
-                                Text("Remember me"),
-                                Spacer(),
                                 GestureDetector(
-                                  onTap: () {
-                                    Get.toNamed(AppRoutes.forgotPassword);
-                                  },
+                                  onTap: () => Get.toNamed(AppRoutes.forgotPassword),
                                   child: Text(
                                     "Forgot Password?",
                                     style: TextStyle(
                                       color: AppColor.primaryOrange,
-                                      fontSize: 14,
+                                      fontSize: 14.sp,
+                                      fontWeight: FontWeight.w600,
                                     ),
                                   ),
                                 ),
                               ],
                             ),
-                            // 8.verticalSpace,
+                            Gap(32.h),
 
                             // Sign In Button
                             SizedBox(
                               width: double.infinity,
-                              height: 50,
-                              child: MaterialButton(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8.r),
-                                ),
-                                color: AppColor.primaryOrange,
+                              height: 56.h,
+                              child: ElevatedButton(
                                 onPressed: () async {
                                   if (_formKey.currentState!.validate()) {
                                     Loader.show(context);
@@ -140,51 +198,65 @@ class _LoginViewState extends State<LoginView> {
                                     Loader.hide();
                                   }
                                 },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColor.primaryOrange,
+                                  foregroundColor: Colors.white,
+                                  elevation: 2,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(16.r),
+                                  ),
+                                ),
                                 child: Text(
-                                  "Sign in",
+                                  "Sign In",
                                   style: TextStyle(
-                                    fontSize: 18,
-                                    color: Colors.white,
+                                    fontSize: 17.sp,
+                                    fontWeight: FontWeight.w600,
                                   ),
                                 ),
                               ),
-                            ),
-                            16.verticalSpace,
-
-                            // Create Account
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Don't have an account?",
-                                  style: TextStyle(fontSize: 14),
-                                ),
-                                Gap(4),
-                                InkWell(
-                                  onTap: () {
-                                    Get.toNamed(AppRoutes.register);
-                                  },
-                                  child: Text(
-                                    "Create Account",
-                                    style: TextStyle(
-                                      color: AppColor.primaryOrange,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ],
                             ),
                           ],
                         ),
                       ),
                     ),
-                    40.verticalSpace,
+
+                    Gap(32.h),
+
+                    // Create Account
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Don't have an account?",
+                          style: TextStyle(
+                            fontSize: 14.sp,
+                            color: Colors.grey.shade600,
+                          ),
+                        ),
+                        Gap(6.w),
+                        GestureDetector(
+                          onTap: () => Get.toNamed(AppRoutes.register),
+                          child: Text(
+                            "Create Account",
+                            style: TextStyle(
+                              color: AppColor.primaryOrange,
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    Gap(40.h),
 
                     // Footer
-                    const Text(
+                    Text(
                       "© 2026 Code IT. All rights reserved.",
-                      style: TextStyle(fontSize: 13, color: Color(0xFF9CA3AF)),
+                      style: TextStyle(
+                        fontSize: 12.sp,
+                        color: Colors.grey.shade500,
+                      ),
                     ),
                   ],
                 ),

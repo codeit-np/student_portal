@@ -3,6 +3,7 @@ import 'package:codeit/utils/app_color.dart';
 import 'package:codeit/utils/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
 class ForgotPasswordView extends StatefulWidget {
@@ -14,90 +15,166 @@ class ForgotPasswordView extends StatefulWidget {
 
 class _ForgotPasswordViewState extends State<ForgotPasswordView> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final ForgotPasswordController controller =
-      Get.find<ForgotPasswordController>();
+  final ForgotPasswordController controller = Get.find<ForgotPasswordController>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Forgot Password"),
-        centerTitle: true,
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        foregroundColor: Colors.black,
-      ),
-      body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 500),
-              child: Padding(
-                padding: EdgeInsets.all(16.0.r),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xFFF8FAFC),
+              Color(0xFFEEF2FF),
+            ],
+          ),
+        ),
+        child: SafeArea(
+          child: Center(
+            child: SingleChildScrollView(
+              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 24.h),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 420),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset(AppStrings.logo, width: 200.w),
-                    16.verticalSpace,
-                    Text(
-                      "Reset your password",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20.sp,
+                    // Logo
+                    Image.asset(AppStrings.logo, width: 180.w),
+                    Gap(40.h),
+
+                    // Icon / Illustration Area
+                    Container(
+                      padding: EdgeInsets.all(20.r),
+                      decoration: BoxDecoration(
+                        color: AppColor.primaryOrange.withOpacity(0.1),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                        Icons.lock_reset_rounded,
+                        size: 64.sp,
+                        color: AppColor.primaryOrange,
                       ),
                     ),
-                    8.verticalSpace,
+                    Gap(32.h),
+
+                    // Header
                     Text(
-                      "Enter your email to receive an OTP",
-                      style: TextStyle(fontSize: 16.sp),
+                      "Forgot Password?",
+                      style: TextStyle(
+                        fontSize: 28.sp,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.black87,
+                        letterSpacing: -0.5,
+                      ),
                     ),
-                    32.verticalSpace,
-                    Form(
-                      key: _formKey,
-                      child: Column(
-                        children: [
-                          TextFormField(
-                            controller: controller.emailController,
-                            keyboardType: TextInputType.emailAddress,
-                            decoration: const InputDecoration(
-                              prefixIcon: Icon(Icons.email),
-                              hintText: "Enter your email address",
-                              labelText: "Email Address",
-                            ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty)
-                                return 'Email required';
-                              if (!GetUtils.isEmail(value))
-                                return 'Enter valid email';
-                              return null;
-                            },
+                    Gap(12.h),
+                    Text(
+                      "Enter your email address and we'll send you an OTP to reset your password.",
+                      style: TextStyle(
+                        fontSize: 15.sp,
+                        color: Colors.grey.shade600,
+                        height: 1.4,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    Gap(40.h),
+
+                    // Form Card
+                    Container(
+                      padding: EdgeInsets.all(24.r),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(24.r),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.06),
+                            blurRadius: 30,
+                            offset: const Offset(0, 10),
                           ),
-                          24.verticalSpace,
-                          SizedBox(
-                            width: double.infinity,
-                            height: 50,
-                            child: MaterialButton(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.r),
+                        ],
+                      ),
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          children: [
+                            // Email Field
+                            TextFormField(
+                              controller: controller.emailController,
+                              keyboardType: TextInputType.emailAddress,
+                              decoration: InputDecoration(
+                                labelText: "Email Address",
+                                hintText: "you@example.com",
+                                prefixIcon: const Icon(Icons.email_outlined),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(16.r),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(16.r),
+                                  borderSide: BorderSide(color: Colors.grey.shade200),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(16.r),
+                                  borderSide: BorderSide(
+                                    color: AppColor.primaryOrange,
+                                    width: 2,
+                                  ),
+                                ),
                               ),
-                              color: AppColor.primaryOrange,
-                              onPressed: () {
-                                if (_formKey.currentState!.validate()) {
-                                  controller.sendOtp(
-                                    controller.emailController.text,
-                                  );
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Email is required';
                                 }
+                                if (!GetUtils.isEmail(value)) {
+                                  return 'Please enter a valid email';
+                                }
+                                return null;
                               },
-                              child: const Text(
-                                "Send OTP",
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  color: Colors.white,
+                            ),
+                            Gap(32.h),
+
+                            // Send OTP Button
+                            SizedBox(
+                              width: double.infinity,
+                              height: 56.h,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  if (_formKey.currentState!.validate()) {
+                                    controller.sendOtp(
+                                      controller.emailController.text.trim(),
+                                    );
+                                  }
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColor.primaryOrange,
+                                  foregroundColor: Colors.white,
+                                  elevation: 2,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(16.r),
+                                  ),
+                                ),
+                                child: Text(
+                                  "Send OTP",
+                                  style: TextStyle(
+                                    fontSize: 17.sp,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    Gap(40.h),
+
+                    // Footer
+                    Text(
+                      "© 2026 Code IT. All rights reserved.",
+                      style: TextStyle(
+                        fontSize: 12.sp,
+                        color: Colors.grey.shade500,
                       ),
                     ),
                   ],

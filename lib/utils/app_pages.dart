@@ -38,8 +38,8 @@ class AppPages {
     GetPage(name: AppRoutes.confirmation, page: () => ConfirmationView()),
     GetPage(name: AppRoutes.certificates, page: () => CertificateView()),
     GetPage(name: AppRoutes.terms, page: () => TermsConditionView(),binding: TermsConditionBinding()),
-    GetPage(name: AppRoutes.forgotPassword, page: () => const ForgotPasswordView()),
     GetPage(name: AppRoutes.otpVerification, page: () => const OtpVerificationView()),
+     GetPage(name: AppRoutes.forgotPassword, page: () => const ForgotPasswordView()),
     GetPage(name: AppRoutes.resetPassword, page: () => const ResetPasswordView()),
     GetPage(name: AppRoutes.receipts, page: () => ReceiptView(),binding: ReceiptBindings()),
   ];

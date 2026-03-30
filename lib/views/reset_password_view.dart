@@ -15,114 +15,186 @@ class ResetPasswordView extends StatefulWidget {
 class _ResetPasswordViewState extends State<ResetPasswordView> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final ForgotPasswordController controller = Get.find<ForgotPasswordController>();
+
   bool obscureNew = true;
   bool obscureConfirm = true;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Reset Password"), centerTitle: true, elevation: 0, backgroundColor: Colors.transparent, foregroundColor: Colors.black),
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: const Text("Reset Password"),
+        centerTitle: true,
+        elevation: 0,
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black87,
+      ),
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 20.h),
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 600),
-              child: Padding(
-                padding: EdgeInsets.all(16.0.r),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(AppStrings.logo, width: 200.w),
-                    16.verticalSpace,
-                    Text(
-                      "Reset Your Password",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24.sp),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Logo
+                  Hero(
+                    tag: 'logo',
+                    child: Image.asset(
+                      AppStrings.logo,
+                      width: 180.w,
                     ),
-                    8.verticalSpace,
-                    Text(
-                      "Enter your new password below",
-                      style: TextStyle(fontSize: 16.sp),
+                  ),
+
+                  40.verticalSpace,
+
+                  // Title & Subtitle
+                  Text(
+                    "Create New Password",
+                    style: TextStyle(
+                      fontSize: 28.sp,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
                     ),
-                    32.verticalSpace,
-                    Form(
-                      key: _formKey,
-                      child: Column(
-                        children: [
-                          TextFormField(
-                            controller: controller.newPasswordController,
-                            obscureText: obscureNew,
-                            decoration: InputDecoration(
-                              prefixIcon: const Icon(Icons.lock),
-                              suffixIcon: IconButton(
-                                icon: Icon(obscureNew ? Icons.visibility_off : Icons.visibility),
-                                onPressed: () {
-                                  setState(() {
-                                    obscureNew = !obscureNew;
-                                  });
-                                },
-                              ),
-                              hintText: "Enter new password",
-                              labelText: "New Password",
-                            ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) return 'Password required';
-                              if (value.length < 6) return 'Password too short';
-                              return null;
+                  ),
+                  12.verticalSpace,
+                  Text(
+                    "Your new password must be different from the previous one.",
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      color: Colors.grey[600],
+                      height: 1.4,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+
+                  50.verticalSpace,
+
+                  // Form
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        // New Password Field
+                        _buildPasswordField(
+                          controller: controller.newPasswordController,
+                          label: "New Password",
+                          hint: "Enter new password",
+                          obscure: obscureNew,
+                          onToggle: () => setState(() => obscureNew = !obscureNew),
+                          icon: Icons.lock,
+                        ),
+
+                        20.verticalSpace,
+
+                        // Confirm Password Field
+                        _buildPasswordField(
+                          controller: controller.confirmPasswordController,
+                          label: "Confirm Password",
+                          hint: "Confirm your new password",
+                          obscure: obscureConfirm,
+                          onToggle: () => setState(() => obscureConfirm = !obscureConfirm),
+                          icon: Icons.lock_outline,
+                        ),
+
+                        40.verticalSpace,
+
+                        // Reset Button
+                        SizedBox(
+                          width: double.infinity,
+                          height: 56.h,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                controller.resetPassword();
+                              }
                             },
-                          ),
-                          16.verticalSpace,
-                          TextFormField(
-                            controller: controller.confirmPasswordController,
-                            obscureText: obscureConfirm,
-                            decoration: InputDecoration(
-                              prefixIcon: const Icon(Icons.lock_outline),
-                              suffixIcon: IconButton(
-                                icon: Icon(obscureConfirm ? Icons.visibility_off : Icons.visibility),
-                                onPressed: () {
-                                  setState(() {
-                                    obscureConfirm = !obscureConfirm;
-                                  });
-                                },
-                              ),
-                              hintText: "Confirm your password",
-                              labelText: "Confirm Password",
-                            ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) return 'Confirm password required';
-                              if (value != controller.newPasswordController.text) return 'Passwords do not match';
-                              return null;
-                            },
-                          ),
-                          24.verticalSpace,
-                          SizedBox(
-                            width: double.infinity,
-                            height: 50,
-                            child: MaterialButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColor.primaryOrange,
+                              foregroundColor: Colors.white,
+                              elevation: 2,
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.r),
+                                borderRadius: BorderRadius.circular(12.r),
                               ),
-                              color: AppColor.primaryOrange,
-                              onPressed: () {
-                                if (_formKey.currentState!.validate()) {
-                                  controller.resetPassword();
-                                }
-                              },
-                              child: const Text(
-                                "Reset Password",
-                                style: TextStyle(fontSize: 18, color: Colors.white),
+                            ),
+                            child: Text(
+                              "Reset Password",
+                              style: TextStyle(
+                                fontSize: 18.sp,
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+
+                  30.verticalSpace,
+                ],
               ),
             ),
           ),
         ),
       ),
+    );
+  }
+
+  // Reusable Password Field Widget
+  Widget _buildPasswordField({
+    required TextEditingController controller,
+    required String label,
+    required String hint,
+    required bool obscure,
+    required VoidCallback onToggle,
+    required IconData icon,
+  }) {
+    return TextFormField(
+      controller: controller,
+      obscureText: obscure,
+      style: TextStyle(fontSize: 16.sp),
+      decoration: InputDecoration(
+        labelText: label,
+        hintText: hint,
+        prefixIcon: Icon(icon, color: AppColor.primaryOrange),
+        suffixIcon: IconButton(
+          icon: Icon(
+            obscure ? Icons.visibility_off : Icons.visibility,
+            color: Colors.grey[600],
+          ),
+          onPressed: onToggle,
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12.r),
+          borderSide: BorderSide(color: Colors.grey.shade300),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12.r),
+          borderSide: BorderSide(color: Colors.grey.shade300),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12.r),
+          borderSide: BorderSide(color: AppColor.primaryOrange, width: 2),
+        ),
+        filled: true,
+        fillColor: Colors.grey[50],
+        contentPadding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
+      ),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'This field is required';
+        }
+        if (label == "New Password" && value.length < 6) {
+          return 'Password must be at least 6 characters';
+        }
+        if (label == "Confirm Password" &&
+            value != this.controller.newPasswordController.text) {
+          return 'Passwords do not match';
+        }
+        return null;
+      },
     );
   }
 }

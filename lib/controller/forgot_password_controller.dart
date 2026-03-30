@@ -48,10 +48,10 @@ class ForgotPasswordController extends GetxController {
         );
         Get.toNamed(AppRoutes.resetPassword);
       } else {
-        Get.snackbar(
-          "Error",
-          "Invalid OTP",
-          colorText: Colors.black,
+        Get.defaultDialog(
+          title: "Error",
+          content: Text("Invalid OTP"),
+          onCancel: () => Get.back(),
         );
       }
     } catch (e) {

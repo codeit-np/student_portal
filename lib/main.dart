@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Code IT',
         theme: ThemeData(colorScheme: .fromSeed(seedColor: AppColor.primaryOrange)),
-        home: const ChangePasswordScreen(),
+        home: const SplashView(),
         getPages: AppPages.routes,
         initialBinding: ControllerBindings(),
       ),
