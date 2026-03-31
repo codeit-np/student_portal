@@ -123,7 +123,6 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
                                 letterSpacing: 12.w,
                               ),
                               decoration: InputDecoration(
-                                hintText: "••••••",
                                 labelText: "OTP Code",
                                 prefixIcon: const Icon(Icons.security_outlined),
                                 counterText: "",

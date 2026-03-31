@@ -1,5 +1,7 @@
+import 'package:codeit/model/forgot_password_model.dart';
 import 'package:codeit/services/auth_service.dart';
 import 'package:codeit/utils/app_routes.dart';
+import 'package:codeit/utils/helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -8,74 +10,62 @@ class ForgotPasswordController extends GetxController {
   final otpController = TextEditingController();
   final newPasswordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
+  final isLoading = false.obs;
+  var message  = ForgotpasswordModel(success: false, message: null).obs;
 
+  // Send OTP Method
   Future<void> sendOtp(String email) async {
     if (email.isEmpty) return;
     try {
+      isLoading(true);
       var response = await AuthService.forgotPassword(email);
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        Get.snackbar(
-          "Success",
-          "OTP sent to your email",
-          colorText: Colors.black,
+      var result = ForgotpasswordModel.fromJson(response.data);
+   
+      if (result.success == true) {
+        CustomDialogs.success(title: "Success", message: "OTP sent to your email",
+        onConfirm: () => Get.toNamed(AppRoutes.otpVerification),
         );
-        Get.toNamed(AppRoutes.otpVerification);
+        
       } else {
-        Get.snackbar(
-          "Error",
-          "Failed to send OTP",
-          colorText: Colors.black,
-        );
+        CustomDialogs.warning(title: "Error", message: "We can't find a user with that email address.");
+        
       }
-    } catch (e) {
-      Get.snackbar(
-        "Error",
-        "Something went wrong",
-        colorText: Colors.black,
-      );
+    } finally{
+        isLoading(false);
     }
   }
 
+  //Verify OTP Method
   Future<void> verifyOtp(String otp) async {
     if (otp.length != 6) return;
     try {
       var response = await AuthService.verifyOtp(emailController.text, otp);
       if (response.statusCode == 200 || response.statusCode == 201) {
-        Get.snackbar(
-          "Success",
-          "OTP verified successfully",
-          colorText: Colors.black,
-        );
-        Get.toNamed(AppRoutes.resetPassword);
+       CustomDialogs.success(title: "Success", message: "OTP verified successfully",
+       onConfirm: ()=>Get.toNamed(AppRoutes.resetPassword)
+       );
+        
+        
       } else {
-        Get.defaultDialog(
-          title: "Error",
-          content: Text("Invalid OTP"),
-          onCancel: () => Get.back(),
-        );
+        CustomDialogs.warning(title: "Error", message: "Invalid OTP");
       }
     } catch (e) {
-      Get.snackbar(
-        "Error",
-        "Something went wrong",
-        colorText: Colors.black,
-      );
+       CustomDialogs.warning(title: "Error", message: "Invalid OTP");
     }
   }
 
+  //Rest TextFormField After Success
   void reset(){
     emailController.text = "";
     otpController.text = "";
     newPasswordController.text = "";
     confirmPasswordController.text = "";
   }
+
+  //Reset Password Method
   Future<void> resetPassword() async {
     if (newPasswordController.text != confirmPasswordController.text) {
-      Get.snackbar(
-        "Error",
-        "Passwords do not match",
-        colorText: Colors.black,
-      );
+      CustomDialogs.warning(title: "Error", message: "Passwords do not match");
       return;
     }
     try {
@@ -85,25 +75,17 @@ class ForgotPasswordController extends GetxController {
         confirmPasswordController.text,
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
-        Get.snackbar(
-          "Success",
-          "Password reset successfully",
-          colorText: Colors.black,
-        );
-        Get.offAllNamed(AppRoutes.login);
+      CustomDialogs.success(title: "Success", message: "Password reset successfully",
+      onConfirm: () =>  Get.offAllNamed(AppRoutes.login),
+      );
+       
+       
       } else {
-        Get.snackbar(
-          "Error",
-          "Failed to reset password",
-          colorText: Colors.black,
-        );
+        CustomDialogs.warning(title: "Error", message: "Failed to reset password");
       }
     } catch (e) {
-      Get.snackbar(
-        "Error",
-        "Something went wrong",
-        colorText: Colors.black,
-      );
+      CustomDialogs.warning(title: "Error", message: "Failed to reset password");
+      
     }
   }
 
