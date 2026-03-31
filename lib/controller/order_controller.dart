@@ -30,10 +30,7 @@ class OrderController extends GetxController {
     try {
       isLoading(true);
       var response = await OrderService.placeOrder(file,enrollmentId);
-      
-      if (response.statusCode == 200) {
-        Get.snackbar("Message", "Your application has been submited");
-      }
+      print(response.data);     
     } finally {
       isLoading(false);
     }

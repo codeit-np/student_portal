@@ -4,6 +4,7 @@ import 'package:codeit/controller/storage_controller.dart';
 import 'package:codeit/model/login_model.dart';
 import 'package:codeit/model/profile_model.dart';
 import 'package:codeit/services/auth_service.dart';
+import 'package:codeit/utils/helper.dart';
 import 'package:codeit/utils/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -78,20 +79,14 @@ void remember(bool value){
         reset();
         Get.offNamed(AppRoutes.dashboard);
       }else{
-        Get.defaultDialog(
-          title: "Message",
-          content: Text("Invalid Email or Password"),
-          actions: [
-            FilledButton(onPressed: (){
-              Get.back();
-            }, child: Text("Cancel"))
-          ]
-        );
+        CustomDialogs.warning(title: "Error", message: "Invalid email or password. Please try again");
       }
     } finally {
       isLoading(false);
     }
   }
+
+  
 
   //Register
   Future register() async {
@@ -118,11 +113,7 @@ void remember(bool value){
         Get.offNamed(AppRoutes.dashboard);
       } else {
         errorMessage.value = loginMessage.value.message!;
-        Get.defaultDialog(
-          onCancel: () => Get.back(),
-          title: "Error",
-          content: Text(errorMessage.value),
-        );
+        CustomDialogs.warning(title: "Error", message: errorMessage.value);
       }
     } finally {
       isLoading(false);

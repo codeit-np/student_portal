@@ -1,6 +1,8 @@
 import 'package:codeit/controller/certificate_controller.dart';
 import 'package:codeit/utils/app_color.dart';
+import 'package:codeit/utils/helper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:get/get.dart';
 
 class CertificateView extends GetView<CertificateController> {
@@ -78,25 +80,17 @@ class CertificateView extends GetView<CertificateController> {
                     child: CertificateCard(
                       certificate: cert,
                       onEmailPressed: () async {
-                        Get.defaultDialog(
-                          title: "Send Certificate",
-                          content: const Text(
-                            "Do you want us to send this certificate to your registered email?",
-                          ),
-                          actions: [
-                            TextButton(
-                              onPressed: () => Get.back(),
-                              child: const Text("Cancel"),
-                            ),
-                            FilledButton(
-                              onPressed: () async {
-                                Get.back();
+                        CustomDialogs.confirmation(
+                          title: "Confirmation", message: "Do you want us to send this certificate to your registered email?",
+                          
+                          onConfirm: () async {
+                            Loader.show(context);
+                             Get.back();
                                 await controller.getCertificate(cert.certicateId);
-                              },
-                              child: const Text("Send Email"),
-                            ),
-                          ],
-                        );
+                                Loader.hide();
+                          },
+                          );
+                        
                       },
                     ),
                   );

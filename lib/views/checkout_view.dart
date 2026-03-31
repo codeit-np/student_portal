@@ -3,6 +3,7 @@ import 'package:codeit/controller/order_controller.dart';
 import 'package:codeit/utils/app_color.dart';
 import 'package:codeit/utils/app_routes.dart';
 import 'package:codeit/utils/app_strings.dart';
+import 'package:codeit/utils/helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:get/get.dart';
@@ -15,13 +16,12 @@ class CheckoutView extends GetView<AuthController> {
     var orderController = Get.find<OrderController>();
     var course = Get.arguments;
     return Scaffold(
-       backgroundColor: AppColor.backgroundColor,
+      backgroundColor: AppColor.backgroundColor,
       appBar: AppBar(
         title: Text("Checkout"),
-         backgroundColor: Colors.white,
+        backgroundColor: Colors.white,
         elevation: 0,
         scrolledUnderElevation: 0,
-       
       ),
       body: Obx(() {
         return SingleChildScrollView(
@@ -388,7 +388,7 @@ class CheckoutView extends GetView<AuthController> {
                                 orderController.terms.value = value!;
                               },
                             ),
-                            
+
                             Text("I agree to the Terms and Conditions."),
                           ],
                         ),
@@ -400,69 +400,35 @@ class CheckoutView extends GetView<AuthController> {
                             onPressed: () {
                               if (orderController.image.value != null) {
                                 if (orderController.terms.value == false) {
-                                  Get.defaultDialog(
-                                    title: "Error Message",
-                                    content: Text(
-                                      "You have not accepted the Terms and Conditions.",
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    actions: [
-                                      FilledButton(
-                                        onPressed: () {
-                                          Get.back();
-                                        },
-                                        child: Text("OK"),
-                                      ),
-                                    ],
+                                  CustomDialogs.warning(
+                                    title: "Warning",
+                                    message:
+                                        "You have not accepted the Terms and Conditions.",
                                   );
                                 } else {
-                                  Get.defaultDialog(
+                                  CustomDialogs.confirmation(
                                     title: "Confirmation",
-                                    content: Text(
-                                      "Are you sure you want to continue?",
-                                    ),
-                                    actions: [
-                                      OutlinedButton(
-                                        onPressed: () {
-                                          Get.back();
-                                        },
-                                        child: Text("Cancel"),
-                                      ),
-                                      FilledButton(
-                                        onPressed: () async {
-                                          if (orderController.terms.value ==
-                                              true) {
-                                            Get.back();
-                                            Loader.show(context);
-                                            await orderController.placeOrder(
-                                              orderController.image.value!,
-                                              course.upcomingId,
-                                            );
-                                            Loader.hide();
-                                            Get.offAndToNamed(AppRoutes.confirmation);
-                                          }
-                                        },
-                                        child: Text("Yes"),
-                                      ),
-                                    ],
+                                    message:
+                                        "Are you sure you want to continue?",
+                                    onConfirm: () async {
+                                      if (orderController.terms.value == true) {
+                                        Get.back();
+                                        Loader.show(context);
+                                        await orderController.placeOrder(
+                                          orderController.image.value!,
+                                          course.upcomingId,
+                                        );
+                                        Loader.hide();
+                                        Get.offAndToNamed(
+                                          AppRoutes.confirmation,
+                                        );
+                                      }
+                                    },
                                   );
                                 }
                               } else {
-                                Get.defaultDialog(
-                                  title: "Error Message",
-                                  content: Text(
-                                    "Please upload your payment receipt to continue.",
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  actions: [
-                                    FilledButton(
-                                      onPressed: () {
-                                        Get.back();
-                                      },
-                                      child: Text("OK"),
-                                    ),
-                                  ],
-                                );
+                                CustomDialogs.warning(title: "Warning", message: "Please upload your payment receipt to continue.");
+                              
                               }
                             },
                             style: ElevatedButton.styleFrom(
