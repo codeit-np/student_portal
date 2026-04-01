@@ -120,7 +120,13 @@ class LoginView extends GetView<AuthController> {
                       style: FilledButton.styleFrom(
                         backgroundColor: AppColor.primaryOrange,
                       ),
-                      onPressed: () {},
+                      onPressed: () async{
+                         if (key.currentState!.validate()) {
+                            Loader.show(context);
+                            await controller.login();
+                            Loader.hide();
+                          }
+                      },
                       child: Text("Sign in "),
                     ),
                   ),
@@ -149,15 +155,13 @@ class LoginView extends GetView<AuthController> {
     );
   }
 
-//Desktop UI
+  //Desktop UI
   Padding _buildTabUI(BuildContext context, GlobalKey<FormState> key) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Center(
         child: ConstrainedBox(
-          constraints: BoxConstraints(
-            maxWidth: 600
-          ),
+          constraints: BoxConstraints(maxWidth: 600),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -174,7 +178,7 @@ class LoginView extends GetView<AuthController> {
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
               Gap(12),
-          
+
               Form(
                 key: key,
                 child: Column(
@@ -186,12 +190,12 @@ class LoginView extends GetView<AuthController> {
                         labelText: 'Email address',
                         prefixIcon: Icon(Icons.email_outlined),
                       ),
-                        validator: (value) => value!.isEmpty ? 'email required' : null,
-
+                      validator: (value) =>
+                          value!.isEmpty ? 'email required' : null,
                     ),
-          
+
                     8.verticalSpace,
-          
+
                     Obx(() {
                       return TextFormField(
                         obscureText: controller.obsecure.value,
@@ -209,12 +213,13 @@ class LoginView extends GetView<AuthController> {
                                 : Icon(Icons.visibility),
                           ),
                         ),
-                        validator: (value) => value!.isEmpty ? 'password required' : null,
+                        validator: (value) =>
+                            value!.isEmpty ? 'password required' : null,
                       );
                     }),
-          
+
                     8.verticalSpace,
-          
+
                     Obx(() {
                       return Row(
                         children: [
@@ -236,9 +241,9 @@ class LoginView extends GetView<AuthController> {
                         ],
                       );
                     }),
-          
+
                     8.verticalSpace,
-          
+
                     SizedBox(
                       height: 32.h,
                       width: double.infinity,
@@ -247,16 +252,16 @@ class LoginView extends GetView<AuthController> {
                           backgroundColor: AppColor.primaryOrange,
                         ),
                         onPressed: () async {
-                          if(key.currentState!.validate()){
+                          if (key.currentState!.validate()) {
                             Loader.show(context);
                             await controller.login();
                             Loader.hide();
                           }
                         },
-                        child: Text("Sign in ",style: TextStyle(fontSize: 18),),
+                        child: Text("Sign in ", style: TextStyle(fontSize: 18)),
                       ),
                     ),
-          
+
                     16.verticalSpace,
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -281,7 +286,6 @@ class LoginView extends GetView<AuthController> {
       ),
     );
   }
-
 
   //Desktop UI
   Padding _buildDesktopUI(BuildContext context, GlobalKey<FormState> key) {
@@ -289,9 +293,7 @@ class LoginView extends GetView<AuthController> {
       padding: const EdgeInsets.all(16.0),
       child: Center(
         child: ConstrainedBox(
-          constraints: BoxConstraints(
-            maxWidth: 600
-          ),
+          constraints: BoxConstraints(maxWidth: 600),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -308,7 +310,7 @@ class LoginView extends GetView<AuthController> {
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
               Gap(12),
-          
+
               Form(
                 key: key,
                 child: Column(
@@ -320,12 +322,12 @@ class LoginView extends GetView<AuthController> {
                         labelText: 'Email address',
                         prefixIcon: Icon(Icons.email_outlined),
                       ),
-                        validator: (value) => value!.isEmpty ? 'email required' : null,
-
+                      validator: (value) =>
+                          value!.isEmpty ? 'email required' : null,
                     ),
-          
+
                     8.verticalSpace,
-          
+
                     Obx(() {
                       return TextFormField(
                         obscureText: controller.obsecure.value,
@@ -343,12 +345,13 @@ class LoginView extends GetView<AuthController> {
                                 : Icon(Icons.visibility),
                           ),
                         ),
-                        validator: (value) => value!.isEmpty ? 'password required' : null,
+                        validator: (value) =>
+                            value!.isEmpty ? 'password required' : null,
                       );
                     }),
-          
+
                     8.verticalSpace,
-          
+
                     Obx(() {
                       return Row(
                         children: [
@@ -370,9 +373,9 @@ class LoginView extends GetView<AuthController> {
                         ],
                       );
                     }),
-          
+
                     8.verticalSpace,
-          
+
                     SizedBox(
                       height: 32.h,
                       width: double.infinity,
@@ -381,16 +384,16 @@ class LoginView extends GetView<AuthController> {
                           backgroundColor: AppColor.primaryOrange,
                         ),
                         onPressed: () async {
-                          if(key.currentState!.validate()){
+                          if (key.currentState!.validate()) {
                             Loader.show(context);
                             await controller.login();
                             Loader.hide();
                           }
                         },
-                        child: Text("Sign in ",style: TextStyle(fontSize: 18),),
+                        child: Text("Sign in ", style: TextStyle(fontSize: 18)),
                       ),
                     ),
-          
+
                     16.verticalSpace,
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -415,5 +418,4 @@ class LoginView extends GetView<AuthController> {
       ),
     );
   }
-
 }

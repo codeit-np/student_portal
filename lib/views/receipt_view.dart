@@ -152,7 +152,7 @@ class ReceiptView extends GetView<ReceiptController> {
                                         ),
                                       ),
                                       Text(
-                                        "Rs. 1,199/-",
+                                        "Rs. ${receipt.amount}/-",
                                         style: TextStyle(
                                           fontSize: 24,
                                           fontWeight: FontWeight.bold,

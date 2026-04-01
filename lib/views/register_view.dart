@@ -117,7 +117,6 @@ class _RegisterViewState extends State<RegisterView> {
             final width = constraints.maxWidth;
             if(width < 600){
               return  _buildMobileUI(formKey, authController, context);
-      
             }else if(width < 1024){
               return _buildMobileUI(formKey, authController, context);
             }else{

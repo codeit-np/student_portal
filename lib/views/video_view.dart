@@ -12,7 +12,7 @@ class VideoView extends StatelessWidget {
 
   final controller = Get.find<VideoController>();
   final courseController = Get.find<CourseController>();
-  final video = Get.arguments;   // Current playing video
+  final video = Get.arguments; // Current playing video
 
   @override
   Widget build(BuildContext context) {
@@ -26,17 +26,18 @@ class VideoView extends StatelessWidget {
       builder: (context, player) {
         return Scaffold(
           backgroundColor: AppColor.backgroundColor,
-      appBar: AppBar(
-        title: Text("Class Videos"),
-         backgroundColor: Colors.white,
-        elevation: 0,
-        scrolledUnderElevation: 0,
-       
-      ),
+          appBar: AppBar(
+            title: Text("Class Videos"),
+            backgroundColor: Colors.white,
+            elevation: 0,
+            scrolledUnderElevation: 0,
+          ),
           body: Column(
             children: [
               // YouTube Player (Fixed at top)
-              player,
+              AspectRatio(
+                aspectRatio: 3/2,
+                child: player),
 
               // Scrollable Content
               Expanded(
@@ -111,12 +112,24 @@ class VideoView extends StatelessWidget {
 
                       // Modern Video List
                       ListView.builder(
-                        itemCount: courseController.course.value.courseDetails?.videos.length ?? 0,
+                        itemCount:
+                            courseController
+                                .course
+                                .value
+                                .courseDetails
+                                ?.videos
+                                .length ??
+                            0,
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         itemBuilder: (context, index) {
-                          final otherVideo = courseController.course.value.courseDetails!.videos[index];
-                          final isCurrentVideo = otherVideo.videoId == video.videoId;
+                          final otherVideo = courseController
+                              .course
+                              .value
+                              .courseDetails!
+                              .videos[index];
+                          final isCurrentVideo =
+                              otherVideo.videoId == video.videoId;
 
                           return VideoListItem(
                             video: otherVideo,
@@ -125,7 +138,10 @@ class VideoView extends StatelessWidget {
                               if (!isCurrentVideo) {
                                 controller.initPlayer(otherVideo.videoId!);
                                 Get.back();
-                                Get.toNamed(AppRoutes.video, arguments: otherVideo);
+                                Get.toNamed(
+                                  AppRoutes.video,
+                                  arguments: otherVideo,
+                                );
                               }
                             },
                           );
@@ -180,22 +196,26 @@ class VideoListItem extends StatelessWidget {
                     width: 48,
                     height: 48,
                     decoration: BoxDecoration(
-                      color: isPlaying 
+                      color: isPlaying
                           ? AppColor.primaryOrange.withOpacity(0.15)
                           : Colors.grey.shade50,
                       shape: BoxShape.circle,
                     ),
                   ),
                   Icon(
-                    isPlaying ? Icons.pause_circle_filled : Icons.play_circle_fill,
+                    isPlaying
+                        ? Icons.pause_circle_filled
+                        : Icons.play_circle_fill,
                     size: 42,
-                    color: isPlaying ? AppColor.primaryOrange : Colors.grey.shade700,
+                    color: isPlaying
+                        ? AppColor.primaryOrange
+                        : Colors.grey.shade700,
                   ),
                 ],
               ),
 
               const Gap(16),
-      
+
               // Video Info
               Expanded(
                 child: Column(
@@ -204,7 +224,9 @@ class VideoListItem extends StatelessWidget {
                     Text(
                       video.title ?? "Untitled Video",
                       style: theme.textTheme.titleMedium?.copyWith(
-                        fontWeight: isPlaying ? FontWeight.bold : FontWeight.w600,
+                        fontWeight: isPlaying
+                            ? FontWeight.bold
+                            : FontWeight.w600,
                         color: isPlaying ? AppColor.primaryOrange : null,
                       ),
                       maxLines: 2,
@@ -234,7 +256,10 @@ class VideoListItem extends StatelessWidget {
               // Current Playing Indicator
               if (isPlaying)
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: AppColor.primaryOrange,
                     borderRadius: BorderRadius.circular(12),

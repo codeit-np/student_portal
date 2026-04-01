@@ -38,19 +38,21 @@ class CourseView extends GetView<CourseController> {
             SliverToBoxAdapter(
               child: Stack(
                 children: [
-                  SizedBox(
-                    width: double.infinity,
-                    height: 240,
-                    child: CachedNetworkImage(
-                      imageUrl: courseDetails?.course?.image ?? '',
-                      fit: BoxFit.cover,
-                      placeholder: (context, url) => Container(
-                        color: Colors.grey.shade200,
-                        child: const Center(child: CircularProgressIndicator()),
-                      ),
-                      errorWidget: (context, url, error) => Container(
-                        color: Colors.grey.shade300,
-                        child: const Icon(Icons.image_not_supported, size: 60),
+                  AspectRatio(
+                    aspectRatio: 16/9,
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: CachedNetworkImage(
+                        imageUrl: courseDetails?.course?.image ?? '',
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) => Container(
+                          color: Colors.grey.shade200,
+                          child: const Center(child: CircularProgressIndicator()),
+                        ),
+                        errorWidget: (context, url, error) => Container(
+                          color: Colors.grey.shade300,
+                          child: const Icon(Icons.image_not_supported, size: 60),
+                        ),
                       ),
                     ),
                   ),

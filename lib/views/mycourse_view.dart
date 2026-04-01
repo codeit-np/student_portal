@@ -14,89 +14,95 @@ class MycourseView extends GetView<CourseController> {
     final theme = Theme.of(context);
 
     return Scaffold(
-       backgroundColor: AppColor.backgroundColor,
+      backgroundColor: AppColor.backgroundColor,
       appBar: AppBar(
         title: Text("My Courses"),
-         backgroundColor: Colors.white,
+        backgroundColor: Colors.white,
         elevation: 0,
         scrolledUnderElevation: 0,
-       
       ),
-    
+
       body: LayoutBuilder(
-        builder: (context, constraints){
-          bool isWideScreen = constraints.maxWidth > 600;
-          return  Obx(() {
-        if (controller.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
-        }
+        builder: (context, constraints) {
+          final width = constraints.maxWidth;
+          return Obx(() {
+            if (controller.isLoading.value) {
+              return const Center(child: CircularProgressIndicator());
+            }
 
-        final courses = controller.courses.value.data;
+            final courses = controller.courses.value.data;
 
-        if (courses.isEmpty) {
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.school_outlined, size: 80, color: Colors.grey.shade400),
-                const Gap(16),
-                Text(
-                  "No courses enrolled yet",
-                  style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w600),
+            if (courses.isEmpty) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.school_outlined,
+                      size: 80,
+                      color: Colors.grey.shade400,
+                    ),
+                    const Gap(16),
+                    Text(
+                      "No courses enrolled yet",
+                      style: theme.textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const Gap(8),
+                    Text(
+                      "Browse and enroll in new courses",
+                      style: theme.textTheme.bodyMedium,
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
                 ),
-                const Gap(8),
-                Text(
-                  "Browse and enroll in new courses",
-                  style: theme.textTheme.bodyMedium,
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
-          );
-        }
+              );
+            }
 
-        return RefreshIndicator(
-          onRefresh: () async => controller.getCourses(), // Add this method in controller if needed
-          child: SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "${courses.length} Enrolled Courses",
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: AppColor.primaryOrange,
-                  ),
-                ),
-                const Gap(20),
+            return RefreshIndicator(
+              onRefresh: () async => controller
+                  .getCourses(), // Add this method in controller if needed
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "${courses.length} Enrolled Courses",
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: AppColor.primaryOrange,
+                      ),
+                    ),
+                    const Gap(20),
 
-                GridView.builder(
-                  itemCount: courses.length,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: isWideScreen == true ? 2 : 1),
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    final course = courses[index];
-                    return CourseCard(
-                      course: course,
-                      onTap: () {
-                        controller.getCourse(course.enrollmentId!);
-                        Get.toNamed(AppRoutes.course);
+                    GridView.builder(
+                      itemCount: courses.length,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: width < 600 ? 1 : width < 1024 ? 2 : 4,
+                      ),
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        final course = courses[index];
+                        return CourseCard(
+                          course: course,
+                          onTap: () {
+                            controller.getCourse(course.enrollmentId!);
+                            Get.toNamed(AppRoutes.course);
+                          },
+                        );
                       },
-                    );
-                  },
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ),
-        );
-      });
+              ),
+            );
+          });
         },
-      )
-      
-     
+      ),
     );
   }
 }
@@ -106,19 +112,14 @@ class CourseCard extends StatelessWidget {
   final dynamic course; // Replace with your actual Course model
   final VoidCallback onTap;
 
-  const CourseCard({
-    super.key,
-    required this.course,
-    required this.onTap,
-  });
+  const CourseCard({super.key, required this.course, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
     final isPending = course.status?.toLowerCase() == "pending";
 
     return Card(
-      
-      margin: const EdgeInsets.only(bottom: 16,right: 16),
+      margin: const EdgeInsets.only(bottom: 16, right: 16),
       elevation: .5,
       color: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -130,18 +131,21 @@ class CourseCard extends StatelessWidget {
             // Course Image with Status Badge
             Stack(
               children: [
-                SizedBox(
-                  width: double.infinity,
-                  child: CachedNetworkImage(
-                    imageUrl: course.courseImage ?? '',
-                    fit: BoxFit.cover,
-                    placeholder: (context, url) => Container(
-                      color: Colors.grey.shade200,
-                      child: const Center(child: CircularProgressIndicator()),
-                    ),
-                    errorWidget: (context, url, error) => Container(
-                      color: Colors.grey.shade300,
-                      child: const Icon(Icons.image_not_supported, size: 50),
+                AspectRatio(
+                  aspectRatio: 16/9,
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: CachedNetworkImage(
+                      imageUrl: course.courseImage ?? '',
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => Container(
+                        color: Colors.grey.shade200,
+                        child: const Center(child: CircularProgressIndicator()),
+                      ),
+                      errorWidget: (context, url, error) => Container(
+                        color: Colors.grey.shade300,
+                        child: const Icon(Icons.image_not_supported, size: 50),
+                      ),
                     ),
                   ),
                 ),
@@ -151,9 +155,12 @@ class CourseCard extends StatelessWidget {
                   top: 12,
                   right: 12,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
                     decoration: BoxDecoration(
-                      color: isPending 
+                      color: isPending
                           ? AppColor.primaryOrange.withOpacity(0.95)
                           : Colors.green.shade600,
                       borderRadius: BorderRadius.circular(20),
@@ -162,7 +169,9 @@ class CourseCard extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(
-                          isPending ? Icons.pending_rounded : Icons.check_circle,
+                          isPending
+                              ? Icons.pending_rounded
+                              : Icons.check_circle,
                           color: Colors.white,
                           size: 16,
                         ),
@@ -203,7 +212,11 @@ class CourseCard extends StatelessWidget {
                   // Mentor
                   Row(
                     children: [
-                      Icon(Icons.person_outline, size: 18, color: Colors.grey.shade600),
+                      Icon(
+                        Icons.person_outline,
+                        size: 18,
+                        color: Colors.grey.shade600,
+                      ),
                       const Gap(8),
                       Text(
                         "Mentor: ${course.mentorName ?? 'N/A'}",

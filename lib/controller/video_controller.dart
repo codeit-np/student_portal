@@ -14,6 +14,7 @@ class VideoController extends GetxController {
       flags: const YoutubePlayerFlags(
         autoPlay: true,
         mute: false,
+        forceHD: true
       ),
     );
   }

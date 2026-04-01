@@ -51,45 +51,6 @@ class DashboardView extends StatelessWidget {
           ),
           Gap(16)
         ],
-        // actions: [
-        //   Padding(
-        //     padding: const EdgeInsets.only(right: 16.0),
-        //     child:  Row(
-        //       children: [
-        //         const Icon(Icons.person, color: AppColor.textColor),
-        //         const SizedBox(width: 8),
-        //         Column(
-        //           mainAxisAlignment: MainAxisAlignment.center,
-        //           crossAxisAlignment: CrossAxisAlignment.start,
-        //           children: [
-        //             Obx((){
-        //               return  
-        //               authController.isLoading.value == true ? Text("Loading...") : Text(
-        //               '${authController.profile.value.user!.name}',
-        //               style: TextStyle(
-        //                 fontSize: 14,
-        //                 fontWeight: FontWeight.bold,
-        //                 color: AppColor.textColor,
-        //               ),
-        //             );
-        //             }),
-        //             Text(
-        //               'Edit Profile',
-        //               style: TextStyle(
-        //                 fontSize: 12,
-        //                 color: AppColor.subtitleColor,
-        //               ),
-        //             ),
-                 
-        //           ],
-        //         ),
-              
-        //       ],
-        //     )
-          
-           
-        //   ),
-        // ],
        
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(1.0),
@@ -840,7 +801,7 @@ class DashboardView extends StatelessWidget {
   }
 
   Widget _buildLogo() {
-    return Image.asset(AppStrings.logo,width: 120.w,);
+    return Image.asset(AppStrings.logo,width: 120,);
   }
 
   Widget _buildDrawerItem({
