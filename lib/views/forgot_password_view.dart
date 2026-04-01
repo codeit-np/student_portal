@@ -196,7 +196,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                 ),
                 textAlign: TextAlign.center,
               ),
-              Gap(40.h),
+              Gap(20.h),
 
               // Form Card
               Form(
@@ -222,7 +222,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                         return null;
                       },
                     ),
-                    Gap(32.h),
+                    Gap(20.h),
 
                     // Send OTP Button
                     SizedBox(

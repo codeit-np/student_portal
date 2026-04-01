@@ -1,4 +1,5 @@
 import 'package:codeit/controller/auth_controller.dart';
+import 'package:codeit/controller/forgot_password_controller.dart';
 import 'package:codeit/utils/app_color.dart';
 import 'package:codeit/utils/app_routes.dart';
 import 'package:codeit/utils/app_strings.dart';
@@ -102,7 +103,9 @@ class LoginView extends GetView<AuthController> {
                         Text("Remember me"),
                         Spacer(),
                         GestureDetector(
-                          onTap: () => Get.toNamed(AppRoutes.forgotPassword),
+                          onTap: () {
+                            Get.toNamed(AppRoutes.forgotPassword);
+                          },
                           child: Text(
                             "Forgot Password",
                             style: TextStyle(fontWeight: FontWeight.bold),

@@ -8,6 +8,7 @@ import 'package:codeit/model/googlemeet_model.dart';
 import 'package:codeit/utils/app_color.dart';
 import 'package:codeit/utils/app_routes.dart';
 import 'package:codeit/utils/app_strings.dart';
+import 'package:codeit/utils/helper.dart';
 import 'package:codeit/views/mycourse_view.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -162,21 +163,14 @@ class DashboardView extends StatelessWidget {
                 icon: Icons.logout,
                 title: 'Logout',
                 onTap: () {
-                  Get.defaultDialog(
-                    title: "Logout",
-                    content: Text("Do you want to continue?"),
-                    actions: [
-                      TextButton(onPressed: (){
-                        Get.back();
-                      }, child: Text("Cancel")),
-                      TextButton(onPressed: (){
-                          StorageController().deleteToken();
+                  CustomDialogs.confirmation(title: "Logout", message: "Do you want to continute?",
+                  onConfirm: () {
+                     StorageController().deleteToken();
                           authController.reset();
                        Get.offAllNamed(AppRoutes.login);
-                      }, child: Text("Yes")),
-                    ]
+                  },
                   );
-                
+                 
                 },
               ),
               const SizedBox(height: 16),

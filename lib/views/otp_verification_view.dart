@@ -84,7 +84,7 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
                           color: Colors.grey.shade600,
                           height: 1.4,
                         ),
-                        textAlign: TextAlign.center,
+                        textAlign: TextAlign.left,
                       ),
                       Gap(8.h),
 

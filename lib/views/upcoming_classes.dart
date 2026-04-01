@@ -5,7 +5,6 @@ import 'package:codeit/controller/video_controller.dart';
 import 'package:codeit/utils/app_color.dart';
 import 'package:codeit/utils/app_routes.dart';
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
 class UpcomingClasses extends GetView<UpcomingClassController> {
@@ -92,7 +91,7 @@ class UpcomingClasses extends GetView<UpcomingClassController> {
                               controller.upcomingClasses.value.data.length,
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: width < 600 ? 1 : 2,crossAxisSpacing: 8, childAspectRatio: width < 600 ? 1/1.8 : width <1024 ? 1/1.9 : 1/1.3),
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: width < 600 ? 1 : 2,crossAxisSpacing: 8, childAspectRatio: width < 600 ? 1/1.8 : width <1024 ? 1/1.8 : 1/1.3),
                           itemBuilder: (BuildContext context, int index) {
                             var course =
                                 controller.upcomingClasses.value.data[index];
@@ -224,6 +223,7 @@ class UpcomingClasses extends GetView<UpcomingClassController> {
                     fontWeight: FontWeight.bold,
                     color: Color(0xFF0F172A),
                   ),
+                  overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 16),
 
@@ -442,14 +442,17 @@ class UpcomingClasses extends GetView<UpcomingClassController> {
 
   // Mocking the MERN Stack banner content since we don't have images
   Widget _buildMernBanner(String image) {
-    return SizedBox(
-      width: double.infinity,
-      child: CachedNetworkImage(
-        imageUrl: image,
-        progressIndicatorBuilder: (context, url, downloadProgress) => Center(
-          child: CircularProgressIndicator(value: downloadProgress.progress),
+    return AspectRatio(
+      aspectRatio: 16/9,
+      child: SizedBox(
+        width: double.infinity,
+        child: CachedNetworkImage(
+          imageUrl: image,
+          progressIndicatorBuilder: (context, url, downloadProgress) => Center(
+            child: CircularProgressIndicator(value: downloadProgress.progress),
+          ),
+          errorWidget: (context, url, error) => Icon(Icons.error),
         ),
-        errorWidget: (context, url, error) => Icon(Icons.error),
       ),
     );
   }
