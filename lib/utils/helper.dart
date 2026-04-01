@@ -56,114 +56,119 @@ class CustomDialogs {
           backgroundColor: Colors.transparent,
           elevation: 0,
           insetPadding: const EdgeInsets.all(24),
-          child: Container(
-            padding: const EdgeInsets.all(28),
-            decoration: BoxDecoration(
-              color: Get.theme.scaffoldBackgroundColor,
-              borderRadius: BorderRadius.circular(28),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.15),
-                  blurRadius: 30,
-                  offset: const Offset(0, 15),
-                ),
-              ],
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth: 600
             ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Icon with background
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: accentColor.withOpacity(0.1),
-                    shape: BoxShape.circle,
+            child: Container(
+              padding: const EdgeInsets.all(28),
+              decoration: BoxDecoration(
+                color: Get.theme.scaffoldBackgroundColor,
+                borderRadius: BorderRadius.circular(28),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.15),
+                    blurRadius: 30,
+                    offset: const Offset(0, 15),
                   ),
-                  child: Icon(
-                    icon,
-                    size: 68,
-                    color: accentColor,
+                ],
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Icon with background
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: accentColor.withOpacity(0.1),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(icon, size: 68, color: accentColor),
                   ),
-                ),
-                const SizedBox(height: 24),
-
-                // Title
-                Text(
-                  title,
-                  style: Get.textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 22,
+                  const SizedBox(height: 24),
+                    
+                  // Title
+                  Text(
+                    title,
+                    style: Get.textTheme.headlineSmall?.copyWith(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 22,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 12),
-
-                // Message
-                Text(
-                  message,
-                  style: Get.textTheme.bodyLarge?.copyWith(
-                    color: Get.theme.textTheme.bodyLarge?.color?.withOpacity(0.75),
-                    height: 1.4,
+                  const SizedBox(height: 12),
+                    
+                  // Message
+                  Text(
+                    message,
+                    style: Get.textTheme.bodyLarge?.copyWith(
+                      color: Get.theme.textTheme.bodyLarge?.color?.withOpacity(
+                        0.75,
+                      ),
+                      height: 1.4,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 32),
-
-                // Action Buttons
-                Row(
-                  children: [
-                    if (type == DialogType.confirmation || type == DialogType.warning) ...[
+                  const SizedBox(height: 32),
+                    
+                  // Action Buttons
+                  Row(
+                    children: [
+                      if (type == DialogType.confirmation ||
+                          type == DialogType.warning) ...[
+                        Expanded(
+                          child: TextButton(
+                            onPressed: () {
+                              Get.back();
+                              onCancel?.call();
+                            },
+                            style: TextButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(vertical: 16),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                            ),
+                            child: Text(
+                              cancelBtnText,
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Get.theme.textTheme.bodyLarge?.color
+                                    ?.withOpacity(0.7),
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                      ],
                       Expanded(
-                        child: TextButton(
+                        child: ElevatedButton(
                           onPressed: () {
                             Get.back();
-                            onCancel?.call();
+                            onConfirm?.call();
                           },
-                          style: TextButton.styleFrom(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: accentColor,
+                            foregroundColor: Colors.white,
                             padding: const EdgeInsets.symmetric(vertical: 16),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16),
                             ),
+                            elevation: 0,
                           ),
                           child: Text(
-                            cancelBtnText,
-                            style: TextStyle(
+                            confirmBtnText,
+                            style: const TextStyle(
                               fontSize: 16,
-                              color: Get.theme.textTheme.bodyLarge?.color?.withOpacity(0.7),
-                              fontWeight: FontWeight.w600,
+                              fontWeight: FontWeight.w700,
                             ),
                           ),
                         ),
                       ),
-                      const SizedBox(width: 12),
                     ],
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Get.back();
-                          onConfirm?.call();
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: accentColor,
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          elevation: 0,
-                        ),
-                        child: Text(
-                          confirmBtnText,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
