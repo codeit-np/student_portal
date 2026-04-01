@@ -44,7 +44,7 @@ class DashboardView extends StatelessWidget {
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("Beta Version\n(3.0.8)",style: TextStyle(color: Colors.blueGrey,fontSize: 12,),textAlign: TextAlign.right,),
+              Text("Beta Version\n(3.0.9)",style: TextStyle(color: Colors.blueGrey,fontSize: 12,),textAlign: TextAlign.right,),
               
             ],
           ),

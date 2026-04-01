@@ -138,7 +138,10 @@ class LoginView extends GetView<AuthController> {
                       Text("New Student?"),
                       Gap(4),
                       GestureDetector(
-                        onTap: () => Get.toNamed(AppRoutes.register),
+                        onTap: () {
+                        controller.reset();
+                          Get.toNamed(AppRoutes.register);
+                        },
                         child: Text(
                           "Create Account",
                           style: TextStyle(fontWeight: FontWeight.bold),
@@ -269,7 +272,10 @@ class LoginView extends GetView<AuthController> {
                         Text("New Student?"),
                         Gap(4),
                         GestureDetector(
-                          onTap: () => Get.toNamed(AppRoutes.register),
+                          onTap: () {
+                            controller.reset();
+                            Get.toNamed(AppRoutes.register);
+                          },
                           child: Text(
                             "Create Account",
                             style: TextStyle(fontWeight: FontWeight.bold),
@@ -401,7 +407,10 @@ class LoginView extends GetView<AuthController> {
                         Text("New Student?"),
                         Gap(4),
                         GestureDetector(
-                          onTap: () => Get.toNamed(AppRoutes.register),
+                          onTap: () {
+                            controller.reset();
+                            Get.toNamed(AppRoutes.register);
+                          },
                           child: Text(
                             "Create Account",
                             style: TextStyle(fontWeight: FontWeight.bold),

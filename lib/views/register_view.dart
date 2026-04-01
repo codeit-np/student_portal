@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:codeit/controller/auth_controller.dart';
 import 'package:codeit/utils/app_color.dart';
+import 'package:codeit/utils/app_routes.dart';
 import 'package:codeit/utils/app_strings.dart';
 import 'package:codeit/views/login_view.dart';
 import 'package:flutter/material.dart';
@@ -339,10 +340,10 @@ class _RegisterViewState extends State<RegisterView> {
                       ),
                     ),
                     TextButton(
-                      onPressed: () => Get.off(() {
-                        authController.reset();
-                        return const LoginView();
-                      }),
+                      onPressed: () async {
+                          authController.reset();
+                          Get.toNamed(AppRoutes.login);
+                      },
                       style: TextButton.styleFrom(padding: EdgeInsets.zero),
                       child: Text(
                         "Sign in",
