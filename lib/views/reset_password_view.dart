@@ -1,6 +1,5 @@
 import 'package:codeit/controller/forgot_password_controller.dart';
 import 'package:codeit/utils/app_color.dart';
-import 'package:codeit/utils/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,7 +14,8 @@ class ResetPasswordView extends StatefulWidget {
 
 class _ResetPasswordViewState extends State<ResetPasswordView> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final ForgotPasswordController controller = Get.find<ForgotPasswordController>();
+  final ForgotPasswordController controller =
+      Get.find<ForgotPasswordController>();
 
   bool obscureNew = true;
   bool obscureConfirm = true;
@@ -32,114 +32,331 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
         foregroundColor: Colors.black87,
       ),
       body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 20.h),
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 600),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // Logo
-                  Hero(
-                    tag: 'logo',
-                    child: Image.asset(
-                      AppStrings.logo,
-                      width: 180.w,
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final width = constraints.maxWidth;
+            if (width < 600) {
+              return _buildMobileUI(context);
+            } else if (width < 1024) {
+              return _buildTabUI(context);
+            } else {
+              return _buildDesktopUI(context);
+            }
+          },
+        ),
+      ),
+    );
+  }
+
+  // Mobile UI
+  Center _buildMobileUI(BuildContext context) {
+    return Center(
+      child: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 600),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.lock_clock, size: 80),
+              // Title & Subtitle
+              Text(
+                "Create New Password",
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
+              ),
+              12.verticalSpace,
+              Text(
+                "Your new password must be different from the previous one.",
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.grey[600],
+                  height: 1.4,
+                ),
+                textAlign: TextAlign.center,
+              ),
+
+              30.verticalSpace,
+
+              // Form
+              Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    // New Password Field
+                    _buildPasswordField(
+                      controller: controller.newPasswordController,
+                      label: "New Password",
+                      hint: "Enter new password",
+                      obscure: obscureNew,
+                      onToggle: () => setState(() => obscureNew = !obscureNew),
+                      icon: Icons.lock,
                     ),
-                  ),
 
-                  40.verticalSpace,
+                    20.verticalSpace,
 
-                  // Title & Subtitle
-                  Text(
-                    "Create New Password",
-                    style: TextStyle(
-                      fontSize: 28.sp,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
+                    // Confirm Password Field
+                    _buildPasswordField(
+                      controller: controller.confirmPasswordController,
+                      label: "Confirm Password",
+                      hint: "Confirm your new password",
+                      obscure: obscureConfirm,
+                      onToggle: () =>
+                          setState(() => obscureConfirm = !obscureConfirm),
+                      icon: Icons.lock_outline,
                     ),
-                  ),
-                  12.verticalSpace,
-                  Text(
-                    "Your new password must be different from the previous one.",
-                    style: TextStyle(
-                      fontSize: 16.sp,
-                      color: Colors.grey[600],
-                      height: 1.4,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
 
-                  50.verticalSpace,
+                    20.verticalSpace,
 
-                  // Form
-                  Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        // New Password Field
-                        _buildPasswordField(
-                          controller: controller.newPasswordController,
-                          label: "New Password",
-                          hint: "Enter new password",
-                          obscure: obscureNew,
-                          onToggle: () => setState(() => obscureNew = !obscureNew),
-                          icon: Icons.lock,
-                        ),
-
-                        20.verticalSpace,
-
-                        // Confirm Password Field
-                        _buildPasswordField(
-                          controller: controller.confirmPasswordController,
-                          label: "Confirm Password",
-                          hint: "Confirm your new password",
-                          obscure: obscureConfirm,
-                          onToggle: () => setState(() => obscureConfirm = !obscureConfirm),
-                          icon: Icons.lock_outline,
-                        ),
-
-                        40.verticalSpace,
-
-                        // Reset Button
-                        SizedBox(
-                          width: double.infinity,
-                          height: 56.h,
-                          child: ElevatedButton(
-                            onPressed: () async {
-                              if (_formKey.currentState!.validate()) {
-                                Loader.show(context);
-                                await controller.resetPassword();
-                                controller.reset();
-                                Loader.hide();
-                              }
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColor.primaryOrange,
-                              foregroundColor: Colors.white,
-                              elevation: 2,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12.r),
-                              ),
-                            ),
-                            child: Text(
-                              "Reset Password",
-                              style: TextStyle(
-                                fontSize: 18.sp,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
+                    // Reset Button
+                    SizedBox(
+                      width: double.infinity,
+                      height: 56,
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            Loader.show(context);
+                            await controller.resetPassword();
+                            controller.reset();
+                            Loader.hide();
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColor.primaryOrange,
+                          foregroundColor: Colors.white,
+                          elevation: 2,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.r),
                           ),
                         ),
-                      ],
+                        child: Text(
+                          "Reset Password",
+                          style: TextStyle(
+                            fontSize: 18.sp,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-
-                  30.verticalSpace,
-                ],
+                  ],
+                ),
               ),
-            ),
+
+              30.verticalSpace,
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Tab UI
+  Center _buildTabUI(BuildContext context) {
+    return Center(
+      child: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 600),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.lock_clock, size: 80),
+              // Title & Subtitle
+              Text(
+                "Create New Password",
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
+              ),
+              12.verticalSpace,
+              Text(
+                "Your new password must be different from the previous one.",
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.grey[600],
+                  height: 1.4,
+                ),
+                textAlign: TextAlign.center,
+              ),
+
+              30.verticalSpace,
+
+              // Form
+              Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    // New Password Field
+                    _buildPasswordField(
+                      controller: controller.newPasswordController,
+                      label: "New Password",
+                      hint: "Enter new password",
+                      obscure: obscureNew,
+                      onToggle: () => setState(() => obscureNew = !obscureNew),
+                      icon: Icons.lock,
+                    ),
+
+                    20.verticalSpace,
+
+                    // Confirm Password Field
+                    _buildPasswordField(
+                      controller: controller.confirmPasswordController,
+                      label: "Confirm Password",
+                      hint: "Confirm your new password",
+                      obscure: obscureConfirm,
+                      onToggle: () =>
+                          setState(() => obscureConfirm = !obscureConfirm),
+                      icon: Icons.lock_outline,
+                    ),
+
+                    20.verticalSpace,
+
+                    // Reset Button
+                    SizedBox(
+                      width: double.infinity,
+                      height: 56,
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            Loader.show(context);
+                            await controller.resetPassword();
+                            controller.reset();
+                            Loader.hide();
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColor.primaryOrange,
+                          foregroundColor: Colors.white,
+                          elevation: 2,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                          ),
+                        ),
+                        child: Text(
+                          "Reset Password",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              30.verticalSpace,
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Desktop UI
+  Center _buildDesktopUI(BuildContext context) {
+    return Center(
+      child: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 600),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.lock_clock, size: 80),
+              // Title & Subtitle
+              Text(
+                "Create New Password",
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
+              ),
+              12.verticalSpace,
+              Text(
+                "Your new password must be different from the previous one.",
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.grey[600],
+                  height: 1.4,
+                ),
+                textAlign: TextAlign.center,
+              ),
+
+              30.verticalSpace,
+
+              // Form
+              Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    // New Password Field
+                    _buildPasswordField(
+                      controller: controller.newPasswordController,
+                      label: "New Password",
+                      hint: "Enter new password",
+                      obscure: obscureNew,
+                      onToggle: () => setState(() => obscureNew = !obscureNew),
+                      icon: Icons.lock,
+                    ),
+
+                    20.verticalSpace,
+
+                    // Confirm Password Field
+                    _buildPasswordField(
+                      controller: controller.confirmPasswordController,
+                      label: "Confirm Password",
+                      hint: "Confirm your new password",
+                      obscure: obscureConfirm,
+                      onToggle: () =>
+                          setState(() => obscureConfirm = !obscureConfirm),
+                      icon: Icons.lock_outline,
+                    ),
+
+                    20.verticalSpace,
+
+                    // Reset Button
+                    SizedBox(
+                      width: double.infinity,
+                      height: 56,
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            Loader.show(context);
+                            await controller.resetPassword();
+                            controller.reset();
+                            Loader.hide();
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColor.primaryOrange,
+                          foregroundColor: Colors.white,
+                          elevation: 2,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                          ),
+                        ),
+                        child: Text(
+                          "Reset Password",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              30.verticalSpace,
+            ],
           ),
         ),
       ),
@@ -158,7 +375,7 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
     return TextFormField(
       controller: controller,
       obscureText: obscure,
-      style: TextStyle(fontSize: 16.sp),
+      style: TextStyle(fontSize: 16),
       decoration: InputDecoration(
         labelText: label,
         hintText: hint,

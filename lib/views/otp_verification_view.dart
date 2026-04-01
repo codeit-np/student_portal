@@ -16,98 +16,92 @@ class OtpVerificationView extends StatefulWidget {
 
 class _OtpVerificationViewState extends State<OtpVerificationView> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final ForgotPasswordController controller = Get.find<ForgotPasswordController>();
+  final ForgotPasswordController controller =
+      Get.find<ForgotPasswordController>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color(0xFFF8FAFC),
-              Color(0xFFEEF2FF),
-            ],
-          ),
+      body: SafeArea(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final width = constraints.maxWidth;
+            if (width < 600) {
+              return _buildMobileUI(context);
+            } else if (width < 1024) {
+              return _buildTabUI(context);
+            } else {
+              return _buildDesktopUI(context);
+            }
+          },
         ),
-        child: SafeArea(
-          child: Center(
-            child: SingleChildScrollView(
-              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 24.h),
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 420),
-                child: Column(
-                  children: [
-                    // Logo
-                    Image.asset(AppStrings.logo, width: 180.w),
-                    Gap(40.h),
+      ),
+    );
+  }
 
-                    // Icon
-                    Container(
-                      padding: EdgeInsets.all(20.r),
-                      decoration: BoxDecoration(
-                        color: AppColor.primaryOrange.withOpacity(0.1),
-                        shape: BoxShape.circle,
+//Mobile UI
+  Center _buildMobileUI(BuildContext context) {
+    return Center(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 20.w,
+                  vertical: 24.h,
+                ),
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 420),
+                  child: Column(
+                    children: [
+                      // Icon
+                      Container(
+                        padding: EdgeInsets.all(20.r),
+                        decoration: BoxDecoration(
+                          color: AppColor.primaryOrange.withOpacity(0.1),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          Icons.verified_user_rounded,
+                          size: 64.sp,
+                          color: AppColor.primaryOrange,
+                        ),
                       ),
-                      child: Icon(
-                        Icons.verified_user_rounded,
-                        size: 64.sp,
-                        color: AppColor.primaryOrange,
-                      ),
-                    ),
-                    Gap(32.h),
+                      Gap(32),
 
-                    // Header
-                    Text(
-                      "Verify OTP",
-                      style: TextStyle(
-                        fontSize: 28.sp,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.black87,
-                        letterSpacing: -0.5,
+                      // Header
+                      Text(
+                        "Verify OTP",
+                        style: TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.black87,
+                          letterSpacing: -0.5,
+                        ),
                       ),
-                    ),
-                    Gap(12.h),
-                    Text(
-                      "Enter the 6-digit code sent to your email",
-                      style: TextStyle(
-                        fontSize: 15.sp,
-                        color: Colors.grey.shade600,
-                        height: 1.4,
+                      Gap(12.h),
+                      Text(
+                        "Enter the 6-digit code sent to your email",
+                        style: TextStyle(
+                          fontSize: 15.sp,
+                          color: Colors.grey.shade600,
+                          height: 1.4,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                      textAlign: TextAlign.center,
-                    ),
-                    Gap(8.h),
+                      Gap(8.h),
 
-                    // Show Email (Fixed - No unnecessary Obx)
-                    Text(
-                      controller.emailController.text,
-                      style: TextStyle(
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.w500,
-                        color: AppColor.primaryOrange,
+                      // Show Email (Fixed - No unnecessary Obx)
+                      Text(
+                        controller.emailController.text,
+                        style: TextStyle(
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w500,
+                          color: AppColor.primaryOrange,
+                        ),
                       ),
-                    ),
 
-                    Gap(40.h),
+                      Gap(40.h),
 
-                    // Form Card
-                    Container(
-                      padding: EdgeInsets.all(24.r),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(24.r),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.06),
-                            blurRadius: 30,
-                            offset: const Offset(0, 10),
-                          ),
-                        ],
-                      ),
-                      child: Form(
+                      // Form Card
+                      Form(
                         key: _formKey,
                         child: Column(
                           children: [
@@ -116,7 +110,7 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
                               controller: controller.otpController,
                               keyboardType: TextInputType.number,
                               maxLength: 6,
-                              textAlign: TextAlign.center,
+                              textAlign: TextAlign.left,
                               style: TextStyle(
                                 fontSize: 24.sp,
                                 fontWeight: FontWeight.w600,
@@ -124,22 +118,10 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
                               ),
                               decoration: InputDecoration(
                                 labelText: "OTP Code",
-                                prefixIcon: const Icon(Icons.security_outlined),
+                                prefixIcon: const Icon(
+                                  Icons.security_outlined,
+                                ),
                                 counterText: "",
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(16.r),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(16.r),
-                                  borderSide: BorderSide(color: Colors.grey.shade200),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(16.r),
-                                  borderSide: BorderSide(
-                                    color: AppColor.primaryOrange,
-                                    width: 2,
-                                  ),
-                                ),
                               ),
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
@@ -156,12 +138,12 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
                             // Verify Button
                             SizedBox(
                               width: double.infinity,
-                              height: 56.h,
+                              height: 56,
                               child: ElevatedButton(
                                 onPressed: () async {
                                   if (_formKey.currentState!.validate()) {
                                     Loader.show(context);
-                                   await controller.verifyOtp(
+                                    await controller.verifyOtp(
                                       controller.otpController.text.trim(),
                                     );
                                     Loader.hide();
@@ -187,55 +169,380 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
                           ],
                         ),
                       ),
-                    ),
 
-                    Gap(32.h),
+                      Gap(32.h),
 
-                    // Resend Option
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Didn't receive the code? ",
-                          style: TextStyle(
-                            fontSize: 14.sp,
-                            color: Colors.grey.shade600,
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            // TODO: Call resend OTP method when implemented in controller
-                            // controller.resendOtp();
-                          },
-                          child: Text(
-                            "Resend",
+                      // Resend Option
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Didn't receive the code? ",
                             style: TextStyle(
                               fontSize: 14.sp,
-                              fontWeight: FontWeight.bold,
-                              color: AppColor.primaryOrange,
+                              color: Colors.grey.shade600,
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-
-                    Gap(40.h),
-
-                    // Footer
-                    Text(
-                      "© 2026 Code IT. All rights reserved.",
-                      style: TextStyle(
-                        fontSize: 12.sp,
-                        color: Colors.grey.shade500,
+                          GestureDetector(
+                            onTap: () {
+                              // TODO: Call resend OTP method when implemented in controller
+                              // controller.resendOtp();
+                            },
+                            child: Text(
+                              "Resend",
+                              style: TextStyle(
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.bold,
+                                color: AppColor.primaryOrange,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ),
-        ),
-      ),
-    );
+            );
   }
+
+
+//Desktop UI
+  Center _buildTabUI(BuildContext context) {
+    return Center(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 24,
+                ),
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 600),
+                  child: Column(
+                    children: [
+                      // Icon
+                      Container(
+                        padding: EdgeInsets.all(20.r),
+                        decoration: BoxDecoration(
+                          color: AppColor.primaryOrange.withOpacity(0.1),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          Icons.verified_user_rounded,
+                          size: 64,
+                          color: AppColor.primaryOrange,
+                        ),
+                      ),
+                      Gap(32),
+
+                      // Header
+                      Text(
+                        "Verify OTP",
+                        style: TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.black87,
+                          letterSpacing: -0.5,
+                        ),
+                      ),
+                      Gap(12.h),
+                      Text(
+                        "Enter the 6-digit code sent to your email",
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.grey.shade600,
+                          height: 1.4,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      Gap(8.h),
+
+                      // Show Email (Fixed - No unnecessary Obx)
+                      Text(
+                        controller.emailController.text,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: AppColor.primaryOrange,
+                        ),
+                      ),
+
+                      
+                      16.verticalSpace,
+                      // Form Card
+                      Form(
+                        key: _formKey,
+                        child: Column(
+                          children: [
+                            // OTP Field
+                            TextFormField(
+                              controller: controller.otpController,
+                              keyboardType: TextInputType.number,
+                              maxLength: 6,
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: 12,
+                              ),
+                              decoration: InputDecoration(
+                                labelText: "OTP Code",
+                                prefixIcon: const Icon(
+                                  Icons.security_outlined,
+                                ),
+                                counterText: "",
+                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'OTP is required';
+                                }
+                                if (value.length != 6) {
+                                  return 'OTP must be 6 digits';
+                                }
+                                return null;
+                              },
+                            ),
+                            Gap(32.h),
+
+                            // Verify Button
+                            SizedBox(
+                              width: double.infinity,
+                              height: 48,
+                              child: ElevatedButton(
+                                onPressed: () async {
+                                  if (_formKey.currentState!.validate()) {
+                                    Loader.show(context);
+                                    await controller.verifyOtp(
+                                      controller.otpController.text.trim(),
+                                    );
+                                    Loader.hide();
+                                  }
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColor.primaryOrange,
+                                  foregroundColor: Colors.white,
+                                  elevation: 2,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(16.r),
+                                  ),
+                                ),
+                                child: Text(
+                                  "Verify OTP",
+                                  style: TextStyle(
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      Gap(32.h),
+
+                      // Resend Option
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Didn't receive the code? ",
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.grey.shade600,
+                            ),
+                          ),
+                          Gap(4),
+                          GestureDetector(
+                            onTap: () {
+                              // TODO: Call resend OTP method when implemented in controller
+                              // controller.resendOtp();
+                            },
+                            
+                            child: Text(
+                              "Resend",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: AppColor.primaryOrange,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+  }
+
+//Desktop UI
+  Center _buildDesktopUI(BuildContext context) {
+    return Center(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 24,
+                ),
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 600),
+                  child: Column(
+                    children: [
+                      // Icon
+                      Container(
+                        padding: EdgeInsets.all(20.r),
+                        decoration: BoxDecoration(
+                          color: AppColor.primaryOrange.withOpacity(0.1),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          Icons.verified_user_rounded,
+                          size: 64,
+                          color: AppColor.primaryOrange,
+                        ),
+                      ),
+                      Gap(32),
+
+                      // Header
+                      Text(
+                        "Verify OTP",
+                        style: TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.black87,
+                          letterSpacing: -0.5,
+                        ),
+                      ),
+                      Gap(12.h),
+                      Text(
+                        "Enter the 6-digit code sent to your email",
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.grey.shade600,
+                          height: 1.4,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      Gap(8.h),
+
+                      // Show Email (Fixed - No unnecessary Obx)
+                      Text(
+                        controller.emailController.text,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: AppColor.primaryOrange,
+                        ),
+                      ),
+
+                      
+                      16.verticalSpace,
+                      // Form Card
+                      Form(
+                        key: _formKey,
+                        child: Column(
+                          children: [
+                            // OTP Field
+                            TextFormField(
+                              controller: controller.otpController,
+                              keyboardType: TextInputType.number,
+                              maxLength: 6,
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: 12,
+                              ),
+                              decoration: InputDecoration(
+                                labelText: "OTP Code",
+                                prefixIcon: const Icon(
+                                  Icons.security_outlined,
+                                ),
+                                counterText: "",
+                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'OTP is required';
+                                }
+                                if (value.length != 6) {
+                                  return 'OTP must be 6 digits';
+                                }
+                                return null;
+                              },
+                            ),
+                            Gap(32.h),
+
+                            // Verify Button
+                            SizedBox(
+                              width: double.infinity,
+                              height: 48,
+                              child: ElevatedButton(
+                                onPressed: () async {
+                                  if (_formKey.currentState!.validate()) {
+                                    Loader.show(context);
+                                    await controller.verifyOtp(
+                                      controller.otpController.text.trim(),
+                                    );
+                                    Loader.hide();
+                                  }
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColor.primaryOrange,
+                                  foregroundColor: Colors.white,
+                                  elevation: 2,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(16.r),
+                                  ),
+                                ),
+                                child: Text(
+                                  "Verify OTP",
+                                  style: TextStyle(
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      Gap(32.h),
+
+                      // Resend Option
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Didn't receive the code? ",
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.grey.shade600,
+                            ),
+                          ),
+                          Gap(4),
+                          GestureDetector(
+                            onTap: () {
+                              // TODO: Call resend OTP method when implemented in controller
+                              // controller.resendOtp();
+                            },
+                            
+                            child: Text(
+                              "Resend",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: AppColor.primaryOrange,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+  }
+
 }
