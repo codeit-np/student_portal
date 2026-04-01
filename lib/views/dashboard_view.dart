@@ -10,7 +10,6 @@ import 'package:codeit/utils/app_routes.dart';
 import 'package:codeit/utils/app_strings.dart';
 import 'package:codeit/views/mycourse_view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -45,7 +44,7 @@ class DashboardView extends StatelessWidget {
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("Beta Version\n(3.0.7)",style: TextStyle(color: Colors.blueGrey,fontSize: 12,),textAlign: TextAlign.right,),
+              Text("Beta Version\n(3.0.8)",style: TextStyle(color: Colors.blueGrey,fontSize: 12,),textAlign: TextAlign.right,),
               
             ],
           ),
@@ -167,10 +166,10 @@ class DashboardView extends StatelessWidget {
                     title: "Logout",
                     content: Text("Do you want to continue?"),
                     actions: [
-                      OutlinedButton(onPressed: (){
+                      TextButton(onPressed: (){
                         Get.back();
                       }, child: Text("Cancel")),
-                      FilledButton(onPressed: (){
+                      TextButton(onPressed: (){
                           StorageController().deleteToken();
                           authController.reset();
                        Get.offAllNamed(AppRoutes.login);

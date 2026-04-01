@@ -339,7 +339,10 @@ class _RegisterViewState extends State<RegisterView> {
                       ),
                     ),
                     TextButton(
-                      onPressed: () => Get.off(() => const LoginView()),
+                      onPressed: () => Get.off(() {
+                        authController.reset();
+                        return const LoginView();
+                      }),
                       style: TextButton.styleFrom(padding: EdgeInsets.zero),
                       child: Text(
                         "Sign in",

@@ -1,3 +1,5 @@
+import 'package:codeit/controller/auth_controller.dart';
+import 'package:codeit/controller/storage_controller.dart';
 import 'package:codeit/model/forgot_password_model.dart';
 import 'package:codeit/services/auth_service.dart';
 import 'package:codeit/utils/app_routes.dart';
@@ -69,14 +71,19 @@ class ForgotPasswordController extends GetxController {
       return;
     }
     try {
+      var token = StorageController().getToken();
+      var authController = Get.find<AuthController>();
       var response = await AuthService.resetPassword(
-        emailController.text,
+        token == null ? emailController.text : authController.profile.value.user!.email!,
         newPasswordController.text,
         confirmPasswordController.text,
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
       CustomDialogs.success(title: "Success", message: "Password reset successfully",
-      onConfirm: () =>  Get.offAllNamed(AppRoutes.login),
+      onConfirm: () {
+        reset();
+        Get.offAllNamed(AppRoutes.login);
+      },
       );
        
        
