@@ -16,16 +16,14 @@ class CertificateView extends GetView<CertificateController> {
        backgroundColor: AppColor.backgroundColor,
       appBar: AppBar(
         title: Text("My Certificates"),
-         backgroundColor: Colors.white,
+        backgroundColor: Colors.white,
         elevation: 0,
         scrolledUnderElevation: 0,
-        centerTitle: false,
+       
       ),
       body: Obx(() {
         if (controller.isLoading.value) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
+          return LinearProgressIndicator();
         }
 
         final certificates = controller.certificates.value.data;
@@ -56,47 +54,54 @@ class CertificateView extends GetView<CertificateController> {
           );
         }
 
-        return SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "${certificates.length} Certificates",
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.w600,
-                  color: theme.colorScheme.primary,
+        return 
+        
+        RefreshIndicator(
+          onRefresh: () async {
+              controller.getCertificated();
+          },
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "${certificates.length} Certificates",
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: theme.colorScheme.primary,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 8),
-              ListView.builder(
-                itemCount: certificates.length,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  final cert = certificates[index];
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 16),
-                    child: CertificateCard(
-                      certificate: cert,
-                      onEmailPressed: () async {
-                        CustomDialogs.confirmation(
-                          title: "Confirmation", message: "Do you want us to send this certificate to your registered email?",
+                const SizedBox(height: 8),
+                ListView.builder(
+                  itemCount: certificates.length,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    final cert = certificates[index];
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: CertificateCard(
+                        certificate: cert,
+                        onEmailPressed: () async {
+                          CustomDialogs.confirmation(
+                            title: "Confirmation", message: "Do you want us to send this certificate to your registered email?",
+                            
+                            onConfirm: () async {
+                              Loader.show(context);
+                               Get.back();
+                                  await controller.getCertificate(cert.certicateId);
+                                  Loader.hide();
+                            },
+                            );
                           
-                          onConfirm: () async {
-                            Loader.show(context);
-                             Get.back();
-                                await controller.getCertificate(cert.certicateId);
-                                Loader.hide();
-                          },
-                          );
-                        
-                      },
-                    ),
-                  );
-                },
-              ),
-            ],
+                        },
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
         );
       }),

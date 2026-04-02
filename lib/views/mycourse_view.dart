@@ -20,6 +20,7 @@ class MycourseView extends GetView<CourseController> {
         backgroundColor: Colors.white,
         elevation: 0,
         scrolledUnderElevation: 0,
+       
       ),
 
       body: LayoutBuilder(

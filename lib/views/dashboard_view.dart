@@ -44,14 +44,18 @@ class DashboardView extends StatelessWidget {
         actions: [
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text("Beta Version\n(3.0.9)",style: TextStyle(color: Colors.blueGrey,fontSize: 12,),textAlign: TextAlign.right,),
-              
+              Text(
+                "Version\n(4.0.0)",
+                style: TextStyle(color: Colors.blueGrey, fontSize: 12),
+                textAlign: TextAlign.center,
+              ),
             ],
           ),
-          Gap(16)
+          Gap(16),
         ],
-       
+
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(1.0),
           child: Container(color: AppColor.borderColor, height: 1.0),
@@ -121,7 +125,7 @@ class DashboardView extends StatelessWidget {
                 },
               ),
               _buildDrawerItem(
-                onTap: (){
+                onTap: () {
                   Get.back();
                   Get.toNamed(AppRoutes.certificates);
                 },
@@ -129,7 +133,7 @@ class DashboardView extends StatelessWidget {
                 title: 'Certificates',
               ),
               _buildDrawerItem(
-                onTap: (){
+                onTap: () {
                   Get.back();
                   Get.toNamed(AppRoutes.receipts);
                 },
@@ -142,14 +146,14 @@ class DashboardView extends StatelessWidget {
               //   title: 'Suggestions',
               // ),
               _buildDrawerItem(
-                onTap: (){
+                onTap: () {
                   Get.toNamed(AppRoutes.terms);
                 },
                 icon: Icons.description_outlined,
                 title: 'Terms & Conditions',
               ),
-               _buildDrawerItem(
-                onTap: (){
+              _buildDrawerItem(
+                onTap: () {
                   Get.back();
                   Get.toNamed(AppRoutes.resetPassword);
                 },
@@ -163,14 +167,15 @@ class DashboardView extends StatelessWidget {
                 icon: Icons.logout,
                 title: 'Logout',
                 onTap: () {
-                  CustomDialogs.confirmation(title: "Logout", message: "Do you want to continute?",
-                  onConfirm: () {
-                     StorageController().deleteToken();
-                          authController.reset();
-                       Get.offAllNamed(AppRoutes.login);
-                  },
+                  CustomDialogs.confirmation(
+                    title: "Logout",
+                    message: "Do you want to continute?",
+                    onConfirm: () {
+                      StorageController().deleteToken();
+                      authController.reset();
+                      Get.offAllNamed(AppRoutes.login);
+                    },
                   );
-                 
                 },
               ),
               const SizedBox(height: 16),
@@ -182,404 +187,374 @@ class DashboardView extends StatelessWidget {
         if (courseController.isLoading.value == true) {
           return LinearProgressIndicator();
         } else {
-          return SingleChildScrollView(
-            child: Padding(
-              padding:  EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 8),
-                   Text(
-                    'Welcome back, ${authController.profile.value.user!.name!.split(" ")[0]}! 👋',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    color: Color(0xFF1E293B),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  const Text(
-                    "Here's your learning snapshot today.",
-                    style: TextStyle(fontSize: 16, color: Color(0xFF64748B)),
-                  ),
-                  const SizedBox(height: 24),
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      Get.toNamed(AppRoutes.upcoming);
-                    },
-                    icon: const Icon(Icons.add, size: 20),
-                    label: const Text(
-                      'Enroll in a Course',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColor.primaryOrange,
-                      foregroundColor: Colors.white,
-                      elevation: 0,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 20,
-                        vertical: 12,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                  if (googleMeetController.liveClasses.isEmpty)
-                    const SizedBox()
-                  else
-                    Column(
-                      children: [
-                        ListView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: googleMeetController.liveClasses.length,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: const EdgeInsets.only(bottom: 8),
-                              child: _buildLiveClassCard(googleMeetController.liveClasses[index]),
-                            );
-                          },
-                        ),
-                      ],
-                    ),
-                  
-                  GestureDetector(
-                    onTap: () {
-                      Get.toNamed(AppRoutes.mycourse);
-                    },
-                    child: _buildStatCard(
-                      icon: Icons.menu_book,
-                      iconColor: Colors.blue,
-                      iconBgColor: Colors.blue.shade50,
-                      title: 'Active Courses',
-                      value: '${courseController.courses.value.data.length}',
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  GestureDetector(
-                    onTap: (){
-                      Get.toNamed(AppRoutes.certificates);
-                    },
-                    child: _buildStatCard(
-                      icon: Icons.card_membership,
-                      iconColor: Colors.purple,
-                      iconBgColor: Colors.purple.shade50,
-                      title: 'Certificates',
-                      value: "${certificateController.certificates.value.data.length}",
-                    ),
-                  ),
-                  // const SizedBox(height: 16),
-                  // _buildStatCard(
-                  //   icon: Icons.receipt_long,
-                  //   iconColor: Colors.orange,
-                  //   iconBgColor: Colors.orange.shade50,
-                  //   title: 'Payments',
-                  //   value: '13',
-                  // ),
-                  const SizedBox(height: 24),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: AppColor.borderColor),
-                    ),
-                    padding: const EdgeInsets.all(20),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Text(
-                              'My Courses',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFF1E293B),
-                              ),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                courseController.getCourses();
-                                Get.to(MycourseView());
-                              },
-                              style: TextButton.styleFrom(
-                                padding: EdgeInsets.zero,
-                                minimumSize: Size.zero,
-                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                              ),
-                              child: const Text(
-                                'See All',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Color(0xFF1E293B),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 24),
-
-                       ListView.builder(
-  itemCount: courseController.courses.value.data.length > 3
-      ? 3
-      : courseController.courses.value.data.length,
-  shrinkWrap: true,
-  physics: const NeverScrollableScrollPhysics(),
-  itemBuilder: (BuildContext context, int index) {
-    final course = courseController.courses.value.data[index];
-
-    return Card(
-      margin: const EdgeInsets.only(bottom: 12),
-      elevation: .5,
-      color: Colors.white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(16),
-        onTap: () {
-          courseController.getCourse(course.enrollmentId!);
-          Get.toNamed(AppRoutes.course);
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Course Image
-              ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: SizedBox(
-                  width: 100,
-                  height: 100,
-                  child: CachedNetworkImage(
-                    imageUrl: course.courseImage ?? '',
-                    fit: BoxFit.cover,
-                    progressIndicatorBuilder: (context, url, downloadProgress) =>
-                        Center(
-                      child: CircularProgressIndicator(
-                        value: downloadProgress.progress,
-                        strokeWidth: 2,
-                      ),
-                    ),
-                    errorWidget: (context, url, error) => Container(
-                      color: Colors.grey[200],
-                      child: const Icon(Icons.error_outline, size: 32),
-                    ),
-                  ),
-                ),
-              ),
-
-              const SizedBox(width: 16),
-
-              // Course Details
-              Expanded(
+          return RefreshIndicator(
+            onRefresh: () async {
+              await courseController.getCourses();
+              await googleMeetController.getLiveClasses();
+              await certificateController.getCertificated();
+            },
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.all(16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Course Name
-                    Text(
-                      course.courseName ?? 'Untitled Course',
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-
                     const SizedBox(height: 8),
-
-                    // Mentor
-                    Row(
-                      children: [
-                        const Icon(Icons.person, size: 16, color: Colors.grey),
-                        const SizedBox(width: 6),
-                        Expanded(
-                          child: Text(
-                            "Mentor: ${course.mentorName ?? 'N/A'}",
-                            style: const TextStyle(fontSize: 13),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ],
+                    Text(
+                      'Welcome back, ${authController.profile.value.user!.name!.split(" ")[0]}! 👋',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF1E293B),
+                      ),
                     ),
-
-                    const SizedBox(height: 10),
-
-                    // Status
-                    Row(
-                      children: [
-                        Text(
-                          "Status: ",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 13,
-                            color: Colors.grey[700],
-                          ),
+                    const SizedBox(height: 8),
+                    const Text(
+                      "Access your courses, progress, and achievements",
+                      style: TextStyle(fontSize: 16, color: Color(0xFF64748B)),
+                    ),
+                    const SizedBox(height: 24),
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        Get.toNamed(AppRoutes.upcoming);
+                      },
+                      icon: const Icon(Icons.add, size: 20),
+                      label: const Text(
+                        'Enroll in a Course',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.normal,
                         ),
-                        if (course.status?.toLowerCase() == "pending")
-                          const Row(
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColor.primaryOrange,
+                        foregroundColor: Colors.white,
+                        elevation: 0,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 12,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    if (googleMeetController.liveClasses.isEmpty)
+                      const SizedBox()
+                    else
+                      Column(
+                        children: [
+                          ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: googleMeetController.liveClasses.length,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: const EdgeInsets.only(bottom: 8),
+                                child: _buildLiveClassCard(
+                                  googleMeetController.liveClasses[index],
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+
+                    GestureDetector(
+                      onTap: () {
+                        Get.toNamed(AppRoutes.mycourse);
+                      },
+                      child: _buildStatCard(
+                        icon: Icons.menu_book,
+                        iconColor: Colors.blue,
+                        iconBgColor: Colors.blue.shade50,
+                        title: 'Active Courses',
+                        value: '${courseController.courses.value.data.length}',
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    GestureDetector(
+                      onTap: () {
+                        Get.toNamed(AppRoutes.certificates);
+                      },
+                      child: _buildStatCard(
+                        icon: Icons.card_membership,
+                        iconColor: Colors.purple,
+                        iconBgColor: Colors.purple.shade50,
+                        title: 'Certificates',
+                        value:
+                            "${certificateController.certificates.value.data.length}",
+                      ),
+                    ),
+                    // const SizedBox(height: 16),
+                    // _buildStatCard(
+                    //   icon: Icons.receipt_long,
+                    //   iconColor: Colors.orange,
+                    //   iconBgColor: Colors.orange.shade50,
+                    //   title: 'Payments',
+                    //   value: '13',
+                    // ),
+                    const SizedBox(height: 24),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: AppColor.borderColor),
+                      ),
+                      padding: const EdgeInsets.all(20),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Icon(Icons.pending_rounded,
-                                  size: 16, color: AppColor.primaryOrange),
-                              SizedBox(width: 4),
-                              Text(
-                                "Pending",
+                              const Text(
+                                'My Courses',
                                 style: TextStyle(
-                                  fontSize: 13,
-                                  color: AppColor.primaryOrange,
-                                  fontWeight: FontWeight.w500,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF1E293B),
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  courseController.getCourses();
+                                  Get.to(MycourseView());
+                                },
+                                style: TextButton.styleFrom(
+                                  padding: EdgeInsets.zero,
+                                  minimumSize: Size.zero,
+                                  tapTargetSize:
+                                      MaterialTapTargetSize.shrinkWrap,
+                                ),
+                                child: const Text(
+                                  'See All',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Color(0xFF1E293B),
+                                  ),
                                 ),
                               ),
                             ],
-                          )
-                        else
-                          const Row(
-                            children: [
-                              Icon(Icons.check_circle,
-                                  size: 16, color: Colors.green),
-                              SizedBox(width: 4),
-                              Text(
-                                "Approved",
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  color: Colors.green,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
                           ),
-                      ],
-                    ),
+                          const SizedBox(height: 24),
 
-                    const SizedBox(height: 10),
+                          ListView.builder(
+                            itemCount:
+                                courseController.courses.value.data.length > 3
+                                ? 3
+                                : courseController.courses.value.data.length,
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemBuilder: (BuildContext context, int index) {
+                              final course =
+                                  courseController.courses.value.data[index];
 
-                    // Lessons Count
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.play_circle_fill,
-                          size: 18,
-                          color: AppColor.primaryOrange,
-                        ),
-                        const SizedBox(width: 6),
-                        Text(
-                          "${course.lessons ?? 0} Videos",
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                fontWeight: FontWeight.w500,
-                              ),
-                        ),
-                      ],
+                              return Card(
+                                margin: const EdgeInsets.only(bottom: 12),
+                                elevation: .5,
+                                color: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                                child: InkWell(
+                                  borderRadius: BorderRadius.circular(16),
+                                  onTap: () {
+                                    courseController.getCourse(
+                                      course.enrollmentId!,
+                                    );
+                                    Get.toNamed(AppRoutes.course);
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(12),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        // Course Image
+                                        ClipRRect(
+                                          borderRadius: BorderRadius.circular(
+                                            12,
+                                          ),
+                                          child: SizedBox(
+                                            width: 100,
+                                            height: 100,
+                                            child: CachedNetworkImage(
+                                              imageUrl:
+                                                  course.courseImage ?? '',
+                                              fit: BoxFit.cover,
+                                              progressIndicatorBuilder:
+                                                  (
+                                                    context,
+                                                    url,
+                                                    downloadProgress,
+                                                  ) => Center(
+                                                    child:
+                                                        CircularProgressIndicator(
+                                                          value:
+                                                              downloadProgress
+                                                                  .progress,
+                                                          strokeWidth: 2,
+                                                        ),
+                                                  ),
+                                              errorWidget:
+                                                  (context, url, error) =>
+                                                      Container(
+                                                        color: Colors.grey[200],
+                                                        child: const Icon(
+                                                          Icons.error_outline,
+                                                          size: 32,
+                                                        ),
+                                                      ),
+                                            ),
+                                          ),
+                                        ),
+
+                                        const SizedBox(width: 16),
+
+                                        // Course Details
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              // Course Name
+                                              Text(
+                                                course.courseName ??
+                                                    'Untitled Course',
+                                                style: const TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+
+                                              const SizedBox(height: 8),
+
+                                              // Mentor
+                                              Row(
+                                                children: [
+                                                  const Icon(
+                                                    Icons.person,
+                                                    size: 16,
+                                                    color: Colors.grey,
+                                                  ),
+                                                  const SizedBox(width: 6),
+                                                  Expanded(
+                                                    child: Text(
+                                                      "Mentor: ${course.mentorName ?? 'N/A'}",
+                                                      style: const TextStyle(
+                                                        fontSize: 13,
+                                                      ),
+                                                      maxLines: 1,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+
+                                              const SizedBox(height: 10),
+
+                                              // Status
+                                              Row(
+                                                children: [
+                                                  Text(
+                                                    "Status: ",
+                                                    style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontSize: 13,
+                                                      color: Colors.grey[700],
+                                                    ),
+                                                  ),
+                                                  if (course.status
+                                                          ?.toLowerCase() ==
+                                                      "pending")
+                                                    const Row(
+                                                      children: [
+                                                        Icon(
+                                                          Icons.pending_rounded,
+                                                          size: 16,
+                                                          color: AppColor
+                                                              .primaryOrange,
+                                                        ),
+                                                        SizedBox(width: 4),
+                                                        Text(
+                                                          "Pending",
+                                                          style: TextStyle(
+                                                            fontSize: 13,
+                                                            color: AppColor
+                                                                .primaryOrange,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    )
+                                                  else
+                                                    const Row(
+                                                      children: [
+                                                        Icon(
+                                                          Icons.check_circle,
+                                                          size: 16,
+                                                          color: Colors.green,
+                                                        ),
+                                                        SizedBox(width: 4),
+                                                        Text(
+                                                          "Approved",
+                                                          style: TextStyle(
+                                                            fontSize: 13,
+                                                            color: Colors.green,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                ],
+                                              ),
+
+                                              const SizedBox(height: 10),
+
+                                              // Lessons Count
+                                              Row(
+                                                children: [
+                                                  Icon(
+                                                    Icons.play_circle_fill,
+                                                    size: 18,
+                                                    color:
+                                                        AppColor.primaryOrange,
+                                                  ),
+                                                  const SizedBox(width: 6),
+                                                  Text(
+                                                    "${course.lessons ?? 0} Videos",
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .bodyMedium
+                                                        ?.copyWith(
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                        ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  },
-),
-                      ],
-                    ),
-                  ),
-                  // const SizedBox(height: 24),
-                  // Container(
-                  //   decoration: BoxDecoration(
-                  //     color: Colors.white,
-                  //     borderRadius: BorderRadius.circular(16),
-                  //     border: Border.all(color: AppColor.borderColor),
-                  //   ),
-                  //   padding: const EdgeInsets.all(20),
-                  //   child: Column(
-                  //     crossAxisAlignment: CrossAxisAlignment.start,
-                  //     children: [
-                  //       Row(
-                  //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //         children: [
-                  //           const Text(
-                  //             'Recent Payments',
-                  //             style: TextStyle(
-                  //               fontSize: 18,
-                  //               fontWeight: FontWeight.bold,
-                  //               color: Color(0xFF1E293B),
-                  //             ),
-                  //           ),
-                  //           TextButton(
-                  //             onPressed: () {},
-                  //             style: TextButton.styleFrom(
-                  //               padding: EdgeInsets.zero,
-                  //               minimumSize: Size.zero,
-                  //               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  //             ),
-                  //             child: const Text(
-                  //               'See All',
-                  //               style: TextStyle(
-                  //                 fontSize: 14,
-                  //                 color: Color(0xFF1E293B),
-                  //               ),
-                  //             ),
-                  //           ),
-                  //         ],
-                  //       ),
-                  //       const SizedBox(height: 16),
-                  //       Container(
-                  //         decoration: BoxDecoration(
-                  //           color: Colors.white,
-                  //           borderRadius: BorderRadius.circular(12),
-                  //           border: Border.all(color: AppColor.borderColor),
-                  //           boxShadow: [
-                  //             BoxShadow(
-                  //               color: Colors.black.withOpacity(0.02),
-                  //               blurRadius: 8,
-                  //               offset: const Offset(0, 2),
-                  //             ),
-                  //           ],
-                  //         ),
-                  //         padding: const EdgeInsets.all(16),
-                  //         child: Column(
-                  //           children: [
-                  //             _buildPaymentItem(
-                  //               title: 'Advanced Excel',
-                  //               amount: 'Rs.1,999',
-                  //               date: 'Feb 20, 2026',
-                  //             ),
-                  //             const Divider(
-                  //               color: AppColor.borderColor,
-                  //               height: 32,
-                  //             ),
-                  //             _buildPaymentItem(
-                  //               title: 'Web Design',
-                  //               amount: 'Rs.1',
-                  //               date: 'Feb 08, 2026',
-                  //             ),
-                  //             const Divider(
-                  //               color: AppColor.borderColor,
-                  //               height: 32,
-                  //             ),
-                  //             _buildPaymentItem(
-                  //               title: 'Flutter',
-                  //               amount: 'Rs.1,999',
-                  //               date: 'Jan 05, 2026',
-                  //               isLast: true,
-                  //             ),
-                  //           ],
-                  //         ),
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
-                  // const SizedBox(height: 32), // extra space for bottom
-               
-                ],
               ),
             ),
           );
@@ -641,7 +616,10 @@ class DashboardView extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     'Class Time: ${data.classTime ?? 'N/A'}',
-                    style: const TextStyle(fontSize: 12, color: Color(0xFF94A3B8)),
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Color(0xFF94A3B8),
+                    ),
                   ),
                   const SizedBox(height: 12),
                   ElevatedButton(
@@ -794,7 +772,7 @@ class DashboardView extends StatelessWidget {
   }
 
   Widget _buildLogo() {
-    return Image.asset(AppStrings.logo,width: 120,);
+    return Image.asset(AppStrings.logo, width: 120);
   }
 
   Widget _buildDrawerItem({
