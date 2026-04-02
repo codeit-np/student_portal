@@ -1,4 +1,5 @@
 import 'package:codeit/bindings/controller_bindings.dart';
+import 'package:codeit/controller/connectivity_controller.dart';
 import 'package:codeit/utils/app_color.dart';
 import 'package:codeit/utils/app_pages.dart';
 import 'package:codeit/views/splash_view.dart';
@@ -8,7 +9,10 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  Get.put(ConnectivityController()); // Global controller
   await GetStorage.init();
+  
   runApp(const MyApp());
 }
 

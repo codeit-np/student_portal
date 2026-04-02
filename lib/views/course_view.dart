@@ -26,125 +26,130 @@ class CourseView extends GetView<CourseController> {
       ),
       body: Obx(() {
         if (controller.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
+          return LinearProgressIndicator();
         }
 
         final courseDetails = controller.course.value.courseDetails;
         final videos = courseDetails?.videos ?? [];
 
-        return CustomScrollView(
-          slivers: [
-            // Beautiful Course Banner
-            SliverToBoxAdapter(
-              child: Stack(
-                children: [
-                  AspectRatio(
-                    aspectRatio: 16/9,
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: CachedNetworkImage(
-                        imageUrl: courseDetails?.course?.image ?? '',
-                        fit: BoxFit.cover,
-                        placeholder: (context, url) => Container(
-                          color: Colors.grey.shade200,
-                          child: const Center(child: CircularProgressIndicator()),
-                        ),
-                        errorWidget: (context, url, error) => Container(
-                          color: Colors.grey.shade300,
-                          child: const Icon(Icons.image_not_supported, size: 60),
+        return RefreshIndicator(
+          onRefresh: () async{
+            controller.getCourse(int.parse(courseDetails!.course!.id.toString()));
+          },
+          child: CustomScrollView(
+            slivers: [
+              // Beautiful Course Banner
+              SliverToBoxAdapter(
+                child: Stack(
+                  children: [
+                    AspectRatio(
+                      aspectRatio: 16/9,
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: CachedNetworkImage(
+                          imageUrl: courseDetails?.course?.image ?? '',
+                          fit: BoxFit.cover,
+                          placeholder: (context, url) => Container(
+                            color: Colors.grey.shade200,
+                            child: const Center(child: CircularProgressIndicator()),
+                          ),
+                          errorWidget: (context, url, error) => Container(
+                            color: Colors.grey.shade300,
+                            child: const Icon(Icons.image_not_supported, size: 60),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  // Gradient Overlay
-                  Positioned.fill(
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                            Colors.transparent,
-                            Colors.black54,
+                    // Gradient Overlay
+                    Positioned.fill(
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Colors.transparent,
+                              Colors.black54,
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    // Course Title on Banner
+                    Positioned(
+                      bottom: 20,
+                      left: 20,
+                      right: 20,
+                      child: Text(
+                        courseDetails?.course?.name ?? "Course Videos",
+                        style: theme.textTheme.headlineSmall?.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          shadows: const [
+                            Shadow(color: Colors.black87, blurRadius: 8),
                           ],
                         ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                  ),
-                  // Course Title on Banner
-                  Positioned(
-                    bottom: 20,
-                    left: 20,
-                    right: 20,
-                    child: Text(
-                      courseDetails?.course?.name ?? "Course Videos",
-                      style: theme.textTheme.headlineSmall?.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        shadows: const [
-                          Shadow(color: Colors.black87, blurRadius: 8),
-                        ],
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-
-            SliverPadding(
-              padding: const EdgeInsets.all(16),
-              sliver: SliverList(
-                delegate: SliverChildListDelegate([
-                  const Gap(8),
-
-                  // Video Count
-                  Row(
-                    children: [
-                      Icon(Icons.video_library_rounded, color: theme.colorScheme.primary),
-                      const Gap(8),
-                      Text(
-                        "${videos.length} Video Lessons",
-                        style: theme.textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.w600,
+          
+              SliverPadding(
+                padding: const EdgeInsets.all(16),
+                sliver: SliverList(
+                  delegate: SliverChildListDelegate([
+                    const Gap(8),
+          
+                    // Video Count
+                    Row(
+                      children: [
+                        Icon(Icons.video_library_rounded, color: theme.colorScheme.primary),
+                        const Gap(8),
+                        Text(
+                          "${videos.length} Video Lessons",
+                          style: theme.textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-
-                  const Gap(24),
-
-                  // Section Title
-                  Text(
-                    "Course Content",
-                    style: theme.textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
+                      ],
                     ),
-                  ),
-
-                  const Gap(16),
-
-                  // Modern Video List
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: videos.length,
-                    itemBuilder: (context, index) {
-                      final video = videos[index];
-                      return VideoCard(
-                        video: video,
-                        onTap: () {
-                          videoController.initPlayer(video.videoId!);
-                          Get.toNamed(AppRoutes.video, arguments: video);
-                        },
-                      );
-                    },
-                  ),
-                ]),
+          
+                    const Gap(24),
+          
+                    // Section Title
+                    Text(
+                      "Course Content",
+                      style: theme.textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+          
+                    const Gap(16),
+          
+                    // Modern Video List
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: videos.length,
+                      itemBuilder: (context, index) {
+                        final video = videos[index];
+                        return VideoCard(
+                          video: video,
+                          onTap: () {
+                            videoController.initPlayer(video.videoId!);
+                            Get.toNamed(AppRoutes.video, arguments: video);
+                          },
+                        );
+                      },
+                    ),
+                  ]),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         );
       }),
     );

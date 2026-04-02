@@ -13,6 +13,7 @@ import 'package:codeit/views/demo_video_view.dart';
 import 'package:codeit/views/forgot_password_view.dart';
 import 'package:codeit/views/login_view.dart';
 import 'package:codeit/views/mycourse_view.dart';
+import 'package:codeit/views/no_internet_view.dart';
 import 'package:codeit/views/otp_verification_view.dart';
 import 'package:codeit/views/receipt_view.dart';
 import 'package:codeit/views/register_view.dart';
@@ -42,5 +43,6 @@ class AppPages {
      GetPage(name: AppRoutes.forgotPassword, page: () => const ForgotPasswordView()),
     GetPage(name: AppRoutes.resetPassword, page: () => const ResetPasswordView()),
     GetPage(name: AppRoutes.receipts, page: () => ReceiptView(),binding: ReceiptBindings()),
+    GetPage(name: AppRoutes.nointernet, page: () => NoInternetPage()),
   ];
 }

@@ -1,6 +1,6 @@
-import 'package:codeit/utils/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../utils/app_strings.dart';
 
 class SplashView extends StatelessWidget {
   const SplashView({super.key});
@@ -26,15 +26,11 @@ class SplashView extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Clean Logo - No Background
               Image.asset(
                 AppStrings.logo,
                 width: 210.w,
               ),
-      
               60.verticalSpace,
-      
-              // Modern Typography
               RichText(
                 textAlign: TextAlign.center,
                 text: TextSpan(
@@ -61,10 +57,7 @@ class SplashView extends StatelessWidget {
                   ],
                 ),
               ),
-      
               90.verticalSpace,
-      
-              // Modern Loader
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
