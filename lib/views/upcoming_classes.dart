@@ -25,105 +25,97 @@ class UpcomingClasses extends GetView<UpcomingClassController> {
         if (controller.isLoading.value == true) {
           return LinearProgressIndicator();
         } else {
-          return LayoutBuilder(
-            builder: (context, constraints) {
-              final width = constraints.maxWidth;
-                return SingleChildScrollView(
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                // Header Section
+                Container(
+                  width: double.infinity,
+                  color: Colors.white,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24.0,
+                    vertical: 16.0,
+                  ),
                   child: Column(
                     children: [
-                      // Header Section
-                      Container(
-                        width: double.infinity,
-                        color: Colors.white,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 24.0,
-                          vertical: 16.0,
-                        ),
-                        child: Column(
+                      RichText(
+                        textAlign: TextAlign.center,
+                        text: const TextSpan(
+                          style: TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.w900,
+                            color: Color(0xFF0F172A),
+                            height: 1.2,
+                          ),
                           children: [
-                            RichText(
-                              textAlign: TextAlign.center,
-                              text: const TextSpan(
-                                style: TextStyle(
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.w900,
-                                  color: Color(0xFF0F172A),
-                                  height: 1.2,
-                                ),
-                                children: [
-                                  TextSpan(
-                                    text: 'Upcoming Classes in Google Meet ',
-                                  ),
-                                  WidgetSpan(
-                                    alignment: PlaceholderAlignment.middle,
-                                    child: Icon(
-                                      Icons.videocam,
-                                      color: AppColor.primaryOrange,
-                                      size: 32,
-                                    ), // Mocking Google Meet icon
-                                  ),
-                                ],
-                              ),
+                            TextSpan(
+                              text: 'Upcoming Classes in Google Meet ',
                             ),
-                            const SizedBox(height: 16),
-                            const Text(
-                              'Miss a live class? No problem—recorded videos will be available for every session.',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Color(0xFF64748B),
-                                fontStyle: FontStyle.italic,
-                                height: 1.5,
-                              ),
+                            WidgetSpan(
+                              alignment: PlaceholderAlignment.middle,
+                              child: Icon(
+                                Icons.videocam,
+                                color: AppColor.primaryOrange,
+                                size: 32,
+                              ), // Mocking Google Meet icon
                             ),
-                            const SizedBox(height: 8),
                           ],
                         ),
                       ),
-
-                      // Classes List Section
-                      Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: ListView.builder(
-                          padding: EdgeInsets.all(4),
-                          itemCount:
-                              controller.upcomingClasses.value.data.length,
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemBuilder: (BuildContext context, int index) {
-                            var course =
-                                controller.upcomingClasses.value.data[index];
-                            return Expanded(
-                              child: Column(
-                                children: [
-                                  _buildClassCard(
-                                    course: course,
-                                    title: '${course.courseName}',
-                                    startsIn: '${course.startsIn}',
-                                    startDate: '${course.startDate}',
-                                    duration: '${course.courseDuration}',
-                                    classTime: '${course.classTime}',
-                                    seatsLeft: '${course.availableSeats}',
-                                    price: 'Rs.${course.offerPrice}',
-                                    originalPrice: 'Rs.${course.actualPrice}',
-                                    discount: '${course.discount} off',
-                                    bannerWidget: _buildMernBanner(
-                                      "${course.courseImage}",
-                                    ),
-                                    videoID: course.demoVideoId!,
-                                  ),
-
-                                ],
-                              ),
-                            );
-                          },
+                      const SizedBox(height: 16),
+                      const Text(
+                        'Miss a live class? No problem—recorded videos will be available for every session.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Color(0xFF64748B),
+                          fontStyle: FontStyle.italic,
+                          height: 1.5,
                         ),
                       ),
+                      const SizedBox(height: 8),
                     ],
                   ),
-                );
-             
-            },
+                ),
+          
+                // Classes List Section
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: ListView.builder(
+                    padding: EdgeInsets.all(4),
+                    itemCount:
+                        controller.upcomingClasses.value.data.length,
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemBuilder: (BuildContext context, int index) {
+                      var course =
+                          controller.upcomingClasses.value.data[index];
+                      return Column(
+                        children: [
+                          _buildClassCard(
+                            course: course,
+                            title: '${course.courseName}',
+                            startsIn: '${course.startsIn}',
+                            startDate: '${course.startDate}',
+                            duration: '${course.courseDuration}',
+                            classTime: '${course.classTime}',
+                            seatsLeft: '${course.availableSeats}',
+                            price: 'Rs.${course.offerPrice}',
+                            originalPrice: 'Rs.${course.actualPrice}',
+                            discount: '${course.discount} off',
+                            bannerWidget: _buildMernBanner(
+                              "${course.courseImage}",
+                            ),
+                            videoID: course.demoVideoId!,
+                          ),
+                      
+                        ],
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
           );
         }
       }),
