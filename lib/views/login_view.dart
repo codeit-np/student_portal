@@ -35,7 +35,7 @@ class LoginView extends GetView<AuthController> {
   //Mobile UI
   Padding _buildMobileUI(BuildContext context, GlobalKey<FormState> key) {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

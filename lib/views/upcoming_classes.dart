@@ -28,7 +28,6 @@ class UpcomingClasses extends GetView<UpcomingClassController> {
           return LayoutBuilder(
             builder: (context, constraints) {
               final width = constraints.maxWidth;
-             
                 return SingleChildScrollView(
                   child: Column(
                     children: [
@@ -85,13 +84,12 @@ class UpcomingClasses extends GetView<UpcomingClassController> {
                       // Classes List Section
                       Padding(
                         padding: const EdgeInsets.all(16.0),
-                        child: GridView.builder(
+                        child: ListView.builder(
                           padding: EdgeInsets.all(4),
                           itemCount:
                               controller.upcomingClasses.value.data.length,
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: width < 600 ? 1 : 2,crossAxisSpacing: 8, childAspectRatio: width < 600 ? 1/1.8 : width <1024 ? 1/1.8 : 1/1.3),
                           itemBuilder: (BuildContext context, int index) {
                             var course =
                                 controller.upcomingClasses.value.data[index];

@@ -190,7 +190,7 @@ class VideoCard extends StatelessWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(12),
                     child: Container(
-                      width: 100,
+                      width: 62,
                       height: 62,
                       color: Colors.grey.shade50,
                       child: const Icon(Icons.play_circle_outline, size: 40, color: Colors.grey),
@@ -211,7 +211,7 @@ class VideoCard extends StatelessWidget {
                 ],
               ),
 
-              const Gap(16),
+              const Gap(8),
 
               // Video Details
               Expanded(

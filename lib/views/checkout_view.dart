@@ -26,7 +26,7 @@ class CheckoutView extends GetView<AuthController> {
       body: Obx(() {
         return SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -389,7 +389,7 @@ class CheckoutView extends GetView<AuthController> {
                               },
                             ),
 
-                            Text("I agree to the Terms and Conditions."),
+                            Expanded(child: Text("I agree to the Terms and Conditions.")),
                           ],
                         ),
                         // Confirm Payment & Button
