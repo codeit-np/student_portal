@@ -133,33 +133,7 @@ class LoginView extends GetView<AuthController> {
                     ),
                   ),
 
-                  16.verticalSpace,
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.center,
-                  //   children: [
-                  //     Text("New Student?"),
-                  //     Gap(4),
-                  //     GestureDetector(
-                  //       onTap: () {
-                  //       controller.reset();
-                  //         Get.toNamed(AppRoutes.register);
-                  //       },
-                  //       child: Text(
-                  //         "Create Account",
-                  //         style: TextStyle(fontWeight: FontWeight.bold),
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
                  
-                  SizedBox(
-                    width: 300,
-                    child: Column(
-                      children: [
-                        Text("Note",style: Theme.of(context).textTheme.headlineSmall!.copyWith(fontWeight: FontWeight.bold)),
-                        Text("Enter the email and password you used when enrolling on the website.",style:Theme.of(context).textTheme.labelMedium,textAlign:  TextAlign.center,),
-                      ],
-                    ))
                 
                 ],
               ),
@@ -277,24 +251,7 @@ class LoginView extends GetView<AuthController> {
                       ),
                     ),
 
-                    16.verticalSpace,
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("New Student?"),
-                        Gap(4),
-                        GestureDetector(
-                          onTap: () {
-                            controller.reset();
-                            Get.toNamed(AppRoutes.register);
-                          },
-                          child: Text(
-                            "Create Account",
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ],
-                    ),
+                    
                   ],
                 ),
               ),
@@ -412,24 +369,7 @@ class LoginView extends GetView<AuthController> {
                       ),
                     ),
 
-                    16.verticalSpace,
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("New Student?"),
-                        Gap(4),
-                        GestureDetector(
-                          onTap: () {
-                            controller.reset();
-                            Get.toNamed(AppRoutes.register);
-                          },
-                          child: Text(
-                            "Create Account",
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ],
-                    ),
+                    
                   ],
                 ),
               ),
