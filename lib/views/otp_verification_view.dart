@@ -1,3 +1,4 @@
+import 'package:codeit/controller/auth_controller.dart';
 import 'package:codeit/controller/forgot_password_controller.dart';
 import 'package:codeit/utils/app_color.dart';
 import 'package:codeit/utils/app_strings.dart';
@@ -173,7 +174,8 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
                       Gap(32.h),
 
                       // Resend Option
-                      Row(
+                     Obx((){
+                      return  Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
@@ -184,9 +186,11 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
                             ),
                           ),
                           GestureDetector(
-                            onTap: () {
-                              // TODO: Call resend OTP method when implemented in controller
-                              // controller.resendOtp();
+                            onTap: () async {
+                              var authController = Get.find<AuthController>();
+                              Loader.show(context);
+                              controller.sendOtp("${authController.profile.value.user!.email}");
+                              Loader.hide();
                             },
                             child: Text(
                               "Resend",
@@ -198,7 +202,10 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
                             ),
                           ),
                         ],
-                      ),
+                      );
+                    
+                     })
+                     
                     ],
                   ),
                 ),

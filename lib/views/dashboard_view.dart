@@ -47,7 +47,7 @@ class DashboardView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                "Version\n(4.0.0)",
+                "Version\n(4.0.2)",
                 style: TextStyle(color: Colors.blueGrey, fontSize: 12),
                 textAlign: TextAlign.center,
               ),
@@ -162,6 +162,14 @@ class DashboardView extends StatelessWidget {
               ),
               // _buildDrawerItem(icon: Icons.person_outline, title: 'Profile'),
               const Spacer(),
+               _buildDrawerItem(
+                onTap: () {
+                  Get.back();
+                  Get.toNamed(AppRoutes.deleteaccount);
+                },
+                icon: Icons.delete_forever,
+                title: 'Delete Account',
+              ),
               const Divider(color: Colors.white38, height: 1),
               _buildDrawerItem(
                 icon: Icons.logout,

@@ -1,5 +1,4 @@
 import 'package:codeit/controller/auth_controller.dart';
-import 'package:codeit/controller/forgot_password_controller.dart';
 import 'package:codeit/utils/app_color.dart';
 import 'package:codeit/utils/app_routes.dart';
 import 'package:codeit/utils/app_strings.dart';
@@ -49,7 +48,7 @@ class LoginView extends GetView<AuthController> {
             ),
             4.verticalSpace,
             Text(
-              "Start your learning journey",
+              "Sign in to your student portal",
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             16.verticalSpace,
@@ -135,23 +134,28 @@ class LoginView extends GetView<AuthController> {
                   ),
 
                   16.verticalSpace,
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text("New Student?"),
-                      Gap(4),
-                      GestureDetector(
-                        onTap: () {
-                        controller.reset();
-                          Get.toNamed(AppRoutes.register);
-                        },
-                        child: Text(
-                          "Create Account",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ],
-                  ),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.center,
+                  //   children: [
+                  //     Text("New Student?"),
+                  //     Gap(4),
+                  //     GestureDetector(
+                  //       onTap: () {
+                  //       controller.reset();
+                  //         Get.toNamed(AppRoutes.register);
+                  //       },
+                  //       child: Text(
+                  //         "Create Account",
+                  //         style: TextStyle(fontWeight: FontWeight.bold),
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
+
+                  SizedBox(
+                    width: 300,
+                    child: Text("Note: Enter the email and password you created when enrolling."))
+                
                 ],
               ),
             ),
@@ -161,7 +165,7 @@ class LoginView extends GetView<AuthController> {
     );
   }
 
-  //Desktop UI
+  //Tab UI
   Padding _buildTabUI(BuildContext context, GlobalKey<FormState> key) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
@@ -180,7 +184,7 @@ class LoginView extends GetView<AuthController> {
               ),
               4.verticalSpace,
               Text(
-                "Start your learning journey",
+                "Sign in to your student portal",
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
               Gap(12),
@@ -315,7 +319,7 @@ class LoginView extends GetView<AuthController> {
               ),
               4.verticalSpace,
               Text(
-                "Start your learning journey",
+                "Sign in to your student portal",
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
               Gap(12),

@@ -9,6 +9,7 @@ import 'package:codeit/views/checkout_view.dart';
 import 'package:codeit/views/comfirmation_view.dart';
 import 'package:codeit/views/course_view.dart';
 import 'package:codeit/views/dashboard_view.dart';
+import 'package:codeit/views/delete_account_view.dart';
 import 'package:codeit/views/demo_video_view.dart';
 import 'package:codeit/views/forgot_password_view.dart';
 import 'package:codeit/views/login_view.dart';
@@ -44,5 +45,6 @@ class AppPages {
     GetPage(name: AppRoutes.resetPassword, page: () => const ResetPasswordView()),
     GetPage(name: AppRoutes.receipts, page: () => ReceiptView(),binding: ReceiptBindings()),
     GetPage(name: AppRoutes.nointernet, page: () => NoInternetPage()),
+    GetPage(name: AppRoutes.deleteaccount, page: () => DeleteAccountView()),
   ];
 }

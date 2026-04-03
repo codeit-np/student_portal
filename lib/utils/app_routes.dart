@@ -17,4 +17,5 @@ class AppRoutes {
   static const resetPassword = "/reset-password";
   static const receipts = "/receipts";
   static const nointernet = "/no-internet";
+  static const deleteaccount = "/delete-account";
 }

@@ -41,6 +41,14 @@ class AuthService {
     return response;
   }
 
+ // Delete Account
+ static Future<Response> deleteAccount() async{
+    var token = StorageController().getToken();
+    DioConnection.dio.options.headers['Authorization'] = "Bearer $token";
+
+    var response = await DioConnection.dio.delete("delete-account");
+    return response;
+ }
   //  FORGOT PASSWORD 
 
   static Future<Response> forgotPassword(String email) async {

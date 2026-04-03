@@ -65,7 +65,7 @@ void remember(bool value){
   Future login() async {
     try {
       isLoading(true);
-      var response = await AuthService.loign(email.text, password.text);
+      var response = await AuthService.loign(email.text.trim(), password.text.trim());
       loginMessage.value = LoginModel.fromJson(response.data);
 
       if (loginMessage.value.success == true) {
@@ -86,6 +86,22 @@ void remember(bool value){
     }
   }
 
+//Delete Account
+Future deleteAccount() async{
+  try{
+    isLoading(true);
+    var response = await AuthService.deleteAccount();
+    var result = LoginModel.fromJson(response.data);
+
+    if(result.success == true){
+      var storageController = Get.find<StorageController>();
+      storageController.deleteToken();
+      Get.offAllNamed(AppRoutes.login);
+    }
+  }finally{
+    isLoading(false);
+  }
+}
   
 
   //Register
