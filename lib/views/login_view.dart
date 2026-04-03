@@ -151,10 +151,15 @@ class LoginView extends GetView<AuthController> {
                   //     ),
                   //   ],
                   // ),
-
+                 
                   SizedBox(
                     width: 300,
-                    child: Text("Note: Enter the email and password you created when enrolling."))
+                    child: Column(
+                      children: [
+                        Text("Note",style: Theme.of(context).textTheme.headlineSmall!.copyWith(fontWeight: FontWeight.bold)),
+                        Text("Enter the email and password you used when enrolling on the website.",style:Theme.of(context).textTheme.labelMedium,textAlign:  TextAlign.center,),
+                      ],
+                    ))
                 
                 ],
               ),

@@ -25,15 +25,11 @@ class AuthController extends GetxController {
   // Check Auth on Splash Screen Loading
   void checkAuth() {
     var token = StorageController().getToken();
+    var email = StorageController().getEmail();
+    var password = StorageController().getPassword();
     if (token != null) {
       Future.delayed(Duration(seconds: 2), () async {
-        var courseController = Get.find<CourseController>();
-        var certificateController = Get.find<CertificateController>();
-        await getProfle();
-        await certificateController.getCertificated();
-        await courseController.getCourses();
-        reset();
-        Get.offAllNamed(AppRoutes.dashboard);
+         await loginCheck(email!, password!);
       });
     } else {
       Future.delayed(Duration(seconds: 2), () {
@@ -60,17 +56,16 @@ void remember(bool value){
   void visibility(){
     obsecure.value = !obsecure.value;
   }
-  
-  //Login Method
-  Future login() async {
+
+  //Login Check in Splash
+  Future loginCheck(String email, String password) async {
     try {
       isLoading(true);
-      var response = await AuthService.loign(email.text.trim(), password.text.trim());
+      var response = await AuthService.loign(email.trim(), password.trim());
       loginMessage.value = LoginModel.fromJson(response.data);
-
       if (loginMessage.value.success == true) {
         //Store Token in local storage
-        StorageController().saveLogin(loginMessage.value.token!);
+       await StorageController().saveLogin(loginMessage.value.token!,email,password);
         await getProfle();
         var courseController = Get.find<CourseController>();
         var certificateController = Get.find<CertificateController>();
@@ -81,7 +76,31 @@ void remember(bool value){
       }else{
         CustomDialogs.warning(title: "Error", message: "Invalid email or password. Please try again");
       }
-    } finally {
+    }finally {
+      isLoading(false);
+    }
+  }
+  
+  //Login Method
+  Future login() async {
+    try {
+      isLoading(true);
+      var response = await AuthService.loign(email.text.trim(), password.text.trim());
+      loginMessage.value = LoginModel.fromJson(response.data);
+      if (loginMessage.value.success == true) {
+        //Store Token in local storage
+        await StorageController().saveLogin(loginMessage.value.token!,email.text,password.text);
+        await getProfle();
+        var courseController = Get.find<CourseController>();
+        var certificateController = Get.find<CertificateController>();
+        await courseController.getCourses();
+        await certificateController.getCertificated();
+        reset();
+        Get.offNamed(AppRoutes.dashboard);
+      }else{
+        CustomDialogs.warning(title: "Error", message: "Invalid email or password. Please try again");
+      }
+    }finally {
       isLoading(false);
     }
   }
@@ -118,7 +137,7 @@ Future deleteAccount() async{
       loginMessage.value = LoginModel.fromJson(response.data);
       if (loginMessage.value.success == true) {
         //Store Token in local storage
-        StorageController().saveLogin(loginMessage.value.token!);
+        StorageController().saveLogin(loginMessage.value.token!,email.text,password.text);
         await getProfle();
 
         var courseController = Get.find<CourseController>();

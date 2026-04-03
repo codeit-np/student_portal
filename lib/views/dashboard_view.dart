@@ -47,7 +47,7 @@ class DashboardView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                "Version\n(4.0.2)",
+                "Version\n(4.0.4)",
                 style: TextStyle(color: Colors.blueGrey, fontSize: 12),
                 textAlign: TextAlign.center,
               ),
