@@ -133,7 +133,7 @@ class LoginView extends GetView<AuthController> {
                     ),
                   ),
 
-                  16.verticalSpace,
+                  // 16.verticalSpace,
                   // Row(
                   //   mainAxisAlignment: MainAxisAlignment.center,
                   //   children: [
@@ -152,14 +152,14 @@ class LoginView extends GetView<AuthController> {
                   //   ],
                   // ),
                  
-                  SizedBox(
-                    width: 300,
-                    child: Column(
-                      children: [
-                        Text("Note",style: Theme.of(context).textTheme.headlineSmall!.copyWith(fontWeight: FontWeight.bold)),
-                        Text("Enter the email and password you used when enrolling on the website.",style:Theme.of(context).textTheme.labelMedium,textAlign:  TextAlign.center,),
-                      ],
-                    ))
+                  // SizedBox(
+                  //   width: 300,
+                  //   child: Column(
+                  //     children: [
+                  //       Text("Note",style: Theme.of(context).textTheme.headlineSmall!.copyWith(fontWeight: FontWeight.bold)),
+                  //       Text("Enter the email and password you used when enrolling on the website.",style:Theme.of(context).textTheme.labelMedium,textAlign:  TextAlign.center,),
+                  //     ],
+                  //   ))
                 
                 ],
               ),
