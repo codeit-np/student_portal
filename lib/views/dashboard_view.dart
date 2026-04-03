@@ -162,7 +162,7 @@ class DashboardView extends StatelessWidget {
               ),
               // _buildDrawerItem(icon: Icons.person_outline, title: 'Profile'),
               const Spacer(),
-               _buildDrawerItem(
+              _buildDrawerItem(
                 onTap: () {
                   Get.back();
                   Get.toNamed(AppRoutes.deleteaccount);
@@ -221,33 +221,37 @@ class DashboardView extends StatelessWidget {
                       "Access your courses, progress, and achievements",
                       style: TextStyle(fontSize: 16, color: Color(0xFF64748B)),
                     ),
+
                     const SizedBox(height: 24),
-                    ElevatedButton.icon(
-                      onPressed: () {
-                        Get.toNamed(AppRoutes.upcoming);
-                      },
-                      icon: const Icon(Icons.add, size: 20),
-                      label: const Text(
-                        'Enroll in a Course',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.normal,
-                        ),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColor.primaryOrange,
-                        foregroundColor: Colors.white,
-                        elevation: 0,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                          vertical: 12,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 24),
+
+                    //IOS Disable
+
+                    // ElevatedButton.icon(
+                    //   onPressed: () {
+                    //     Get.toNamed(AppRoutes.upcoming);
+                    //   },
+                    //   icon: const Icon(Icons.add, size: 20),
+                    //   label: const Text(
+                    //     'Enroll in a Course',
+                    //     style: TextStyle(
+                    //       fontSize: 16,
+                    //       fontWeight: FontWeight.normal,
+                    //     ),
+                    //   ),
+                    //   style: ElevatedButton.styleFrom(
+                    //     backgroundColor: AppColor.primaryOrange,
+                    //     foregroundColor: Colors.white,
+                    //     elevation: 0,
+                    //     padding: const EdgeInsets.symmetric(
+                    //       horizontal: 20,
+                    //       vertical: 12,
+                    //     ),
+                    //     shape: RoundedRectangleBorder(
+                    //       borderRadius: BorderRadius.circular(8),
+                    //     ),
+                    //   ),
+                    // ),
+                    // const SizedBox(height: 24),
                     if (googleMeetController.liveClasses.isEmpty)
                       const SizedBox()
                     else
