@@ -20,7 +20,7 @@ class ForgotPasswordController extends GetxController {
     if (email.isEmpty) return;
     try {
       isLoading(true);
-      var response = await AuthService.forgotPassword(email);
+      var response = await AuthService.forgotPassword(email.trim());
       var result = ForgotpasswordModel.fromJson(response.data);
    
       if (result.success == true) {
@@ -74,9 +74,9 @@ class ForgotPasswordController extends GetxController {
       var token = StorageController().getToken();
       var authController = Get.find<AuthController>();
       var response = await AuthService.resetPassword(
-        token == null ? emailController.text : authController.profile.value.user!.email!,
-        newPasswordController.text,
-        confirmPasswordController.text,
+        token == null ? emailController.text.trim() : authController.profile.value.user!.email!.trim(),
+        newPasswordController.text.trim(),
+        confirmPasswordController.text.trim(),
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
       CustomDialogs.success(title: "Success", message: "Password reset successfully",
