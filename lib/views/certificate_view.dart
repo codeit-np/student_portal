@@ -13,13 +13,12 @@ class CertificateView extends GetView<CertificateController> {
     final theme = Theme.of(context);
 
     return Scaffold(
-       backgroundColor: AppColor.backgroundColor,
+      backgroundColor: AppColor.backgroundColor,
       appBar: AppBar(
         title: Text("My Certificates"),
         backgroundColor: Colors.white,
         elevation: 0,
         scrolledUnderElevation: 0,
-       
       ),
       body: Obx(() {
         if (controller.isLoading.value) {
@@ -33,8 +32,11 @@ class CertificateView extends GetView<CertificateController> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.workspace_premium_outlined,
-                    size: 80, color: theme.colorScheme.primary.withOpacity(0.6)),
+                Icon(
+                  Icons.workspace_premium_outlined,
+                  size: 80,
+                  color: theme.colorScheme.primary.withOpacity(0.6),
+                ),
                 const SizedBox(height: 16),
                 Text(
                   "No certificates yet",
@@ -54,11 +56,9 @@ class CertificateView extends GetView<CertificateController> {
           );
         }
 
-        return 
-        
-        RefreshIndicator(
+        return RefreshIndicator(
           onRefresh: () async {
-              controller.getCertificated();
+            controller.getCertificated();
           },
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(16),
@@ -85,16 +85,17 @@ class CertificateView extends GetView<CertificateController> {
                         certificate: cert,
                         onEmailPressed: () async {
                           CustomDialogs.confirmation(
-                            title: "Confirmation", message: "Do you want us to send this certificate to your registered email?",
-                            
+                            title: "Confirmation",
+                            message:
+                                "Do you want us to send this certificate to your registered email?",
+
                             onConfirm: () async {
                               Loader.show(context);
-                               Get.back();
-                                  await controller.getCertificate(cert.certicateId);
-                                  Loader.hide();
+                              Get.back();
+                              await controller.getCertificate(cert.certicateId);
+                              Loader.hide();
                             },
-                            );
-                          
+                          );
                         },
                       ),
                     );
@@ -128,9 +129,7 @@ class CertificateCard extends StatelessWidget {
       color: Colors.white,
       elevation: 2,
       shadowColor: theme.colorScheme.shadow.withOpacity(0.1),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       clipBehavior: Clip.hardEdge,
       child: InkWell(
         onTap: () {
@@ -193,7 +192,6 @@ class CertificateCard extends StatelessWidget {
               Align(
                 alignment: Alignment.centerRight,
                 child: FilledButton.icon(
-                  
                   onPressed: onEmailPressed,
                   icon: const Icon(Icons.email_outlined, size: 20),
                   label: const Text("Send to Email"),
@@ -226,11 +224,7 @@ class CertificateCard extends StatelessWidget {
 
     return Row(
       children: [
-        Icon(
-          icon,
-          size: 20,
-          color: theme.colorScheme.primary.withOpacity(0.7),
-        ),
+        Icon(icon, size: 20, color: theme.colorScheme.primary.withOpacity(0.7)),
         const SizedBox(width: 12),
         Text(
           "$label: ",

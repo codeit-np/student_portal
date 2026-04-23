@@ -6,7 +6,7 @@ class CertificateService {
   static Future<Response> fetchCertificates() async{
     var token = StorageController().getToken();
     DioConnection.dio.options.headers['Authorization'] = "Bearer $token";
-
+    
     var response = await DioConnection.dio.get("certificates");
     return response;
   }

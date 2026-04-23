@@ -65,12 +65,14 @@ void remember(bool value){
       loginMessage.value = LoginModel.fromJson(response.data);
       if (loginMessage.value.success == true) {
         //Store Token in local storage
+      
        await StorageController().saveLogin(loginMessage.value.token!,email,password);
-        await getProfle();
+      await getProfle();
         var courseController = Get.find<CourseController>();
         var certificateController = Get.find<CertificateController>();
         await courseController.getCourses();
         await certificateController.getCertificated();
+        
         reset();
         Get.offNamed(AppRoutes.dashboard);
       }else{

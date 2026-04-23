@@ -10,11 +10,13 @@ class CertificateController extends GetxController {
 
   Future getCertificated() async {
     try {
+      
       isLoading(true);
       var response = await CertificateService.fetchCertificates();
       var result = CertificateModel.fromJson(response.data);
       if (result.sucess == true) {
         certificates.value = result;
+        
       }
     } finally {
       isLoading(false);
@@ -26,6 +28,7 @@ class CertificateController extends GetxController {
       isLoading(true);
       var response = await CertificateService.emailCertificate(id);
       var result = CertificateMessageModel.fromJson(response.data);
+      print("Id  is $id");
       if (result.success == true) {
         CustomDialogs.success(title: "Success", message: "Your certificate has been successfully delivered to your registered email address. Kindly check your inbox for details.");
       } else {

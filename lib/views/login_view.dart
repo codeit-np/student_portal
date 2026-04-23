@@ -277,24 +277,25 @@ class LoginView extends GetView<AuthController> {
                       ),
                     ),
 
-                    16.verticalSpace,
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("New Student?"),
-                        Gap(4),
-                        GestureDetector(
-                          onTap: () {
-                            controller.reset();
-                            Get.toNamed(AppRoutes.register);
-                          },
-                          child: Text(
-                            "Create Account",
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ],
-                    ),
+                    // 16.verticalSpace,
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.center,
+                    //   children: [
+                    //     Text("New Student?"),
+                    //     Gap(4),
+                    //     GestureDetector(
+                    //       onTap: () {
+                    //         controller.reset();
+                    //         Get.toNamed(AppRoutes.register);
+                    //       },
+                    //       child: Text(
+                    //         "Create Account",
+                    //         style: TextStyle(fontWeight: FontWeight.bold),
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
+                  
                   ],
                 ),
               ),
@@ -412,24 +413,24 @@ class LoginView extends GetView<AuthController> {
                       ),
                     ),
 
-                    16.verticalSpace,
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("New Student?"),
-                        Gap(4),
-                        GestureDetector(
-                          onTap: () {
-                            controller.reset();
-                            Get.toNamed(AppRoutes.register);
-                          },
-                          child: Text(
-                            "Create Account",
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ],
-                    ),
+                    // 16.verticalSpace,
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.center,
+                    //   children: [
+                    //     Text("New Student?"),
+                    //     Gap(4),
+                    //     GestureDetector(
+                    //       onTap: () {
+                    //         controller.reset();
+                    //         Get.toNamed(AppRoutes.register);
+                    //       },
+                    //       child: Text(
+                    //         "Create Account",
+                    //         style: TextStyle(fontWeight: FontWeight.bold),
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
                   ],
                 ),
               ),
