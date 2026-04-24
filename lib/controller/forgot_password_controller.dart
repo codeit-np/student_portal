@@ -13,16 +13,14 @@ class ForgotPasswordController extends GetxController {
   final newPasswordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
   final isLoading = false.obs;
-  var message  = ForgotpasswordModel(success: false, message: null).obs;
-
+  var message  = ForgotPasswordModel(success: false).obs;
   // Send OTP Method
   Future<void> sendOtp(String email) async {
     if (email.isEmpty) return;
     try {
       isLoading(true);
       var response = await AuthService.forgotPassword(email.trim());
-      var result = ForgotpasswordModel.fromJson(response.data);
-   
+      var result = ForgotPasswordModel.fromJson(response.data);
       if (result.success == true) {
         CustomDialogs.success(title: "Success", message: "OTP sent to your email",
         onConfirm: () => Get.toNamed(AppRoutes.otpVerification),

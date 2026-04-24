@@ -1,7 +1,6 @@
 import 'package:codeit/controller/auth_controller.dart';
 import 'package:codeit/controller/forgot_password_controller.dart';
 import 'package:codeit/utils/app_color.dart';
-import 'package:codeit/utils/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -17,8 +16,7 @@ class OtpVerificationView extends StatefulWidget {
 
 class _OtpVerificationViewState extends State<OtpVerificationView> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final ForgotPasswordController controller =
-      Get.find<ForgotPasswordController>();
+  final ForgotPasswordController controller = Get.find<ForgotPasswordController>();
 
   @override
   Widget build(BuildContext context) {
@@ -174,8 +172,7 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
                       Gap(32.h),
 
                       // Resend Option
-                     Obx((){
-                      return  Row(
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
@@ -202,10 +199,8 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
                             ),
                           ),
                         ],
-                      );
-                    
-                     })
-                     
+                      )
+      
                     ],
                   ),
                 ),

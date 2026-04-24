@@ -149,113 +149,115 @@ class LoginView extends GetView<AuthController> {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Center(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(maxWidth: 600),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              //Logo
-              Image.asset(AppStrings.logo, width: 220),
-              8.verticalSpace,
-              Text(
-                "Student Portal",
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              4.verticalSpace,
-              Text(
-                "Sign in to your student portal",
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-              Gap(12),
-
-              Form(
-                key: key,
-                child: Column(
-                  children: [
-                    TextFormField(
-                      controller: controller.email,
-                      decoration: InputDecoration(
-                        hintText: 'Enter your email',
-                        labelText: 'Email address',
-                        prefixIcon: Icon(Icons.email_outlined),
-                      ),
-                      validator: (value) =>
-                          value!.isEmpty ? 'email required' : null,
-                    ),
-
-                    8.verticalSpace,
-
-                    Obx(() {
-                      return TextFormField(
-                        obscureText: controller.obsecure.value,
-                        controller: controller.password,
+        child: SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: 600),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                //Logo
+                Image.asset(AppStrings.logo, width: 220),
+                8.verticalSpace,
+                Text(
+                  "Student Portal",
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                4.verticalSpace,
+                Text(
+                  "Sign in to your student portal",
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                Gap(12),
+          
+                Form(
+                  key: key,
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        controller: controller.email,
                         decoration: InputDecoration(
-                          hintText: 'Enter your password',
-                          labelText: 'Password',
-                          prefixIcon: Icon(Icons.lock_open_outlined),
-                          suffixIcon: IconButton(
-                            onPressed: () {
-                              controller.visibility();
-                            },
-                            icon: controller.obsecure.value == true
-                                ? Icon(Icons.visibility_off)
-                                : Icon(Icons.visibility),
-                          ),
+                          hintText: 'Enter your email',
+                          labelText: 'Email address',
+                          prefixIcon: Icon(Icons.email_outlined),
                         ),
                         validator: (value) =>
-                            value!.isEmpty ? 'password required' : null,
-                      );
-                    }),
-
-                    8.verticalSpace,
-
-                    Obx(() {
-                      return Row(
-                        children: [
-                          Checkbox(
-                            value: controller.isRemember.value,
-                            onChanged: (value) {
-                              controller.remember(value!);
-                            },
-                          ),
-                          Text("Remember me"),
-                          Spacer(),
-                          GestureDetector(
-                            onTap: () => Get.toNamed(AppRoutes.forgotPassword),
-                            child: Text(
-                              "Forgot Password",
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                            value!.isEmpty ? 'email required' : null,
+                      ),
+          
+                      8.verticalSpace,
+          
+                      Obx(() {
+                        return TextFormField(
+                          obscureText: controller.obsecure.value,
+                          controller: controller.password,
+                          decoration: InputDecoration(
+                            hintText: 'Enter your password',
+                            labelText: 'Password',
+                            prefixIcon: Icon(Icons.lock_open_outlined),
+                            suffixIcon: IconButton(
+                              onPressed: () {
+                                controller.visibility();
+                              },
+                              icon: controller.obsecure.value == true
+                                  ? Icon(Icons.visibility_off)
+                                  : Icon(Icons.visibility),
                             ),
                           ),
-                        ],
-                      );
-                    }),
-
-                    8.verticalSpace,
-
-                    SizedBox(
-                      height: 32.h,
-                      width: double.infinity,
-                      child: FilledButton(
-                        style: FilledButton.styleFrom(
-                          backgroundColor: AppColor.primaryOrange,
+                          validator: (value) =>
+                              value!.isEmpty ? 'password required' : null,
+                        );
+                      }),
+          
+                      8.verticalSpace,
+          
+                      Obx(() {
+                        return Row(
+                          children: [
+                            Checkbox(
+                              value: controller.isRemember.value,
+                              onChanged: (value) {
+                                controller.remember(value!);
+                              },
+                            ),
+                            Text("Remember me"),
+                            Spacer(),
+                            GestureDetector(
+                              onTap: () => Get.toNamed(AppRoutes.forgotPassword),
+                              child: Text(
+                                "Forgot Password",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ],
+                        );
+                      }),
+          
+                      8.verticalSpace,
+          
+                      SizedBox(
+                        height: 32.h,
+                        width: double.infinity,
+                        child: FilledButton(
+                          style: FilledButton.styleFrom(
+                            backgroundColor: AppColor.primaryOrange,
+                          ),
+                          onPressed: () async {
+                            if (key.currentState!.validate()) {
+                              Loader.show(context);
+                              await controller.login();
+                              Loader.hide();
+                            }
+                          },
+                          child: Text("Sign in ", style: TextStyle(fontSize: 18)),
                         ),
-                        onPressed: () async {
-                          if (key.currentState!.validate()) {
-                            Loader.show(context);
-                            await controller.login();
-                            Loader.hide();
-                          }
-                        },
-                        child: Text("Sign in ", style: TextStyle(fontSize: 18)),
                       ),
-                    ),
-
-                    
-                  ],
+          
+                      
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -267,113 +269,115 @@ class LoginView extends GetView<AuthController> {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Center(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(maxWidth: 600),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              //Logo
-              Image.asset(AppStrings.logo, width: 220),
-              8.verticalSpace,
-              Text(
-                "Student Portal",
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              4.verticalSpace,
-              Text(
-                "Sign in to your student portal",
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-              Gap(12),
-
-              Form(
-                key: key,
-                child: Column(
-                  children: [
-                    TextFormField(
-                      controller: controller.email,
-                      decoration: InputDecoration(
-                        hintText: 'Enter your email',
-                        labelText: 'Email address',
-                        prefixIcon: Icon(Icons.email_outlined),
-                      ),
-                      validator: (value) =>
-                          value!.isEmpty ? 'email required' : null,
-                    ),
-
-                    8.verticalSpace,
-
-                    Obx(() {
-                      return TextFormField(
-                        obscureText: controller.obsecure.value,
-                        controller: controller.password,
+        child: SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: 600),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                //Logo
+                Image.asset(AppStrings.logo, width: 220),
+                8.verticalSpace,
+                Text(
+                  "Student Portal",
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                4.verticalSpace,
+                Text(
+                  "Sign in to your student portal",
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                Gap(12),
+          
+                Form(
+                  key: key,
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        controller: controller.email,
                         decoration: InputDecoration(
-                          hintText: 'Enter your password',
-                          labelText: 'Password',
-                          prefixIcon: Icon(Icons.lock_open_outlined),
-                          suffixIcon: IconButton(
-                            onPressed: () {
-                              controller.visibility();
-                            },
-                            icon: controller.obsecure.value == true
-                                ? Icon(Icons.visibility_off)
-                                : Icon(Icons.visibility),
-                          ),
+                          hintText: 'Enter your email',
+                          labelText: 'Email address',
+                          prefixIcon: Icon(Icons.email_outlined),
                         ),
                         validator: (value) =>
-                            value!.isEmpty ? 'password required' : null,
-                      );
-                    }),
-
-                    8.verticalSpace,
-
-                    Obx(() {
-                      return Row(
-                        children: [
-                          Checkbox(
-                            value: controller.isRemember.value,
-                            onChanged: (value) {
-                              controller.remember(value!);
-                            },
-                          ),
-                          Text("Remember me"),
-                          Spacer(),
-                          GestureDetector(
-                            onTap: () => Get.toNamed(AppRoutes.forgotPassword),
-                            child: Text(
-                              "Forgot Password",
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                            value!.isEmpty ? 'email required' : null,
+                      ),
+          
+                      8.verticalSpace,
+          
+                      Obx(() {
+                        return TextFormField(
+                          obscureText: controller.obsecure.value,
+                          controller: controller.password,
+                          decoration: InputDecoration(
+                            hintText: 'Enter your password',
+                            labelText: 'Password',
+                            prefixIcon: Icon(Icons.lock_open_outlined),
+                            suffixIcon: IconButton(
+                              onPressed: () {
+                                controller.visibility();
+                              },
+                              icon: controller.obsecure.value == true
+                                  ? Icon(Icons.visibility_off)
+                                  : Icon(Icons.visibility),
                             ),
                           ),
-                        ],
-                      );
-                    }),
-
-                    8.verticalSpace,
-
-                    SizedBox(
-                      height: 32.h,
-                      width: double.infinity,
-                      child: FilledButton(
-                        style: FilledButton.styleFrom(
-                          backgroundColor: AppColor.primaryOrange,
+                          validator: (value) =>
+                              value!.isEmpty ? 'password required' : null,
+                        );
+                      }),
+          
+                      8.verticalSpace,
+          
+                      Obx(() {
+                        return Row(
+                          children: [
+                            Checkbox(
+                              value: controller.isRemember.value,
+                              onChanged: (value) {
+                                controller.remember(value!);
+                              },
+                            ),
+                            Text("Remember me"),
+                            Spacer(),
+                            GestureDetector(
+                              onTap: () => Get.toNamed(AppRoutes.forgotPassword),
+                              child: Text(
+                                "Forgot Password",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ],
+                        );
+                      }),
+          
+                      8.verticalSpace,
+          
+                      SizedBox(
+                        height: 32.h,
+                        width: double.infinity,
+                        child: FilledButton(
+                          style: FilledButton.styleFrom(
+                            backgroundColor: AppColor.primaryOrange,
+                          ),
+                          onPressed: () async {
+                            if (key.currentState!.validate()) {
+                              Loader.show(context);
+                              await controller.login();
+                              Loader.hide();
+                            }
+                          },
+                          child: Text("Sign in ", style: TextStyle(fontSize: 18)),
                         ),
-                        onPressed: () async {
-                          if (key.currentState!.validate()) {
-                            Loader.show(context);
-                            await controller.login();
-                            Loader.hide();
-                          }
-                        },
-                        child: Text("Sign in ", style: TextStyle(fontSize: 18)),
                       ),
-                    ),
-
-                    
-                  ],
+          
+                      
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
