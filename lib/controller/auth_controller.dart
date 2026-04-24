@@ -76,7 +76,10 @@ void remember(bool value){
       }else{
         CustomDialogs.warning(title: "Error", message: "Invalid email or password. Please try again");
       }
-    }finally {
+    }catch(e){
+      CustomDialogs.warning(title: "Error", message: e.toString());
+    }
+    finally {
       isLoading(false);
     }
   }
@@ -100,7 +103,10 @@ void remember(bool value){
       }else{
         CustomDialogs.warning(title: "Error", message: "Invalid email or password. Please try again");
       }
-    }finally {
+    }catch(e){
+      CustomDialogs.warning(title: "Error", message: e.toString());
+    }
+    finally {
       isLoading(false);
     }
   }
