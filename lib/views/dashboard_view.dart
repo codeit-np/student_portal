@@ -47,7 +47,7 @@ class DashboardView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                "Version\n(4.0.4)",
+                "Version\n(4.0.7)",
                 style: TextStyle(color: Colors.blueGrey, fontSize: 12),
                 textAlign: TextAlign.center,
               ),
@@ -282,7 +282,7 @@ class DashboardView extends StatelessWidget {
                         iconColor: Colors.blue,
                         iconBgColor: Colors.blue.shade50,
                         title: 'Active Courses',
-                        value: '${courseController.courses.value.data.length}',
+                        value: '${courseController.activeCourses.value}',
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -372,10 +372,14 @@ class DashboardView extends StatelessWidget {
                                 child: InkWell(
                                   borderRadius: BorderRadius.circular(16),
                                   onTap: () {
-                                    courseController.getCourse(
-                                      course.enrollmentId!,
-                                    );
-                                    Get.toNamed(AppRoutes.course);
+                                    if (course.status == "approved") {
+                                      courseController.getCourse(
+                                        course.enrollmentId!,
+                                      );
+                                      Get.toNamed(AppRoutes.course);
+                                    }else{
+                                      CustomDialogs.warning(title: "Warning", message: "Your enrollment is being processed. We'll notify you once approved.");
+                                    }
                                   },
                                   child: Padding(
                                     padding: const EdgeInsets.all(12),

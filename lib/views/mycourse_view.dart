@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:codeit/controller/course_controller.dart';
 import 'package:codeit/utils/app_color.dart';
 import 'package:codeit/utils/app_routes.dart';
+import 'package:codeit/utils/helper.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -91,8 +92,16 @@ class MycourseView extends GetView<CourseController> {
                         return CourseCard(
                           course: course,
                           onTap: () {
-                            controller.getCourse(course.enrollmentId!);
-                            Get.toNamed(AppRoutes.course);
+                            // controller.getCourse(course.enrollmentId!);
+                            // Get.toNamed(AppRoutes.course);
+                              if (course.status == "approved") {
+                                      controller.getCourse(
+                                        course.enrollmentId!,
+                                      );
+                                      Get.toNamed(AppRoutes.course);
+                                    }else{
+                                      CustomDialogs.warning(title: "Warning", message: "Your enrollment is being processed. We'll notify you once approved.");
+                                    }
                           },
                         );
                       },

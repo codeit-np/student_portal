@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:codeit/utils/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -5,7 +7,7 @@ import 'package:get/get.dart';
 enum DialogType { success, warning, confirmation }
 
 class CustomDialogs {
-  // Main method to show modern dialog
+  // Main method to show modern compact dialog
   static void showModernDialog({
     required DialogType type,
     required String title,
@@ -22,164 +24,260 @@ class CustomDialogs {
 
     switch (type) {
       case DialogType.success:
-        accentColor = Colors.green.shade600;
+        accentColor = const Color(0xFF10B981);
         icon = Icons.check_circle_rounded;
-        defaultConfirmText = "Great!";
+        defaultConfirmText = "Got it";
         break;
       case DialogType.warning:
-        accentColor = Colors.orange.shade600;
-        icon = Icons.warning_amber_rounded;
-        defaultConfirmText = "I Understand";
+        accentColor = const Color(0xFFF59E0B);
+        icon = Icons.warning_rounded;
+        defaultConfirmText = "Okay";
         break;
       case DialogType.confirmation:
         accentColor = AppColor.primaryOrange;
-        icon = Icons.help_outline_rounded;
-        defaultConfirmText = "Confirm";
+        icon = Icons.question_mark_rounded;
+        defaultConfirmText = "Yes";
         break;
     }
 
     final confirmBtnText = confirmText ?? defaultConfirmText;
-    final cancelBtnText = cancelText ?? "Cancel";
+    final cancelBtnText = cancelText ?? "No";
 
     Get.dialog(
-      ScaleTransition(
-        scale: Tween<double>(begin: 0.8, end: 1.0).animate(
-          CurvedAnimation(
-            parent: AnimationController(
-              vsync: Navigator.of(Get.overlayContext!, rootNavigator: true),
-              duration: const Duration(milliseconds: 250),
-            )..forward(),
-            curve: Curves.easeOutBack,
-          ),
-        ),
-        child: Dialog(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          insetPadding: const EdgeInsets.all(24),
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              maxWidth: 600
-            ),
-            child: Container(
-              padding: const EdgeInsets.all(28),
-              decoration: BoxDecoration(
-                color: Get.theme.scaffoldBackgroundColor,
-                borderRadius: BorderRadius.circular(28),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.15),
-                    blurRadius: 30,
-                    offset: const Offset(0, 15),
-                  ),
-                ],
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // Icon with background
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: accentColor.withOpacity(0.1),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(icon, size: 68, color: accentColor),
-                  ),
-                  const SizedBox(height: 24),
-                    
-                  // Title
-                  Text(
-                    title,
-                    style: Get.textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 22,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 12),
-                    
-                  // Message
-                  Text(
-                    message,
-                    style: Get.textTheme.bodyLarge?.copyWith(
-                      color: Get.theme.textTheme.bodyLarge?.color?.withOpacity(
-                        0.75,
-                      ),
-                      height: 1.4,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 32),
-                    
-                  // Action Buttons
-                  Row(
-                    children: [
-                      if (type == DialogType.confirmation ||
-                          type == DialogType.warning) ...[
-                        Expanded(
-                          child: TextButton(
-                            onPressed: () {
-                              Get.back();
-                              onCancel?.call();
-                            },
-                            style: TextButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(vertical: 16),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                            ),
-                            child: Text(
-                              cancelBtnText,
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Get.theme.textTheme.bodyLarge?.color
-                                    ?.withOpacity(0.7),
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                      ],
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Get.back();
-                            onConfirm?.call();
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: accentColor,
-                            foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            elevation: 0,
-                          ),
-                          child: Text(
-                            confirmBtnText,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+      Material(
+        color: Colors.transparent,
+        child: Stack(
+          children: [
+            // Transparent background with blur
+            Container(
+              color: Colors.black.withOpacity(0.4),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),
+                child: const SizedBox.expand(),
               ),
             ),
-          ),
+            
+            // Dialog
+            Center(
+              child: TweenAnimationBuilder(
+                duration: const Duration(milliseconds: 300),
+                tween: Tween<double>(begin: 0.9, end: 1.0),
+                curve: Curves.easeOutCubic,
+                builder: (context, double scale, child) {
+                  return Transform.scale(
+                    scale: scale,
+                    child: FadeTransition(
+                      opacity: AlwaysStoppedAnimation(scale),
+                      child: Container(
+                        width: 320,
+                        constraints: const BoxConstraints(minWidth: 280),
+                        decoration: BoxDecoration(
+                          color: Get.theme.scaffoldBackgroundColor,
+                          borderRadius: BorderRadius.circular(24),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.15),
+                              blurRadius: 24,
+                              spreadRadius: 0,
+                              offset: const Offset(0, 8),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            // Top accent line
+                            Container(
+                              height: 4,
+                              width: 60,
+                              margin: const EdgeInsets.only(top: 16),
+                              decoration: BoxDecoration(
+                                color: accentColor.withOpacity(0.3),
+                                borderRadius: BorderRadius.circular(2),
+                              ),
+                            ),
+                            
+                            Padding(
+                              padding: const EdgeInsets.all(20),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  // Icon circle
+                                  Container(
+                                    padding: const EdgeInsets.all(12),
+                                    decoration: BoxDecoration(
+                                      color: accentColor.withOpacity(0.1),
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Icon(
+                                      icon,
+                                      size: 32,
+                                      color: accentColor,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 16),
+                                  
+                                  // Title
+                                  Text(
+                                    title,
+                                    style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w700,
+                                      letterSpacing: -0.3,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  const SizedBox(height: 8),
+                                  
+                                  // Message
+                                  Text(
+                                    message,
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Get.theme.textTheme.bodyLarge?.color?.withOpacity(0.7),
+                                      height: 1.4,
+                                      letterSpacing: -0.2,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  const SizedBox(height: 24),
+                                  
+                                  // Action Buttons
+                                  Row(
+                                    children: [
+                                      if (type == DialogType.confirmation ||
+                                          type == DialogType.warning) ...[
+                                        Expanded(
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              Get.back();
+                                              onCancel?.call();
+                                            },
+                                            child: Container(
+                                              padding: const EdgeInsets.symmetric(vertical: 10),
+                                              decoration: BoxDecoration(
+                                                color: Colors.grey.withOpacity(0.1),
+                                                borderRadius: BorderRadius.circular(12),
+                                              ),
+                                              child: Center(
+                                                child: Text(
+                                                  cancelBtnText,
+                                                  style: TextStyle(
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.w600,
+                                                    color: Colors.grey.shade700,
+                                                    letterSpacing: -0.2,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(width: 10),
+                                      ],
+                                      Expanded(
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            Get.back();
+                                            onConfirm?.call();
+                                          },
+                                          child: Container(
+                                            padding: const EdgeInsets.symmetric(vertical: 10),
+                                            decoration: BoxDecoration(
+                                              color: accentColor,
+                                              borderRadius: BorderRadius.circular(12),
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                confirmBtnText,
+                                                style: const TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w700,
+                                                  color: Colors.white,
+                                                  letterSpacing: -0.2,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
         ),
       ),
       barrierDismissible: barrierDismissible,
-      barrierColor: Colors.black.withOpacity(0.5),
+      barrierColor: Colors.transparent,
+    );
+  }
+
+  // Quick toast-style dialogs
+  static void quickSuccess({
+    required String message,
+    Duration duration = const Duration(seconds: 2),
+  }) {
+    Get.closeCurrentSnackbar();
+    Get.rawSnackbar(
+      message: message,
+      backgroundColor: const Color(0xFF10B981),
+      borderRadius: 12,
+      margin: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      snackStyle: SnackStyle.FLOATING,
+      duration: duration,
+      icon: const Icon(Icons.check_circle, color: Colors.white, size: 20),
+      snackPosition: SnackPosition.TOP,
+    );
+  }
+
+  static void quickError({
+    required String message,
+    Duration duration = const Duration(seconds: 2),
+  }) {
+    Get.closeCurrentSnackbar();
+    Get.rawSnackbar(
+      message: message,
+      backgroundColor: const Color(0xFFEF4444),
+      borderRadius: 12,
+      margin: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      snackStyle: SnackStyle.FLOATING,
+      duration: duration,
+      icon: const Icon(Icons.error_outline, color: Colors.white, size: 20),
+      snackPosition: SnackPosition.TOP,
+    );
+  }
+
+  static void quickInfo({
+    required String message,
+    Duration duration = const Duration(seconds: 2),
+  }) {
+    Get.closeCurrentSnackbar();
+    Get.rawSnackbar(
+      message: message,
+      backgroundColor: const Color(0xFF3B82F6),
+      borderRadius: 12,
+      margin: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      snackStyle: SnackStyle.FLOATING,
+      duration: duration,
+      icon: const Icon(Icons.info_outline, color: Colors.white, size: 20),
+      snackPosition: SnackPosition.TOP,
     );
   }
 
   // Convenience methods
-
   static void success({
     required String title,
     required String message,
@@ -227,7 +325,7 @@ class CustomDialogs {
       title: title,
       message: message,
       confirmText: confirmText,
-      cancelText: cancelText ?? "Cancel",
+      cancelText: cancelText ?? "No",
       onConfirm: onConfirm,
       onCancel: onCancel,
     );
