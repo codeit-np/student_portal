@@ -5,6 +5,7 @@ import 'package:codeit/controller/storage_controller.dart';
 import 'package:codeit/utils/app_routes.dart';
 import 'package:codeit/utils/helper.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:local_auth/local_auth.dart';
 
 class BiometricController extends GetxController {
@@ -29,9 +30,16 @@ class BiometricController extends GetxController {
 
       supported.value = canCheck && deviceSupported;
 
+      var box = GetStorage();
       if (!supported.value) {
+        box.write("biometricSupport", false);
+        print("Biometric support false");
         return;
       }
+
+      box.write("biometricSupport", true);
+        print("Biometric support true");
+
 
       List<BiometricType> available = await auth.getAvailableBiometrics();
 
@@ -55,7 +63,7 @@ class BiometricController extends GetxController {
       );
 
       authenticated.value = result;
-       
+
       if (authenticated.value == true) {
         // Get.snackbar("Success", "Biometric login successful");
 
@@ -70,8 +78,10 @@ class BiometricController extends GetxController {
           await courseController.getCourses();
           await certificateController.getCertificated();
           Get.offAllNamed(AppRoutes.dashboard);
-        }else{
-           CustomDialogs.quickError(message: "Please login with your credentials");
+        } else {
+          CustomDialogs.quickError(
+            message: "Please login with your credentials",
+          );
         }
       } else {
         CustomDialogs.quickError(message: "Please login with your credentials");

@@ -13,6 +13,7 @@ import 'package:codeit/views/mycourse_view.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DashboardView extends StatelessWidget {
@@ -24,6 +25,8 @@ class DashboardView extends StatelessWidget {
     var authController = Get.find<AuthController>();
     var certificateController = Get.find<CertificateController>();
     var googleMeetController = Get.put(GoogleMeetController());
+    var box = GetStorage();
+    var biometricSupport = box.read("biometricSupport");
     return Scaffold(
       backgroundColor: AppColor.backgroundColor,
       appBar: AppBar(
@@ -163,7 +166,7 @@ class DashboardView extends StatelessWidget {
                 title: 'Change Password',
               ),
 
-               _buildDrawerItem(
+              _buildDrawerItem(
                 onTap: () {
                   Get.back();
                   Get.toNamed(AppRoutes.deleteaccount);
@@ -171,26 +174,29 @@ class DashboardView extends StatelessWidget {
                 icon: Icons.delete_forever,
                 title: 'Delete Account',
               ),
-
-              Obx(() {
-                return SwitchListTile(
-                  tileColor: Colors.white,
-                  title: const Text("Enable Biometric"),
-                  value: authController.biometric.value,
-                  onChanged: (bool value) {
-                    if (value == true) {
-                      authController.enableBiomatric();
-                    } else {
-                      authController.disableBiomatric();
-                    }
-                  },
-                  secondary: const Icon(Icons.fingerprint_outlined), // 👈 icon here
-                );
-              }),
+              biometricSupport == false
+                  ? SizedBox()
+                  : Obx(() {
+                      return SwitchListTile(
+                        tileColor: Colors.white,
+                        title: const Text("Enable Biometric"),
+                        value: authController.biometric.value,
+                        onChanged: (bool value) {
+                          if (value == true) {
+                            authController.enableBiomatric();
+                          } else {
+                            authController.disableBiomatric();
+                          }
+                        },
+                        secondary: const Icon(
+                          Icons.fingerprint_outlined,
+                        ), // 👈 icon here
+                      );
+                    }),
 
               // _buildDrawerItem(icon: Icons.person_outline, title: 'Profile'),
               const Spacer(),
-             
+
               const Divider(color: Colors.white38, height: 1),
               _buildDrawerItem(
                 icon: Icons.logout,
@@ -200,9 +206,17 @@ class DashboardView extends StatelessWidget {
                     title: "Logout",
                     message: "Do you want to continute?",
                     onConfirm: () {
-                      // StorageController().deleteToken();
-                      authController.reset();
-                      Get.offAllNamed(AppRoutes.login);
+                      var box = GetStorage();
+                      var biometricSupport = box.read("biometricSupport");
+
+                      if (biometricSupport == true) {
+                        authController.reset();
+                        Get.offAllNamed(AppRoutes.login);
+                      } else {
+                        StorageController().deleteToken();
+                        authController.reset();
+                        Get.offAllNamed(AppRoutes.login);
+                      }
                     },
                   );
                 },

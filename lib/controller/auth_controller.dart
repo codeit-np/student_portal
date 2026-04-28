@@ -8,6 +8,7 @@ import 'package:codeit/utils/helper.dart';
 import 'package:codeit/utils/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 class AuthController extends GetxController {
   var name = TextEditingController();
@@ -23,39 +24,51 @@ class AuthController extends GetxController {
   var obsecure = true.obs;
   var biometric = false.obs;
 
-  void enableBiomatric(){
+  //Enable Biometric Button
+  void enableBiomatric() {
     biometric.value = true;
     StorageController().saveBiometric();
   }
 
-  void disableBiomatric(){
+  //Disable Biometric Button
+  void disableBiomatric() {
     biometric.value = false;
     StorageController().deleteBiometric();
   }
 
-
   // Check Auth on Splash Screen Loading
   void checkAuth() {
+    //Enable Disable Biometric Button
     var token = StorageController().getToken();
-    var email = StorageController().getEmail();
-    var biometricValue = StorageController().getBiometric();
-    print(biometricValue);
-  if(biometricValue == null){
-    biometric.value = false;
-  }else{
-    biometric.value = true;
-  }
-   
-    // var password = StorageController().getPassword();
-    // if (token != null) {
-    //   Future.delayed(Duration(seconds: 2), () async {
-    //      await loginCheck(email!, password!);
-    //   });
-    // } else {
+    var box = GetStorage();
+    var biometricSupport = box.read("biometricSupport");
+    if (biometricSupport == true) {
+      var biometricValue = StorageController().getBiometric();
+      if (biometricValue == null) {
+        biometric.value = false;
+      } else {
+        biometric.value = true;
+      }
+
       Future.delayed(Duration(seconds: 2), () {
         Get.offAllNamed(AppRoutes.login);
       });
-    // }
+    } else {
+      if (token != null)  {
+        Future.delayed(Duration(seconds: 2), () async{
+           await getProfle();
+        var courseController = Get.find<CourseController>();
+        var certificateController = Get.find<CertificateController>();
+        await courseController.getCourses();
+        await certificateController.getCertificated();
+          Get.offAllNamed(AppRoutes.dashboard);
+        });
+      } else {
+        Future.delayed(Duration(seconds: 2), () {
+          Get.offAllNamed(AppRoutes.login);
+        });
+      }
+    }
   }
 
   void remember(bool value) {
