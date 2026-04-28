@@ -35,6 +35,7 @@ class LoginView extends GetView<AuthController> {
   //Mobile UI
   Padding _buildMobileUI(BuildContext context, GlobalKey<FormState> key) {
     var biometricController = Get.find<BiometricController>();
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Center(
@@ -141,11 +142,12 @@ class LoginView extends GetView<AuthController> {
                           child: Text("Sign in "),
                         ),
                       ),
-
+                      
                       controller.biometric.value == true ? Gap(20) : SizedBox(),
                       controller.biometric.value == false
                           ? SizedBox.shrink()
                           : Obx(() {
+                            print("Face ${biometricController.hasFace.value}");
                               if (biometricController.hasFace.value &&
                                   biometricController.hasFingerprint.value) {
                                 return Container(
@@ -165,6 +167,7 @@ class LoginView extends GetView<AuthController> {
                               }
 
                               if (biometricController.hasFace.value) {
+                               
                                 return ElevatedButton.icon(
                                   onPressed: biometricController.biometricLogin,
 
@@ -184,7 +187,7 @@ class LoginView extends GetView<AuthController> {
                                 );
                               }
 
-                              return const SizedBox.shrink();
+                              return const Text("No Biometric");
                             }),
                     ],
                   ),
@@ -310,7 +313,7 @@ class LoginView extends GetView<AuthController> {
                               ),
                             ),
                           ),
-
+                            
                            controller.biometric.value == true ? Gap(20) : SizedBox(),
                       controller.biometric.value == false
                           ? SizedBox.shrink()
