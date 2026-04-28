@@ -1,4 +1,5 @@
 import 'package:codeit/controller/auth_controller.dart';
+import 'package:codeit/controller/biometric_controller.dart';
 import 'package:codeit/controller/certificate_controller.dart';
 import 'package:codeit/controller/course_controller.dart';
 import 'package:codeit/controller/forgot_password_controller.dart';
@@ -18,5 +19,8 @@ class ControllerBindings extends Bindings {
       ForgotPasswordController(),
       permanent: true,
     );
+
+    Get.put<BiometricController>(BiometricController());
+    
   }
 }

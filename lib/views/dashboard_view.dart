@@ -47,7 +47,7 @@ class DashboardView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                "Version\n(4.0.7)",
+                "Version\n(4.0.8)",
                 style: TextStyle(color: Colors.blueGrey, fontSize: 12),
                 textAlign: TextAlign.center,
               ),
@@ -145,6 +145,7 @@ class DashboardView extends StatelessWidget {
               //   icon: Icons.chat_bubble_outline,
               //   title: 'Suggestions',
               // ),
+              Divider(),
               _buildDrawerItem(
                 onTap: () {
                   Get.toNamed(AppRoutes.terms);
@@ -152,6 +153,7 @@ class DashboardView extends StatelessWidget {
                 icon: Icons.description_outlined,
                 title: 'Terms & Conditions',
               ),
+
               _buildDrawerItem(
                 onTap: () {
                   Get.back();
@@ -160,9 +162,8 @@ class DashboardView extends StatelessWidget {
                 icon: Icons.lock,
                 title: 'Change Password',
               ),
-              // _buildDrawerItem(icon: Icons.person_outline, title: 'Profile'),
-              const Spacer(),
-              _buildDrawerItem(
+
+               _buildDrawerItem(
                 onTap: () {
                   Get.back();
                   Get.toNamed(AppRoutes.deleteaccount);
@@ -170,6 +171,26 @@ class DashboardView extends StatelessWidget {
                 icon: Icons.delete_forever,
                 title: 'Delete Account',
               ),
+
+              Obx(() {
+                return SwitchListTile(
+                  tileColor: Colors.white,
+                  title: const Text("Enable Biometric"),
+                  value: authController.biometric.value,
+                  onChanged: (bool value) {
+                    if (value == true) {
+                      authController.enableBiomatric();
+                    } else {
+                      authController.disableBiomatric();
+                    }
+                  },
+                  secondary: const Icon(Icons.fingerprint_outlined), // 👈 icon here
+                );
+              }),
+
+              // _buildDrawerItem(icon: Icons.person_outline, title: 'Profile'),
+              const Spacer(),
+             
               const Divider(color: Colors.white38, height: 1),
               _buildDrawerItem(
                 icon: Icons.logout,
@@ -179,7 +200,7 @@ class DashboardView extends StatelessWidget {
                     title: "Logout",
                     message: "Do you want to continute?",
                     onConfirm: () {
-                      StorageController().deleteToken();
+                      // StorageController().deleteToken();
                       authController.reset();
                       Get.offAllNamed(AppRoutes.login);
                     },
@@ -377,8 +398,12 @@ class DashboardView extends StatelessWidget {
                                         course.enrollmentId!,
                                       );
                                       Get.toNamed(AppRoutes.course);
-                                    }else{
-                                      CustomDialogs.warning(title: "Warning", message: "Your enrollment is being processed. We'll notify you once approved.");
+                                    } else {
+                                      CustomDialogs.warning(
+                                        title: "Warning",
+                                        message:
+                                            "Your enrollment is being processed. We'll notify you once approved.",
+                                      );
                                     }
                                   },
                                   child: Padding(

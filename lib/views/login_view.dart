@@ -1,4 +1,5 @@
 import 'package:codeit/controller/auth_controller.dart';
+import 'package:codeit/controller/biometric_controller.dart';
 import 'package:codeit/utils/app_color.dart';
 import 'package:codeit/utils/app_routes.dart';
 import 'package:codeit/utils/app_strings.dart';
@@ -33,6 +34,7 @@ class LoginView extends GetView<AuthController> {
 
   //Mobile UI
   Padding _buildMobileUI(BuildContext context, GlobalKey<FormState> key) {
+    var biometricController = Get.find<BiometricController>();
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Center(
@@ -59,6 +61,8 @@ class LoginView extends GetView<AuthController> {
                 children: [
                   TextFormField(
                     controller: controller.email,
+                    validator: (value) =>
+                        value!.isEmpty ? 'email required' : null,
                     decoration: InputDecoration(
                       hintText: 'Enter your email',
                       labelText: 'Email address',
@@ -72,6 +76,9 @@ class LoginView extends GetView<AuthController> {
                     return TextFormField(
                       obscureText: controller.obsecure.value,
                       controller: controller.password,
+                      validator: (value) =>
+                          value!.isEmpty ? 'password required' : null,
+
                       decoration: InputDecoration(
                         hintText: 'Enter your password',
                         labelText: 'Password',
@@ -116,25 +123,71 @@ class LoginView extends GetView<AuthController> {
 
                   8.verticalSpace,
 
-                  SizedBox(
-                    width: double.infinity,
-                    child: FilledButton(
-                      style: FilledButton.styleFrom(
-                        backgroundColor: AppColor.primaryOrange,
+                  Column(
+                    children: [
+                      SizedBox(
+                        width: double.infinity,
+                        child: FilledButton(
+                          style: FilledButton.styleFrom(
+                            backgroundColor: AppColor.primaryOrange,
+                          ),
+                          onPressed: () async {
+                            if (key.currentState!.validate()) {
+                              Loader.show(context);
+                              await controller.login();
+                              Loader.hide();
+                            }
+                          },
+                          child: Text("Sign in "),
+                        ),
                       ),
-                      onPressed: () async{
-                         if (key.currentState!.validate()) {
-                            Loader.show(context);
-                            await controller.login();
-                            Loader.hide();
-                          }
-                      },
-                      child: Text("Sign in "),
-                    ),
-                  ),
 
-                 
-                
+                      controller.biometric.value == true ? Gap(20) : SizedBox(),
+                      controller.biometric.value == false
+                          ? SizedBox.shrink()
+                          : Obx(() {
+                              if (biometricController.hasFace.value &&
+                                  biometricController.hasFingerprint.value) {
+                                return Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(14),
+                                    border: Border.all(
+                                      color: Colors.grey.shade300,
+                                    ),
+                                  ),
+                                  child: IconButton(
+                                    onPressed: () async {
+                                      biometricController.biometricLogin();
+                                    },
+                                    icon: Icon(Icons.fingerprint),
+                                  ),
+                                );
+                              }
+
+                              if (biometricController.hasFace.value) {
+                                return ElevatedButton.icon(
+                                  onPressed: biometricController.biometricLogin,
+
+                                  icon: const Icon(Icons.face),
+
+                                  label: const Text("Login with Face ID"),
+                                );
+                              }
+
+                              if (biometricController.hasFingerprint.value) {
+                                return ElevatedButton.icon(
+                                  onPressed: biometricController.biometricLogin,
+
+                                  icon: const Icon(Icons.fingerprint),
+
+                                  label: const Text("Login with Fingerprint"),
+                                );
+                              }
+
+                              return const SizedBox.shrink();
+                            }),
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -146,6 +199,7 @@ class LoginView extends GetView<AuthController> {
 
   //Tab UI
   Padding _buildTabUI(BuildContext context, GlobalKey<FormState> key) {
+    var biometricController = Get.find<BiometricController>();
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Center(
@@ -168,7 +222,7 @@ class LoginView extends GetView<AuthController> {
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 Gap(12),
-          
+
                 Form(
                   key: key,
                   child: Column(
@@ -183,9 +237,9 @@ class LoginView extends GetView<AuthController> {
                         validator: (value) =>
                             value!.isEmpty ? 'email required' : null,
                       ),
-          
+
                       8.verticalSpace,
-          
+
                       Obx(() {
                         return TextFormField(
                           obscureText: controller.obsecure.value,
@@ -207,9 +261,9 @@ class LoginView extends GetView<AuthController> {
                               value!.isEmpty ? 'password required' : null,
                         );
                       }),
-          
+
                       8.verticalSpace,
-          
+
                       Obx(() {
                         return Row(
                           children: [
@@ -222,7 +276,8 @@ class LoginView extends GetView<AuthController> {
                             Text("Remember me"),
                             Spacer(),
                             GestureDetector(
-                              onTap: () => Get.toNamed(AppRoutes.forgotPassword),
+                              onTap: () =>
+                                  Get.toNamed(AppRoutes.forgotPassword),
                               child: Text(
                                 "Forgot Password",
                                 style: TextStyle(fontWeight: FontWeight.bold),
@@ -231,28 +286,77 @@ class LoginView extends GetView<AuthController> {
                           ],
                         );
                       }),
-          
+
                       8.verticalSpace,
-          
-                      SizedBox(
-                        height: 32.h,
-                        width: double.infinity,
-                        child: FilledButton(
-                          style: FilledButton.styleFrom(
-                            backgroundColor: AppColor.primaryOrange,
+
+                      Column(
+                        children: [
+                          SizedBox(
+                            width: double.infinity,
+                            child: FilledButton(
+                              style: FilledButton.styleFrom(
+                                backgroundColor: AppColor.primaryOrange,
+                              ),
+                              onPressed: () async {
+                                if (key.currentState!.validate()) {
+                                  Loader.show(context);
+                                  await controller.login();
+                                  Loader.hide();
+                                }
+                              },
+                              child: Text(
+                                "Sign in ",
+                                style: TextStyle(fontSize: 18),
+                              ),
+                            ),
                           ),
-                          onPressed: () async {
-                            if (key.currentState!.validate()) {
-                              Loader.show(context);
-                              await controller.login();
-                              Loader.hide();
-                            }
-                          },
-                          child: Text("Sign in ", style: TextStyle(fontSize: 18)),
-                        ),
+
+                           controller.biometric.value == true ? Gap(20) : SizedBox(),
+                      controller.biometric.value == false
+                          ? SizedBox.shrink()
+                          : Obx(() {
+                              if (biometricController.hasFace.value &&
+                                  biometricController.hasFingerprint.value) {
+                                return Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(14),
+                                    border: Border.all(
+                                      color: Colors.grey.shade300,
+                                    ),
+                                  ),
+                                  child: IconButton(
+                                    onPressed: () async {
+                                      biometricController.biometricLogin();
+                                    },
+                                    icon: Icon(Icons.fingerprint),
+                                  ),
+                                );
+                              }
+
+                              if (biometricController.hasFace.value) {
+                                return ElevatedButton.icon(
+                                  onPressed: biometricController.biometricLogin,
+
+                                  icon: const Icon(Icons.face),
+
+                                  label: const Text("Login with Face ID"),
+                                );
+                              }
+
+                              if (biometricController.hasFingerprint.value) {
+                                return ElevatedButton.icon(
+                                  onPressed: biometricController.biometricLogin,
+
+                                  icon: const Icon(Icons.fingerprint),
+
+                                  label: const Text("Login with Fingerprint"),
+                                );
+                              }
+
+                              return const SizedBox.shrink();
+                            }),
+                        ],
                       ),
-          
-                      
                     ],
                   ),
                 ),
@@ -266,6 +370,8 @@ class LoginView extends GetView<AuthController> {
 
   //Desktop UI
   Padding _buildDesktopUI(BuildContext context, GlobalKey<FormState> key) {
+    var biometricController = Get.find<BiometricController>();
+
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Center(
@@ -288,7 +394,7 @@ class LoginView extends GetView<AuthController> {
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 Gap(12),
-          
+
                 Form(
                   key: key,
                   child: Column(
@@ -303,9 +409,9 @@ class LoginView extends GetView<AuthController> {
                         validator: (value) =>
                             value!.isEmpty ? 'email required' : null,
                       ),
-          
+
                       8.verticalSpace,
-          
+
                       Obx(() {
                         return TextFormField(
                           obscureText: controller.obsecure.value,
@@ -327,9 +433,9 @@ class LoginView extends GetView<AuthController> {
                               value!.isEmpty ? 'password required' : null,
                         );
                       }),
-          
+
                       8.verticalSpace,
-          
+
                       Obx(() {
                         return Row(
                           children: [
@@ -342,7 +448,8 @@ class LoginView extends GetView<AuthController> {
                             Text("Remember me"),
                             Spacer(),
                             GestureDetector(
-                              onTap: () => Get.toNamed(AppRoutes.forgotPassword),
+                              onTap: () =>
+                                  Get.toNamed(AppRoutes.forgotPassword),
                               child: Text(
                                 "Forgot Password",
                                 style: TextStyle(fontWeight: FontWeight.bold),
@@ -351,28 +458,77 @@ class LoginView extends GetView<AuthController> {
                           ],
                         );
                       }),
-          
+
                       8.verticalSpace,
-          
-                      SizedBox(
-                        height: 32.h,
-                        width: double.infinity,
-                        child: FilledButton(
-                          style: FilledButton.styleFrom(
-                            backgroundColor: AppColor.primaryOrange,
+
+                      Column(
+                        children: [
+                          SizedBox(
+                            width: double.infinity,
+                            child: FilledButton(
+                              style: FilledButton.styleFrom(
+                                backgroundColor: AppColor.primaryOrange,
+                              ),
+                              onPressed: () async {
+                                if (key.currentState!.validate()) {
+                                  Loader.show(context);
+                                  await controller.login();
+                                  Loader.hide();
+                                }
+                              },
+                              child: Text(
+                                "Sign in ",
+                                style: TextStyle(fontSize: 18),
+                              ),
+                            ),
                           ),
-                          onPressed: () async {
-                            if (key.currentState!.validate()) {
-                              Loader.show(context);
-                              await controller.login();
-                              Loader.hide();
-                            }
-                          },
-                          child: Text("Sign in ", style: TextStyle(fontSize: 18)),
-                        ),
+
+                           controller.biometric.value == true ? Gap(20) : SizedBox(),
+                      controller.biometric.value == false
+                          ? SizedBox.shrink()
+                          : Obx(() {
+                              if (biometricController.hasFace.value &&
+                                  biometricController.hasFingerprint.value) {
+                                return Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(14),
+                                    border: Border.all(
+                                      color: Colors.grey.shade300,
+                                    ),
+                                  ),
+                                  child: IconButton(
+                                    onPressed: () async {
+                                      biometricController.biometricLogin();
+                                    },
+                                    icon: Icon(Icons.fingerprint),
+                                  ),
+                                );
+                              }
+
+                              if (biometricController.hasFace.value) {
+                                return ElevatedButton.icon(
+                                  onPressed: biometricController.biometricLogin,
+
+                                  icon: const Icon(Icons.face),
+
+                                  label: const Text("Login with Face ID"),
+                                );
+                              }
+
+                              if (biometricController.hasFingerprint.value) {
+                                return ElevatedButton.icon(
+                                  onPressed: biometricController.biometricLogin,
+
+                                  icon: const Icon(Icons.fingerprint),
+
+                                  label: const Text("Login with Fingerprint"),
+                                );
+                              }
+
+                              return const SizedBox.shrink();
+                            }),
+                        ],
                       ),
-          
-                      
                     ],
                   ),
                 ),
