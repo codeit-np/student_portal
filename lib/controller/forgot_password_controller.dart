@@ -13,7 +13,7 @@ class ForgotPasswordController extends GetxController {
   final newPasswordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
   final isLoading = false.obs;
-  var message  = ForgotPasswordModel(success: false).obs;
+  var message = ForgotPasswordModel(success: false).obs;
   // Send OTP Method
   Future<void> sendOtp(String email) async {
     if (email.isEmpty) return;
@@ -22,16 +22,19 @@ class ForgotPasswordController extends GetxController {
       var response = await AuthService.forgotPassword(email.trim());
       var result = ForgotPasswordModel.fromJson(response.data);
       if (result.success == true) {
-        CustomDialogs.success(title: "Success", message: "OTP sent to your email",
-        onConfirm: () => Get.toNamed(AppRoutes.otpVerification),
+        CustomDialogs.success(
+          title: "Success",
+          message: "OTP sent to your email",
+          onConfirm: () => Get.toNamed(AppRoutes.otpVerification),
         );
-        
       } else {
-        CustomDialogs.warning(title: "Error", message: "We can't find a user with that email address.");
-        
+        CustomDialogs.warning(
+          title: "Error",
+          message: "We can't find a user with that email address.",
+        );
       }
-    } finally{
-        isLoading(false);
+    } finally {
+      isLoading(false);
     }
   }
 
@@ -41,21 +44,21 @@ class ForgotPasswordController extends GetxController {
     try {
       var response = await AuthService.verifyOtp(emailController.text, otp);
       if (response.statusCode == 200 || response.statusCode == 201) {
-       CustomDialogs.success(title: "Success", message: "OTP verified successfully",
-       onConfirm: ()=>Get.toNamed(AppRoutes.resetPassword)
-       );
-        
-        
+        CustomDialogs.success(
+          title: "Success",
+          message: "OTP verified successfully",
+          onConfirm: () => Get.toNamed(AppRoutes.resetPassword),
+        );
       } else {
         CustomDialogs.warning(title: "Error", message: "Invalid OTP");
       }
     } catch (e) {
-       CustomDialogs.warning(title: "Error", message: "Invalid OTP");
+      CustomDialogs.warning(title: "Error", message: "Invalid OTP");
     }
   }
 
   //Rest TextFormField After Success
-  void reset(){
+  void reset() {
     emailController.text = "";
     otpController.text = "";
     newPasswordController.text = "";
@@ -68,29 +71,44 @@ class ForgotPasswordController extends GetxController {
       CustomDialogs.warning(title: "Error", message: "Passwords do not match");
       return;
     }
+
     try {
       var token = StorageController().getToken();
+ 
       var authController = Get.find<AuthController>();
+   
+      if (token !=null){
+        await authController.getProfle();
+      }
       var response = await AuthService.resetPassword(
-        token == null ? emailController.text.trim() : authController.profile.value.user!.email!.trim(),
+        token == null
+            ? emailController.text.trim()
+            : authController.profile.value.user!.email!.trim(),
         newPasswordController.text.trim(),
         confirmPasswordController.text.trim(),
       );
+
+     
       if (response.statusCode == 200 || response.statusCode == 201) {
-      CustomDialogs.success(title: "Success", message: "Password reset successfully",
-      onConfirm: () {
-        reset();
-        Get.offAllNamed(AppRoutes.login);
-      },
-      );
-       
-       
+        CustomDialogs.success(
+          title: "Success",
+          message: "Password reset successfully",
+          onConfirm: () {
+            reset();
+            Get.offAllNamed(AppRoutes.login);
+          },
+        );
       } else {
-        CustomDialogs.warning(title: "Error", message: "Failed to reset password");
+        CustomDialogs.warning(
+          title: "Error",
+          message: "Failed to reset password",
+        );
       }
     } catch (e) {
-      CustomDialogs.warning(title: "Error", message: "Failed to reset password");
-      
+      CustomDialogs.warning(
+        title: "Error",
+        message: "Failed to reset password",
+      );
     }
   }
 

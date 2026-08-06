@@ -80,6 +80,8 @@ class AuthService {
         "password_confirmation": confirmPassword,
       },
     );
+
+    
     return response;
   }
 }

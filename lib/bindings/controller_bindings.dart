@@ -11,7 +11,7 @@ class ControllerBindings extends Bindings {
   @override
   void dependencies() {
     Get.put<StorageController>(StorageController(), permanent: true);
-    Get.put<AuthController>(AuthController());
+    Get.put<AuthController>(AuthController(),permanent: true);
     Get.put<CourseController>(CourseController(), permanent: true);
     Get.put<VideoController>(VideoController(), permanent: true);
     Get.put<CertificateController>(CertificateController(), permanent: true);

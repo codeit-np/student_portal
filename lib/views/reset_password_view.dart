@@ -120,11 +120,11 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
                           if (_formKey.currentState!.validate()) {
                             Loader.show(context);
                             await controller.resetPassword();
-                            controller.reset();
+                            // controller.reset();
                             Loader.hide();
                           }
                         },
-                        style: ElevatedButton.styleFrom(
+                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColor.primaryOrange,
                           foregroundColor: Colors.white,
                           elevation: 2,
